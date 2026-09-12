@@ -8,8 +8,11 @@ not required for the Palisades flow.
 
 This README describes the current implementation as of September 12, 2026. Earlier
 plans in `outputs/agent-system-plan.md` and status notes describe previous stages;
-where they disagree, use this README and the executable code. The service is a
-local MVP, not a completed live integration.
+where they disagree, use the executable code and the current integration records.
+The live State → Platform → local SDK agent → browser path is now implemented and
+was exercised on September 12. Start with the [project quickstart](../docs/QUICKSTART.md)
+and [live validation](../dashboard/live/VALIDATION.md). This is still a prototype;
+the local fixture and optional standalone platform poller are separate modes.
 
 ## Ownership and data flow
 
@@ -54,8 +57,9 @@ of the same material; shared semantic-result caching is not implemented.
 The default `FixtureEngine` is a deterministic test double. It reads explicit
 `payload.fixture` annotations for extraction and echoes source descriptions for
 questions. It does not understand arbitrary transcripts or translate answers.
-Live SDK extraction and answers have been smoke-tested on explicitly synthetic
-messages with OpenRouter; real Palisades interpretation quality remains unvalidated.
+Live SDK extraction and answers have been exercised on synthetic messages and the
+composite State/Palisades replay through OpenRouter. Semantic accuracy against a
+human reference remains unvalidated.
 See [scope and results](docs/OPENROUTER.md).
 
 ## Palisades channel check
@@ -239,7 +243,8 @@ It repeatedly reads the fixed interval, deduplicating unchanged IDs to catch lat
 arrivals. The interval does not slide. Results are capped at 500 per device with no
 stable pagination, so completeness is not guaranteed. The optional SSE listener in
 `live.py` is not connected as a polling wakeup mechanism. Import failures retry;
-stale generation stops polling. A real platform connection has not been verified.
+stale generation stops polling. This standalone polling mode is distinct from the
+gateway-owned live pipeline verified in [the integration record](../dashboard/live/VALIDATION.md).
 
 Import does not advance replay time. Use
 `POST /sessions/platform-demo/0/clock` with `{"time_ms":300000}` to expose the
@@ -276,20 +281,17 @@ channel phases, missing/wrong/ambiguous replies, late delivery, evidence IDs,
 mocked platform polling, canonical transcript import and publication ambiguity.
 They do not call a real model, connect to a real platform or play audio.
 
-For the project-wide review, the remaining acceptance work is:
+The [live integration record](../dashboard/live/VALIDATION.md) now covers the actual
+Palisades channel sequence, shared State context, source IDs, original radio playback,
+automatic briefings, operator questions and generation isolation in the browser.
+Remaining acceptance work includes a human-labelled semantic evaluation, an omitted
+acknowledgement control replay through the real model, and broader latency sampling.
+Passing offline tests does not establish those results.
 
-- Run the actual Palisades transcript through SDK extraction, including fragmented
-  group names and a control replay with the acknowledging reply omitted.
-- Verify producer timestamps, source IDs, transcript kind and media intervals
-  through the platform adapter; ensure no future utterance reaches the model.
-- Connect the updated web to v1 snapshots/questions/SSE and verify all three phases.
-- Implement the trusted media resolver and verify the original audio intervals.
-- Evaluate semantic correctness, ambiguous exchanges and actual latency; no measured
-  model-quality or latency claim is made by passing the local tests.
-
-Full-history retrieval, semantic verification, additional monitoring scenarios,
-provider fallback and production deployment are unfinished. Optional incident
-publication is not a prerequisite for completing the selected demo.
+Full-history retrieval, semantic verification, additional monitoring scenarios and
+public agent/dashboard deployment remain unfinished. Provider fallback is implemented
+and mock-tested; both models were smoke-tested, but forced failover during browser
+replay was not demonstrated. Optional incident publication is not required for this demo.
 
 ## Code map
 
@@ -309,13 +311,14 @@ with their owners.
 
 ## OpenRouter and local replay check
 
-Set `FIRE_ENGINE=sdk`, `FIRE_PROVIDER=openrouter`, `FIRE_MODEL=openai/gpt-6-astra`,
-`FIRE_FALLBACK_MODEL=anthropic/claude-fable-5.1` and `OPENROUTER_API_KEY` in the process environment. The provider uses Chat
+Set `FIRE_ENGINE=sdk`, `FIRE_PROVIDER=openrouter`, `FIRE_MODEL=google/gemini-3.1-flash-lite`,
+`FIRE_FALLBACK_MODEL=openai/gpt-5.6-luna` and `OPENROUTER_API_KEY` in the process environment. The provider uses Chat
 Completions with typed outputs and disables SDK tracing. It never substitutes
 `OPENAI_API_KEY` for the OpenRouter credential. The default provider remains OpenAI.
 
-Both models use strict typed outputs, `reasoning.effort=low` and compatible
-provider routing. The 28-second request budget gives each model at most 14 seconds
+Both models use strict typed outputs. The current configuration sets
+`FIRE_REASONING_EFFORT=minimal`, `FIRE_FALLBACK_REASONING_EFFORT=none` and
+`FIRE_PROVIDER_SORT=latency`. The 28-second request budget gives each model at most 14 seconds
 when fallback is enabled. Cancellation never starts the fallback. Extraction text
 defaults to English; set `FIRE_OUTPUT_LANGUAGE=ru` for Russian. Answers honor the
 question's `language`. See [1Password startup and validation](docs/OPENROUTER.md).

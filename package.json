@@ -1,0 +1,10 @@
+{
+  "name": "fire-incident-copilot-verification",
+  "private": true,
+  "scripts": {
+    "verify": "bash scripts/verify.sh"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

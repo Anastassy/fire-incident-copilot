@@ -16,17 +16,21 @@ storage, and two independent data access interfaces:
 - REST API for reading devices, telemetry, incidents, dashboards
 - SSE streams for live updates (Redis pub/sub)
 - MCP server (13 tools) for the agent system
-- Bridge adapter (`app/adapter/bridge.py`) to the simulator's State Machine API (relays real events to ingestion)
+- Bridge adapter (`app/adapter/bridge.py`) to the simulator's State Machine API (relays published events to ingestion)
 
-**External dependencies (not our code):**
-- State Machine API (contract in `raw-source/fire-safety-state-api-v0.2.2/`) — created by another team, deployed at `https://api.aitinkerers.space`
+**Dependencies maintained outside this platform component:**
+- State Machine API (contract in `raw-source/fire-safety-state-api-v0.2.2/`) — separately maintained simulation service, deployed at `https://api.aitinkerers.space`
 - Simulator (team "Simulation") — provides scenarios and events via State Machine API
 
-Full architecture and responsibility breakdown — see plan in `/Users/vitalynec/.claude/plans/swirling-meandering-aho.md`.
+Architecture and decisions are in the [ADRs](dev-docs/adr/README.md).
+For the current integrated demo, use the [project quickstart](../docs/QUICKSTART.md).
+Its dashboard gateway receives State SSE and writes to Platform REST; do not start
+another `bridge` for the same run. Project-wide component origins are disclosed in
+[SUBMISSION.md](../SUBMISSION.md#build-history-and-eligibility).
 
 ### Deployment addresses
 
-- **Production** (planned): `https://platform.aitinkerers.space` — target address after Hetzner deployment and DNS/Caddy configuration (current status: infrastructure being prepared)
+- **Hosted demo**: `https://platform.aitinkerers.space` — deployed service used in the [September 12 live validation](../dashboard/live/VALIDATION.md); requires an API key
 - **Local development**: `http://localhost:8000` — for local development and testing
 
 All examples in this document use `http://localhost:8000`; in production simply replace with `https://platform.aitinkerers.space`.
@@ -41,10 +45,12 @@ All examples below and in files `contracts/safety-telemetry-platform-v1/examples
 (for testing and development): they are generated manually via curl, contain fixed timestamps,
 and `"origin": "synthetic"` in the provenance.
 
-**Real data** appears only when the `bridge` service runs with a valid `STATE_MACHINE_BEARER_TOKEN` —
-then events come from the simulator with `"origin": "recorded"` (provenance contains real source_id,
-acquisition_id, audio_source_file, and SHA256). The rest of the platform does not change and does not know the difference —
-all three interfaces (REST, SSE, MCP) work identically with synthetic and real data.
+**State events** can be imported by the standalone `bridge` or the live dashboard
+gateway. A running stream does not imply that every observation was recorded at a
+real fire: Base2 × Palisades combines synthetic building/CCTV observations with
+independent historical radio. Inspect each record's provenance, source_id,
+acquisition_id and original timestamps. REST, SSE and MCP handle both types of data;
+a provenance label does not make independent sources one real incident.
 
 ### Data ingestion contract
 
@@ -863,7 +869,7 @@ as long as you need the live data stream.
    - `API_KEY=dev-secret-change-me` (can be any string, real one generated if needed)
    - `DATABASE_URL` and `REDIS_URL` point to internal docker containers (`db:5432` and `redis:6379`
      inside the docker network)
-2. `docker compose up --build` brings up the CORE stack:
+2. `docker compose up --build app` brings up the CORE stack without the optional bridge:
    - `db` (Postgres) and `redis` with healthchecks
    - `app` (FastAPI backend): waits for `db` and `redis`, applies migrations (`alembic upgrade head`),
      starts uvicorn at `http://localhost:8000`
