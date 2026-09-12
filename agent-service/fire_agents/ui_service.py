@@ -176,6 +176,11 @@ class UIService:
         session,binding=self.require(c,ctx);as_of=session['time_ms']
         device_ids=json.loads(binding['devices'])
         watches=c.execute('SELECT * FROM watches WHERE session_id=? AND generation=?',(ctx.demo_context_id,ctx.generation)).fetchall()
+        active_ids={stable('watch',*self.scope(ctx),w['task_ref']) for w in watches}
+        for existing in c.execute('SELECT id FROM ui_cards WHERE session_id=? AND generation=? AND subject_id=?',self.scope(ctx)).fetchall():
+            if existing['id'] not in active_ids:
+                c.execute('DELETE FROM ui_cards WHERE id=?',(existing['id'],))
+                self.bump(c,ctx)
         tables={r['name'] for r in c.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         for watch in watches:
             raw=[]
@@ -202,6 +207,23 @@ class UIService:
                        lifecycle='closed' if watch['assessment']=='no_longer_relevant' else 'active',platform_status=None,publication_status=publication,
                        claims=claims,unknowns=['A source report does not independently prove execution.'],coverage=self.coverage(as_of),queries=[],
                        evidence_ids=[r for r in refs if r],checked_at=now(),closure_reason='Cancellation reported.' if watch['assessment']=='no_longer_relevant' else None)
+            channel_row=c.execute('SELECT body FROM channel_checks WHERE session_id=? AND generation=? AND task_ref=?',
+                                  (ctx.demo_context_id,ctx.generation,watch['task_ref'])).fetchone()
+            if channel_row:
+                channel=json.loads(channel_row['body'])
+                value['statement']=(f"{channel['team']}: assignment not found in the processed transcript."
+                    if not channel['assignment'] else f"{channel['team']}: {channel['channel']} assigned; " +
+                    ('acknowledging reply found in transcript.' if channel['acknowledgement'] else 'reply not yet found.'))
+                value['unknowns']=['This transcript does not establish that every group member switched channels.',
+                                   'Machine transcript and speaker attribution require human verification.']
+                if not channel['assignment']:
+                    value['unknowns'].append('Assignment not found in the processed exchange.')
+                elif not channel['acknowledgement']:
+                    value['unknowns'].append('Assignment found; acknowledging reply not found in the processed exchange.')
+                else:
+                    value['unknowns'].append('Reply linked by matching channel and proximity on the same source; speaker identity is not established.')
+                value['assessment']='supported' if channel['acknowledgement'] and all(refs) else 'insufficient_data'
+                if not all(refs):value['unknowns'].append('Platform reading IDs are missing for some source events.')
             # Only a fetched platform status may be displayed; do not infer it from outbox intent.
             if 'ui_platform_status' in tables and linked:
                 ps=c.execute('SELECT status FROM ui_platform_status WHERE incident_id=?',(linked['incident_id'],)).fetchone()

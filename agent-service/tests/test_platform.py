@@ -55,6 +55,7 @@ def test_reset_before_publish(tmp_path):
 def test_update_preserves_operator_status(tmp_path):
     s,t=make(tmp_path);prepare(s);p=Publisher(t,s);asyncio.run(p.step())
     s.ingest(Event(session_id='demo',generation=0,event_id='43',reading_id=43,time_ms=20,source_id='radio',kind='radio',description='T1 завершено',payload={'fixture':{'action':'completed','task_ref':'T1'}}))
+    s.tick('demo',0,20)
     asyncio.run(Runtime(s,FixtureEngine(),10).step());asyncio.run(p.step())
     updates=[a for n,a in t.calls if n=='update_incident']
     assert len(updates)==1 and 'status' not in updates[0]

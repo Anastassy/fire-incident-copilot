@@ -25,7 +25,8 @@ class Claim(BaseModel):
     evidence_ids: list[str] = Field(min_length=1)
 
 class Extraction(BaseModel):
-    action: Literal['none', 'assigned', 'accepted', 'completed', 'cancelled']
+    action: Literal['none', 'assigned', 'accepted', 'completed', 'cancelled', 'channel_requested', 'channel_assigned', 'channel_acknowledged']
+    channel: str | None = None
     task_ref: str | None = None
     team: str | None = None
     claim: Claim | None = None

@@ -13,6 +13,7 @@ from .engines import FixtureEngine, SDKEngine
 from .runtime import Runtime
 from .ui_service import UIService, UIError
 from .ui_routes import install_ui_routes
+from .platform_sync import from_environment
 
 def create_app(db_path=None, engine=None, background=True):
     path=Path(db_path or os.getenv('FIRE_DB_PATH','work/runtime.sqlite3'))
@@ -23,6 +24,7 @@ def create_app(db_path=None, engine=None, background=True):
     selected=engine or (FixtureEngine() if mode=='fixture' else SDKEngine(os.environ['FIRE_MODEL']))
     runtime=Runtime(store,selected,int(os.getenv('FIRE_WATCH_TIMEOUT_MS','300000')))
     ui=UIService(runtime)
+    platform_sync=from_environment(store,ui)
     async def worker():
         while True:
             worked=await runtime.step()
@@ -38,6 +40,9 @@ def create_app(db_path=None, engine=None, background=True):
     @asynccontextmanager
     async def lifespan(app):
         tasks=[asyncio.create_task(worker()),asyncio.create_task(question_worker())] if background else []
+        if background and platform_sync:
+            store.start(platform_sync.scope.session_id)
+            tasks.append(asyncio.create_task(platform_sync.run()))
         app.state.workers=tasks
         try:yield
         finally:
@@ -68,7 +73,8 @@ def create_app(db_path=None, engine=None, background=True):
     @app.get('/health')
     def health():
         failed=[t for t in getattr(app.state,'workers',[]) if t.done() and not t.cancelled() and t.exception()]
-        return {'status':'degraded' if failed else 'ok','engine':type(selected).__name__,'platform_connected':False,
+        return {'status':'degraded' if failed else 'ok','engine':type(selected).__name__,'platform_connected':bool(platform_sync and platform_sync.status['connected']),
+                'platform':platform_sync.status if platform_sync else {'configured':False},
                 'ui_api_version':'v1','authentication':'shared-demo-cookie' if os.getenv('FIRE_UI_SESSION_TOKEN') else 'local-only-no-auth'}
     @app.post('/sessions/{sid}')
     def start(sid:str):

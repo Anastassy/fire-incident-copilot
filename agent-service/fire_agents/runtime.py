@@ -8,7 +8,12 @@ class Runtime:
         job = self.store.claim_job()
         if not job: return False
         try:
-            result = await self.engine.extract(job['event'])
+            event = job['event']
+            if hasattr(self.engine, 'extract_with_context'):
+                context = self.store.recent_context(event)
+                result = await self.engine.extract_with_context(event, context)
+            else:
+                result = await self.engine.extract(event)
             self.store.finish(job, result, self.timeout_ms)
         except StaleGeneration:
             pass  # reset has already cancelled the old task

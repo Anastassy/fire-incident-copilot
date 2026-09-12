@@ -21,6 +21,8 @@ class Store:
             CREATE TABLE IF NOT EXISTS watches(session_id TEXT, generation INTEGER, task_ref TEXT, team TEXT,
               assessment TEXT, last_ms INTEGER, due_ms INTEGER, evidence TEXT, published INTEGER DEFAULT 0,
               PRIMARY KEY(session_id,generation,task_ref));
+            CREATE TABLE IF NOT EXISTS channel_facts(session_id TEXT,generation INTEGER,event_id TEXT,time_ms INTEGER,source_id TEXT,body TEXT,PRIMARY KEY(session_id,generation,event_id));
+            CREATE TABLE IF NOT EXISTS channel_checks(session_id TEXT,generation INTEGER,task_ref TEXT,body TEXT,PRIMARY KEY(session_id,generation,task_ref));
             CREATE TABLE IF NOT EXISTS outbox(id TEXT PRIMARY KEY, session_id TEXT, generation INTEGER, body TEXT, status TEXT);
             ''')
     @contextmanager
@@ -65,7 +67,7 @@ class Store:
             return True
     def claim_job(self):
         with self.tx() as c:
-            row = c.execute("SELECT * FROM jobs WHERE status='pending' OR (status='running' AND lease_until<?) ORDER BY rowid LIMIT 1", (time.time(),)).fetchone()
+            row = c.execute("SELECT j.* FROM jobs j JOIN sessions s ON s.id=j.session_id AND s.generation=j.generation JOIN events e ON e.session_id=j.session_id AND e.generation=j.generation AND e.event_id=j.event_id WHERE e.time_ms<=s.time_ms AND (j.status='pending' OR (j.status='running' AND j.lease_until<?)) ORDER BY e.time_ms,j.rowid LIMIT 1", (time.time(),)).fetchone()
             if not row: return None
             token = str(uuid.uuid4())
             c.execute("UPDATE jobs SET status='running',attempts=attempts+1,lease_until=?,token=? WHERE id=?", (time.time()+45,token,row['id']))
@@ -81,6 +83,11 @@ class Store:
             self.require(c,e.session_id,e.generation)
             active = c.execute("SELECT 1 FROM jobs WHERE id=? AND token=? AND status='running' AND lease_until>?",(job['id'],job['token'],time.time())).fetchone()
             if not active: raise ValueError('Job lease lost')
+            if result.action.startswith('channel_'):
+                from .channels import record
+                record(c, e, result)
+                c.execute("UPDATE jobs SET status='done' WHERE id=?", (job['id'],))
+                return
             if result.action != 'none':
                 if not result.claim or set(result.claim.evidence_ids) != {e.event_id}: raise ValueError('Invalid evidence')
                 if result.task_ref:
@@ -111,11 +118,24 @@ class Store:
             if ms < session['time_ms']: raise ValueError('Clock cannot move backwards; reset first')
             c.execute('UPDATE sessions SET time_ms=? WHERE id=?',(ms,sid))
             # Do not evaluate missing confirmation while relevant input jobs are unfinished.
-            busy=c.execute("SELECT 1 FROM jobs WHERE session_id=? AND generation=? AND status NOT IN ('done','cancelled') LIMIT 1",(sid,gen)).fetchone()
+            busy=c.execute("SELECT 1 FROM jobs j JOIN events e ON e.session_id=j.session_id AND e.generation=j.generation AND e.event_id=j.event_id JOIN sessions s ON s.id=j.session_id WHERE j.session_id=? AND j.generation=? AND e.time_ms<=s.time_ms AND j.status NOT IN ('done','cancelled') LIMIT 1",(sid,gen)).fetchone()
             if busy: return
             for w in c.execute("SELECT * FROM watches WHERE session_id=? AND generation=? AND due_ms<=? AND assessment IN ('checking','accepted')",(sid,gen,ms)).fetchall():
                 self.publish(c,sid,gen,w['task_ref'],'no_confirmation',json.loads(w['evidence']))
                 c.execute("UPDATE watches SET assessment='no_confirmation',published=1 WHERE session_id=? AND generation=? AND task_ref=?",(sid,gen,w['task_ref']))
+    def recent_context(self, event):
+        with self.tx() as c:
+            rows = c.execute('SELECT body FROM events WHERE session_id=? AND generation=? AND time_ms>=? AND time_ms<? ORDER BY time_ms DESC,event_id LIMIT 20',
+                             (event.session_id,event.generation,max(0,event.time_ms-60000),event.time_ms)).fetchall()
+            result=[];size=0
+            for row in rows:
+                item=Event.model_validate_json(row['body'])
+                if item.source_id != event.source_id:continue
+                size+=len(row['body'])
+                if size>24000:break
+                result.append(item)
+            return list(reversed(result))
+
     def events(self,sid,gen,limit=20):
         with self.tx() as c:
             self.require(c,sid,gen)

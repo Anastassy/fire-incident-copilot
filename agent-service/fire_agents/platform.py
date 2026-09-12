@@ -49,13 +49,15 @@ class Reader:
             ts=datetime.fromisoformat(row['ts'].replace('Z','+00:00'))
             if ts.tzinfo is None or not start <= ts <= end: raise PlatformError('Unexpected event time')
             payload=row.get('payload') or {}
-            description=payload.get(description_field,'')
-            url=payload.get(media_field)
+            description=(row.get('transcript') if description_field == 'description' else None)
+            if description is None: description=payload.get(description_field,'')
+            url=row.get('audio_url') if media_field == 'audio_url' else None
+            if url is None: url=payload.get(media_field)
             if not isinstance(description,str) or (url is not None and not isinstance(url,str)):
                 raise PlatformError('Description/media mapping requires strings')
             events.append(from_platform(row,session_id=session_id,generation=generation,
                 scenario_time_ms=int((ts-origin).total_seconds()*1000),description=description,media_url=url))
-        inserted=sum(self.store.ingest(event) for event in events)
+        inserted=sum(self.store.ingest(event) for event in sorted(events, key=lambda e: (e.time_ms, e.event_id)))
         return {'received':len(rows),'inserted':inserted,'possibly_truncated':len(rows)>=limit,
                 'coverage_complete':False,
                 'limitations':['Platform v1 has no stable pagination or late-arrival cursor.']}
