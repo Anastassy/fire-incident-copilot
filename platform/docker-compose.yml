@@ -68,6 +68,7 @@ services:
       # and exits cleanly rather than crash-looping. Set it in .env to actually run.
       STATE_MACHINE_BEARER_TOKEN: ${STATE_MACHINE_BEARER_TOKEN:-}
       STATE_MACHINE_SCENARIO_ID: ${STATE_MACHINE_SCENARIO_ID:-degraded}
+      STATE_MACHINE_RUN_ID: ${STATE_MACHINE_RUN_ID:-}
       # Internal docker network hostname, not localhost -- `app` is a separate container.
       OUR_API_BASE_URL: http://app:8000
       API_KEY: ${API_KEY:-dev-secret-change-me}
