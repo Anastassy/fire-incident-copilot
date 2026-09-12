@@ -1,0 +1,353 @@
+{
+  "duration_s": 120,
+  "fps": 30,
+  "size": [
+    1920,
+    1080
+  ],
+  "capture_note": "Native Chrome screenshots at full CSS resolution. No downsampled or duplicated tiles. Actual capture timing retained, then held to match approved edit windows. All answers are from the same existing G5 run; no generated UI text.",
+  "shots": [
+    {
+      "id": "B01",
+      "start_s": 0,
+      "end_s": 5,
+      "slide": "B01.png"
+    },
+    {
+      "id": "B02",
+      "start_s": 5,
+      "end_s": 11,
+      "slide": "B02.png"
+    },
+    {
+      "id": "B03",
+      "start_s": 11,
+      "end_s": 15,
+      "slide": "B03.png"
+    },
+    {
+      "id": "B04",
+      "start_s": 15,
+      "end_s": 22,
+      "slide": "B04.png"
+    },
+    {
+      "id": "B05",
+      "start_s": 22,
+      "end_s": 25,
+      "slide": "B05.png"
+    },
+    {
+      "id": "D01",
+      "start_s": 25,
+      "end_s": 30,
+      "source": "overview",
+      "offset_s": 0,
+      "crop": [
+        66,
+        64,
+        1838,
+        1000
+      ],
+      "title": "ONE OPERATOR. MANY SOURCES.",
+      "mode": "wide",
+      "lines": []
+    },
+    {
+      "id": "D02",
+      "start_s": 30,
+      "end_s": 33,
+      "source": "overview",
+      "offset_s": 4,
+      "crop": [
+        1236,
+        172,
+        642,
+        700
+      ],
+      "title": "SENSORS / CAMERAS / RADIO",
+      "mode": "source",
+      "lines": []
+    },
+    {
+      "id": "D03",
+      "start_s": 33,
+      "end_s": 38,
+      "source": "overview",
+      "offset_s": 3,
+      "crop": [
+        1236,
+        260,
+        642,
+        478
+      ],
+      "title": "THE INCIDENT CONTINUES TO CHANGE",
+      "mode": "wide",
+      "lines": []
+    },
+    {
+      "id": "D04",
+      "start_s": 38,
+      "end_s": 43,
+      "source": "assessment",
+      "offset_s": 0,
+      "crop": [
+        116,
+        602,
+        1076,
+        440
+      ],
+      "title": "COPILOT / AUTOMATIC ASSESSMENT",
+      "mode": "wide",
+      "lines": []
+    },
+    {
+      "id": "D05",
+      "start_s": 43,
+      "end_s": 47,
+      "source": "assessment",
+      "offset_s": 0,
+      "crop": [
+        116,
+        716,
+        1076,
+        326
+      ],
+      "title": "EVIDENCE AND UNKNOWNS, SIDE BY SIDE",
+      "mode": "wide",
+      "lines": []
+    },
+    {
+      "id": "D06a",
+      "start_s": 47,
+      "end_s": 49,
+      "source": "power-evidence",
+      "offset_s": 0,
+      "crop": [
+        1420,
+        220,
+        485,
+        540
+      ],
+      "title": "FOLLOW THE EVIDENCE",
+      "mode": "drawer",
+      "lines": [
+        "SOURCE RECORD",
+        "Original reading",
+        "Device, time and provenance"
+      ]
+    },
+    {
+      "id": "D06b",
+      "start_s": 49,
+      "end_s": 53,
+      "source": "cameras",
+      "offset_s": 0,
+      "crop": [
+        1236,
+        474,
+        642,
+        263
+      ],
+      "title": "CAMERA VIEWS / CHECK SOURCE FRESHNESS",
+      "mode": "wide",
+      "lines": []
+    },
+    {
+      "id": "D07",
+      "start_s": 53,
+      "end_s": 59,
+      "source": "connectivity",
+      "offset_s": 0,
+      "crop": [
+        1420,
+        220,
+        485,
+        420
+      ],
+      "title": "FRESHNESS IS PART OF THE EVIDENCE",
+      "mode": "drawer",
+      "lines": [
+        "CONNECTION LOST",
+        "SMK-B2-GRADAS / 03:04",
+        "A last reading is not a current reading."
+      ]
+    },
+    {
+      "id": "D08a",
+      "start_s": 59,
+      "end_s": 63,
+      "source": "question",
+      "offset_s": 0,
+      "crop": [
+        116,
+        1047,
+        1076,
+        130
+      ],
+      "title": "ASK INCIDENT COPILOT",
+      "mode": "wide",
+      "lines": []
+    },
+    {
+      "id": "D08b",
+      "start_s": 63,
+      "end_s": 64,
+      "source": "answer",
+      "offset_s": 0,
+      "crop": [
+        116,
+        578,
+        1065,
+        349
+      ],
+      "title": "ASK INCIDENT COPILOT",
+      "mode": "wide",
+      "lines": []
+    },
+    {
+      "id": "D09a",
+      "start_s": 64,
+      "end_s": 66,
+      "source": "access",
+      "offset_s": 0,
+      "crop": [
+        1420,
+        566,
+        485,
+        420
+      ],
+      "title": "CHECK THE SOURCE / ACCESS",
+      "mode": "drawer",
+      "lines": [
+        "PERMISSION IS NOT PRESENCE",
+        "Access record / Gradas",
+        "A badge event cannot confirm occupancy."
+      ]
+    },
+    {
+      "id": "D09b",
+      "start_s": 66,
+      "end_s": 70,
+      "source": "answer",
+      "offset_s": 0,
+      "crop": [
+        116,
+        578,
+        1065,
+        349
+      ],
+      "title": "COPILOT / GROUNDED ANSWER",
+      "mode": "wide",
+      "lines": []
+    },
+    {
+      "id": "D10",
+      "start_s": 70,
+      "end_s": 74,
+      "source": "answer",
+      "offset_s": 0,
+      "crop": [
+        116,
+        578,
+        1065,
+        349
+      ],
+      "title": "THE ANSWER EXPLAINS ITS LIMITS",
+      "mode": "wide",
+      "lines": []
+    },
+    {
+      "id": "D11",
+      "start_s": 74,
+      "end_s": 78,
+      "source": "radio",
+      "offset_s": 0,
+      "crop": [
+        1420,
+        326,
+        485,
+        550
+      ],
+      "title": "LISTEN TO THE ORIGINAL RADIO",
+      "mode": "radio",
+      "lines": [
+        "PALISADES ARCHIVE",
+        "Original transmission",
+        "Separate incident / source attached"
+      ]
+    },
+    {
+      "id": "D12",
+      "start_s": 78,
+      "end_s": 82,
+      "source": "radio",
+      "offset_s": 1,
+      "crop": [
+        1420,
+        326,
+        485,
+        550
+      ],
+      "title": "KEEP INCIDENT PROVENANCE VISIBLE",
+      "mode": "radio",
+      "lines": [
+        "SOURCE BOUNDARY",
+        "Palisades is a separate incident.",
+        "It cannot confirm conditions in Base2."
+      ]
+    },
+    {
+      "id": "D13",
+      "start_s": 82,
+      "end_s": 90,
+      "source": "answer",
+      "offset_s": 0,
+      "crop": [
+        116,
+        578,
+        1065,
+        349
+      ],
+      "title": "BRIEF COMMAND WITH EVIDENCE",
+      "mode": "wide",
+      "lines": []
+    },
+    {
+      "id": "T01",
+      "start_s": 90,
+      "end_s": 95,
+      "slide": "T01.png"
+    },
+    {
+      "id": "T02",
+      "start_s": 95,
+      "end_s": 100,
+      "slide": "T02.png"
+    },
+    {
+      "id": "T03",
+      "start_s": 100,
+      "end_s": 105,
+      "slide": "T03.png"
+    },
+    {
+      "id": "F01",
+      "start_s": 105,
+      "end_s": 110,
+      "slide": "F01.png"
+    },
+    {
+      "id": "F02",
+      "start_s": 110,
+      "end_s": 115,
+      "slide": "F02.png"
+    },
+    {
+      "id": "F03",
+      "start_s": 115,
+      "end_s": 120,
+      "slide": "F03.png"
+    }
+  ]
+}

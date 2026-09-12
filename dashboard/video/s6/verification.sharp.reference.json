@@ -1,0 +1,29 @@
+{
+  "date": "2026-09-12",
+  "revision": "sharp-native-chrome",
+  "file": "Firewatch-demo-HD.mp4",
+  "sha256": "8f1f9df409484fb77c69c929a99ce7323607f77f92afe869bffe4d54158e7d8f",
+  "bytes": 5009390,
+  "duration_seconds": 120,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "fps": 30,
+  "frames": 3600,
+  "caption_cues_visible": 58,
+  "caption_cues_total": 58,
+  "full_av_decode": true,
+  "faststart": true,
+  "audio_packets_identical_to_approved_v1": true,
+  "clean_crf": 14,
+  "caption_encode_crf": 16,
+  "changes": "Recaptured every UI scene using native Chrome screenshots without downsampled tiles; kept approved slides, voice, radio, captions and timeline.",
+  "visual_review": [
+    "46s evidence and unknowns",
+    "86s full answer and unknowns",
+    "radio source and transcription",
+    "all 58 cue midpoint contact sheet"
+  ],
+  "capture_notes": "Actual same-generation UI; screenshots preserve capture intervals, static panels held to fit edit. This is an edited demo, not a native 30fps recording or latency benchmark."
+}
