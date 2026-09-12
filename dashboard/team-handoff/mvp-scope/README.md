@@ -6,6 +6,6 @@
 2. [Актуальный интерфейс V2](02_INTERFACE.md) и [HTML-макет](../../docs/design/palisades-console.html).
 3. [Интеграция и приёмка](03_DELIVERY.md).
 4. [Тайминг видео](04_VIDEO_TIMING.md) и [problem statement](../../DEMO_OPENING_25S.md).
-5. [Предлагаемый контракт Agent → UI](../../agent-ui-contract-v0.1/README.md) с JSON-примерами.
+5. [Предлагаемый контракт Agent → UI](../../../agent-ui-contract-v0.1/README.md) с JSON-примерами.
 
 Data Platform — source of truth. Агент самостоятельно проверяет гипотезы и отвечает на вопросы с основаниями; UI показывает результаты и исходные данные. Никаких тактических команд, скрытия событий или передачи радио. Старый комнатный вариант не входит в MVP.

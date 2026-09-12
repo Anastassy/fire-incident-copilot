@@ -32,7 +32,7 @@ This is recorded replay with a prerecorded machine transcript, not live speech r
 
 ## Try the prototype
 
-Clone this repository and open [docs/design/palisades-console.html](docs/design/palisades-console.html) in a desktop browser. Keep the repository's folder structure intact so the local audio links resolve. The interface is in English.
+Clone this repository and open [dashboard/docs/design/palisades-console.html](dashboard/docs/design/palisades-console.html) in a desktop browser. Keep the repository's folder structure intact so the local audio links resolve. The interface is in English.
 
 Alternatively, serve the repository with any static HTTP server. For example, if Python 3 is installed:
 
@@ -40,7 +40,7 @@ Alternatively, serve the repository with any static HTTP server. For example, if
 python3 -m http.server 8080 --bind 127.0.0.1
 ```
 
-Then open [the local prototype](http://localhost:8080/docs/design/palisades-console.html). No API keys or build step are needed for this mockup.
+Then open [the local prototype](http://localhost:8080/dashboard/docs/design/palisades-console.html). No API keys or build step are needed for this mockup.
 
 ## Project status
 
@@ -50,12 +50,14 @@ The next implementation milestone is the complete replay → platform → backgr
 
 ## Learn more
 
-- [MVP scope and acceptance criteria](team-handoff/mvp-scope/README.md)
-- [Interface specification](team-handoff/mvp-scope/02_INTERFACE.md)
+The operator interface and its design/MVP materials are in `dashboard/`. The agent backend is in `agent-service/`; shared data and the Agent → UI contract stay at the repository root.
+
+- [MVP scope and acceptance criteria](dashboard/team-handoff/mvp-scope/README.md)
+- [Interface specification](dashboard/team-handoff/mvp-scope/02_INTERFACE.md)
 - [Proposed Agent → UI contract and fixtures](agent-ui-contract-v0.1/README.md)
 - [Data, provenance and transcripts](data/demo/palisades-radio-demo/README.md)
-- [Integration responsibilities and acceptance](team-handoff/mvp-scope/03_DELIVERY.md)
-- [Problem statement: the first 25 seconds](DEMO_OPENING_25S.md)
+- [Integration responsibilities and acceptance](dashboard/team-handoff/mvp-scope/03_DELIVERY.md)
+- [Problem statement: the first 25 seconds](dashboard/DEMO_OPENING_25S.md)
 
 ## Data attribution
 
