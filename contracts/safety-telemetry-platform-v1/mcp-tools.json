@@ -8,7 +8,7 @@
       "description": "List devices, optionally filtered by type and/or status.",
       "input_schema": {
         "properties": {
-          "type": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Type", "description": "cctv | iot | fire_panel | alarm | water_sensor | other"},
+          "type": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Type", "description": "cctv | iot | fire_panel | alarm | water_sensor | radio | other"},
           "status": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Status", "description": "online | offline | fault"}
         },
         "title": "list_devicesArguments",
@@ -41,7 +41,7 @@
         "title": "query_telemetryArguments",
         "type": "object"
       },
-      "returns": "list[TelemetryReading] — each: {id, device_id, ts, end_ts, metric_type, value, unit, payload, quality, availability, provenance, external_event_id, ingested_at}"
+      "returns": "list[TelemetryReading] — each: {id, device_id, ts, end_ts, metric_type, value, unit, payload, quality, availability, provenance, external_event_id, transcript, audio_url, audio_duration_ms, ingested_at}"
     },
     {
       "name": "get_latest_readings",

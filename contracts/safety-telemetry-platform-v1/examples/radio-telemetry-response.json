@@ -1,0 +1,18 @@
+{
+  "id": 100,
+  "device_id": "99999999-8888-7777-6666-555555555555",
+  "ts": "2026-09-12T10:05:00Z",
+  "end_ts": "2026-09-12T10:05:12Z",
+  "metric_type": "radio_audio",
+  "value": null,
+  "unit": null,
+  "payload": {"speaker": "unit-12", "confidence": 0.94},
+  "quality": "valid",
+  "availability": "fresh",
+  "provenance": {"source_id": "radio-dispatch-feed-1", "origin": "recorded"},
+  "external_event_id": "radio-msg-2026091210050012",
+  "transcript": "Command, this is Engine 12, heavy smoke on the third floor.",
+  "audio_url": null,
+  "audio_duration_ms": 12000,
+  "ingested_at": "2026-09-12T10:05:01Z"
+}

@@ -3,7 +3,7 @@ from typing import Literal, Optional
 
 from pydantic import BaseModel, Field
 
-DeviceType = Literal["cctv", "iot", "fire_panel", "alarm", "water_sensor", "other"]
+DeviceType = Literal["cctv", "iot", "fire_panel", "alarm", "water_sensor", "radio", "other"]
 DeviceStatus = Literal["online", "offline", "fault"]
 
 

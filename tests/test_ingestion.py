@@ -128,3 +128,42 @@ async def test_ingest_telemetry_persists_quality_and_provenance_fields():
         assert reading.availability == "fresh"
         assert reading.provenance == {"source_id": "sim-dataset-7", "origin": "synthetic"}
         assert reading.external_event_id == "evt-abc-123"
+
+
+@pytest.mark.asyncio
+async def test_ingest_radio_transcript_without_audio():
+    external_id = f"radio-ch-{uuid4()}"
+    payload = {
+        "device": {"external_id": external_id, "type": "radio", "name": "Channel 3"},
+        "metric_type": "radio_audio",
+        "ts": "2026-09-12T10:05:00Z",
+        "end_ts": "2026-09-12T10:05:12Z",
+        "transcript": "Command, this is Engine 12, heavy smoke on the third floor.",
+        "payload": {"speaker": "unit-12", "confidence": 0.94},
+    }
+
+    transport = ASGITransport(app=app)
+    async with AsyncClient(
+        transport=transport, base_url="http://test", headers=AUTH_HEADERS
+    ) as client:
+        response = await client.post("/ingest/telemetry", json=payload)
+
+    assert response.status_code == 200
+    assert response.json() == {"ingested": 1}
+
+    async with async_session() as session:
+        result = await session.execute(select(Device).where(Device.external_id == external_id))
+        device = result.scalar_one_or_none()
+        assert device is not None
+        assert device.type == "radio"
+        assert device.name == "Channel 3"
+
+        result = await session.execute(
+            select(TelemetryReading).where(TelemetryReading.device_id == device.id)
+        )
+        reading = result.scalars().one()
+        assert reading.metric_type == "radio_audio"
+        assert reading.transcript == "Command, this is Engine 12, heavy smoke on the third floor."
+        assert reading.audio_url is None
+        assert reading.audio_duration_ms is None
+        assert reading.payload["speaker"] == "unit-12"

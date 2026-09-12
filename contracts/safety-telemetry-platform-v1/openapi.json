@@ -801,6 +801,7 @@
               "fire_panel",
               "alarm",
               "water_sensor",
+              "radio",
               "other"
             ],
             "title": "Type"
@@ -1211,6 +1212,39 @@
               }
             ],
             "title": "External Event Id"
+          },
+          "transcript": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transcript"
+          },
+          "audio_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Url"
+          },
+          "audio_duration_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Duration Ms"
           }
         },
         "type": "object",
@@ -1329,6 +1363,39 @@
               }
             ],
             "title": "External Event Id"
+          },
+          "transcript": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transcript"
+          },
+          "audio_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Url"
+          },
+          "audio_duration_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Duration Ms"
           },
           "ingested_at": {
             "type": "string",

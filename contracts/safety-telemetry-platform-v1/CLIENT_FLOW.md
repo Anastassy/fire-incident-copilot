@@ -61,8 +61,14 @@ sequenceDiagram
 
 - `metric_type` is an open-ish enum: `temperature`, `smoke`, `water_level`, `motion`,
   `video_event`, `heartbeat`, `other`, `access`, `occupancy`, `radio_audio`, `system`,
-  `obscuration`, `co`, `eco2`. Use `end_ts` only for events with a duration (e.g. `motion`);
-  leave it `null`/omitted for point events.
+  `obscuration`, `co`, `eco2`. Use `end_ts` only for events with a duration (e.g. `motion` or
+  `radio_audio`); leave it `null`/omitted for point events.
+- **Radio/comms**: For transcribed radio traffic, use `device.type="radio"` and
+  `metric_type="radio_audio"`. One `TelemetryReading` row per transcribed message/utterance.
+  Use `ts`/`end_ts` for the utterance's time span. Include the optional `transcript` field
+  (speech-to-text string). The fields `audio_url` (clip reference) and `audio_duration_ms`
+  (duration in milliseconds) are reserved for future use — you may send `null` or omit them
+  for now (audio attachment is a planned future addition).
 - `provenance` is a free-form dict — put source dataset id, original recorded time, or
   origin type (`recorded`/`synthetic`/`derived`/`human_report`) in it; the platform does not
   interpret it, just stores and forwards it.

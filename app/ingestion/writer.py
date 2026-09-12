@@ -52,6 +52,9 @@ async def write_telemetry_reading(session: AsyncSession, device_id: UUID, teleme
         availability=telemetry_in.availability,
         provenance=telemetry_in.provenance,
         external_event_id=telemetry_in.external_event_id,
+        transcript=telemetry_in.transcript,
+        audio_url=telemetry_in.audio_url,
+        audio_duration_ms=telemetry_in.audio_duration_ms,
     )
     session.add(reading)
     await session.commit()
@@ -69,6 +72,9 @@ async def write_telemetry_reading(session: AsyncSession, device_id: UUID, teleme
         "availability": reading.availability,
         "provenance": reading.provenance,
         "external_event_id": reading.external_event_id,
+        "transcript": reading.transcript,
+        "audio_url": reading.audio_url,
+        "audio_duration_ms": reading.audio_duration_ms,
     }
     await redis_client.publish(TELEMETRY_CHANNEL, json.dumps(event, default=str))
 

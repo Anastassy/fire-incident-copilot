@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import BigInteger, DateTime, Float, ForeignKey, Index, String, func
+from sqlalchemy import BigInteger, DateTime, Float, ForeignKey, Index, Integer, String, Text, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -27,4 +27,7 @@ class TelemetryReading(Base):
     availability: Mapped[str | None] = mapped_column(String, nullable=True)
     provenance: Mapped[dict] = mapped_column(JSONB, default=dict)
     external_event_id: Mapped[str | None] = mapped_column(String, nullable=True, index=True)
+    transcript: Mapped[str | None] = mapped_column(Text, nullable=True)
+    audio_url: Mapped[str | None] = mapped_column(String, nullable=True)
+    audio_duration_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
     ingested_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

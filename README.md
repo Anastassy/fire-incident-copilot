@@ -51,6 +51,29 @@ curl -X POST http://localhost:8000/ingest/telemetry \
 {"ingested": 1}
 ```
 
+Пример для радио-канала (`type: "radio"`) — расшифрованное сообщение переговоров. Одна
+`TelemetryReading`-запись на одно транскрибированное сообщение/реплику (не непрерывный поток),
+`ts`/`end_ts` — начало/конец реплики. Аудио-вложение (`audio_url`, `audio_duration_ms`) пока не
+передаётся симулятором и ожидается позже — сейчас достаточно `transcript`:
+
+```bash
+curl -X POST http://localhost:8000/ingest/telemetry \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: dev-secret-change-me" \
+  -d '{
+    "device": {
+      "external_id": "radio-ch-3",
+      "type": "radio",
+      "name": "Channel 3"
+    },
+    "metric_type": "radio_audio",
+    "ts": "2026-09-12T10:05:00Z",
+    "end_ts": "2026-09-12T10:05:12Z",
+    "transcript": "Command, this is Engine 12, heavy smoke on the third floor.",
+    "payload": {"speaker": "unit-12", "confidence": 0.94}
+  }'
+```
+
 #### 2. WebSocket (WS `/ingest/stream`)
 
 Постоянное соединение, по одному объекту на строку (JSON):
@@ -86,7 +109,7 @@ ws.send(JSON.stringify({
 |------|-----|-------------|---------|
 | `device` | DeviceIn | нет | Обвязка устройства |
 | `device.external_id` | string | нет | Уникальный ID в системе источника |
-| `device.type` | enum | нет | `cctv`, `iot`, `fire_panel`, `alarm`, `water_sensor`, `other` |
+| `device.type` | enum | нет | `cctv`, `iot`, `fire_panel`, `alarm`, `water_sensor`, `radio`, `other` |
 | `device.name` | string | да | Человеко-читаемое имя |
 | `device.location` | DeviceLocation | да | Здание, этаж, зона, координаты |
 | `metric_type` | enum | нет | `temperature`, `smoke`, `water_level`, `motion`, `video_event`, `heartbeat`, `other`, `access`, `occupancy`, `radio_audio`, `system`, `obscuration`, `co`, `eco2` |
@@ -99,6 +122,9 @@ ws.send(JSON.stringify({
 | `availability` | enum | да | Свежесть/связность устройства на момент показания: `fresh`, `stale`, `missing`, `invalid`, `disconnected` |
 | `provenance` | dict | да | Произвольные метаданные о происхождении данных (например, `source_id` исходного датасета, исходное время записи, тип происхождения — `recorded`/`synthetic`/`derived`/`human_report`) |
 | `external_event_id` | string | да | Непрозрачный ID события/наблюдения из системы-источника — для идемпотентности и сверки с записями источника |
+| `transcript` | string | да | Расшифровка радиопереговоров (speech-to-text) для одного сообщения/реплики. Актуально для `metric_type: "radio_audio"` и `device.type: "radio"` |
+| `audio_url` | string | да | Ссылка на исходный аудиоклип реплики. Пока не заполняется симулятором (транскрипт приходит без аудио); зарезервировано на будущее |
+| `audio_duration_ms` | int | да | Длительность аудиоклипа в миллисекундах, если известна |
 
 ### Авторизация
 

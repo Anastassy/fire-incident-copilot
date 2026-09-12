@@ -45,6 +45,9 @@ class TelemetryIn(BaseModel):
     availability: Optional[Availability] = None
     provenance: dict = Field(default_factory=dict)
     external_event_id: Optional[str] = None
+    transcript: Optional[str] = None
+    audio_url: Optional[str] = None
+    audio_duration_ms: Optional[int] = None
 
 
 class TelemetryOut(BaseModel):
@@ -60,6 +63,9 @@ class TelemetryOut(BaseModel):
     availability: Optional[Availability] = None
     provenance: dict = Field(default_factory=dict)
     external_event_id: Optional[str] = None
+    transcript: Optional[str] = None
+    audio_url: Optional[str] = None
+    audio_duration_ms: Optional[int] = None
     ingested_at: datetime
 
     model_config = {"from_attributes": True}

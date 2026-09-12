@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.2 · 2026-09-12 · Radio/comms transcription support
+
+**Feature**: Added radio/comms transcription support. `DeviceType` now includes `"radio"`; simulators
+can send transcribed radio traffic via `metric_type="radio_audio"` with the new optional fields:
+- `transcript` — speech-to-text of one message/utterance
+- `audio_url` — reference to original audio clip (reserved for future use, currently null)
+- `audio_duration_ms` — duration in milliseconds (reserved for future use)
+
+One `TelemetryReading` per utterance; use `ts`/`end_ts` for the message's time span. See
+[CLIENT_FLOW.md](CLIENT_FLOW.md) "Notes" section for details, and
+[examples/radio-telemetry-response.json](examples/radio-telemetry-response.json) for a sample
+response shape.
+
 ## 1.0.1 · 2026-09-12 · SSE events now carry full object shape
 
 **Fix**: Incident and dashboard SSE events (`/stream/incidents` and `/stream/dashboards/{id}`)

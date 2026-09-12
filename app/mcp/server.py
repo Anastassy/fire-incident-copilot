@@ -50,6 +50,9 @@ def _reading_to_dict(reading) -> dict:
         "availability": reading.availability,
         "provenance": reading.provenance,
         "external_event_id": reading.external_event_id,
+        "transcript": reading.transcript,
+        "audio_url": reading.audio_url,
+        "audio_duration_ms": reading.audio_duration_ms,
         "ingested_at": _iso(reading.ingested_at),
     }
 
