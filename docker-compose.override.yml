@@ -1,0 +1,9 @@
+# Auto-merged by `docker compose up` (no extra flag needed) on top of docker-compose.yml.
+# Local-dev-only conveniences: hot reload against your working tree via a bind mount.
+# A real deploy should run `docker compose -f docker-compose.yml up --build` (or just
+# delete/rename this file on the server) to skip this override entirely.
+services:
+  app:
+    volumes:
+      - .:/code
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
