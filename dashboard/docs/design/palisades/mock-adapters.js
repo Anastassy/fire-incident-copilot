@@ -17,7 +17,7 @@
     if(fail){check={...check,status:'error',revision:++revision,generation:g,asOf:at};notifyCheck();return}
     // Deliberately deterministic mock classifier; never presented as a model.
     const request=records.find(r=>r.start===128.6),assignment=records.find(r=>r.start===133.26),reply=records.find(r=>r.start===138.7);
-    check={status:'ready',stage:reply&&assignment?'acknowledged':assignment?'answered':'request',channel:assignment?'V-Fire 25':null,evidenceIds:[request,assignment,reply].filter(Boolean).map(r=>r.id),generation:g,asOf:at,revision:++revision,queries:[{tool:'mock:publishedHistory',count:records.length,asOf:at}],origin:'scripted_mock'};notifyCheck();
+    check={status:'ready',stage:reply&&assignment?'acknowledged':assignment?'answered':'request',channel:assignment?'V-Fire 25':null,evidenceIds:[request,assignment,reply].filter(Boolean).map(r=>r.id),exchange:[['request',request],['assignment',assignment],['reply',reply]].filter(([,r])=>r).map(([role,r])=>({role,evidenceId:r.id})),generation:g,asOf:at,revision:++revision,queries:[{tool:'mock:publishedHistory',count:records.length,asOf:at}],origin:'scripted_mock'};notifyCheck();
    },lag)
   }
   function changed(){notify();const key=rows().map(r=>r.id).join('|');if(key!==lastKey){lastKey=key;investigate()}}
@@ -30,7 +30,7 @@
   const agent={subscribe(fn){checks.add(fn);fn({...check});return()=>checks.delete(fn)},retry(){fail=false;investigate()},simulateError(){fail=true;investigate()},async ask(question){
    const g=generation,at=time,records=rows();await new Promise(r=>setTimeout(r,lag));if(g!==generation||disposed)throw new Error('CONTEXT_CHANGED');if(fail)throw new Error('SEARCH_FAILED');
    const assignment=records.find(r=>r.start===133.26),reply=records.find(r=>r.start===138.7),all=/everyone|all|все|вся|всех|переш/i.test(question),ack=/acknow|reply|answer|channel|ответ|канал|подтверж/i.test(question);
-   let text=all?'Not established. One recorded reply does not verify every team member’s radio state.':!ack?'This mock supports the two example questions. Connect the agent adapter for open-ended questions.':reply&&assignment?'A channel assignment and an acknowledging reply appear in the published transcript. Verify the source audio.':assignment?'An answer assigning V-Fire 25 is present. No acknowledging reply was found in the published transcript.':'No answer to the group’s request was found in the published transcript.';
+   let text=all?'Not established. The published excerpt does not verify every team member’s radio state.':!ack?'This mock supports the two example questions. Connect the agent adapter for open-ended questions.':reply&&assignment?'A channel assignment and an acknowledging reply appear in the published transcript. Verify the source audio.':assignment?'An answer assigning V-Fire 25 is present. No acknowledging reply was found in the published transcript.':'No answer to the group’s request was found in the published transcript.';
    return {generation:g,asOf:at,text,evidenceIds:[assignment,reply].filter(Boolean).map(r=>r.id),origin:'scripted_mock'}
   }};
   const media={async resolve(id){const r=data.getRecord(id);return {url:'../../../data/demo/palisades-radio-demo/audio/decision-focus.mp3',start:r.start,end:r.end,record:r,generation}}};

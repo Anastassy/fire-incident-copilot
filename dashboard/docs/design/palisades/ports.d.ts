@@ -1,7 +1,7 @@
 /** UI normalization seam; does not replace project API contracts. */
 export interface RadioRecord { id:string; start:number; end:number; text:string; source:string; machineGenerated:boolean; humanVerified:boolean }
 export interface Snapshot { runId:string; generation:number; time:number; startTime:number; endTime:number; playing:boolean; ended:boolean; omitReply:boolean; mode:string; records:RadioRecord[] }
-export interface Check { status:'checking'|'ready'|'error'; stage?:'request'|'answered'|'acknowledged'; channel?:string|null; evidenceIds:string[]; generation:number; asOf:number; revision?:number; queries?:unknown[]; origin?:string }
+export interface Check { status:'checking'|'ready'|'error'; stage?:'request'|'answered'|'acknowledged'; channel?:string|null; exchange?:Array<{role:'request'|'assignment'|'reply';evidenceId:string}>; evidenceIds:string[]; generation:number; asOf:number; revision?:number; queries?:unknown[]; origin?:string }
 export interface Answer { generation:number; asOf:number; text:string; evidenceIds:string[]; origin:string }
 type Unsubscribe=()=>void;
 export interface PalisadesAdapters {
