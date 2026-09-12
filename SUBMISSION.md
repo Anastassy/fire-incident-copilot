@@ -1,9 +1,13 @@
 # Firewatch · Fire Incident Copilot — submission preparation
 
-**City:** Valencia  
-**Participant portal:** https://valencia.aitinkerers.org/hackathons/h_GVqIXzHKOYA  
-**Repository:** https://github.com/Anastassy/fire-incident-copilot  
-**Public demo video:** pending publication  
+**City:** Valencia
+
+**Participant portal:** https://valencia.aitinkerers.org/hackathons/h_GVqIXzHKOYA
+
+**Repository:** https://github.com/Anastassy/fire-incident-copilot
+
+**Public demo video:** pending publication
+
 **Public project post:** pending publication
 
 Prepared September 12, 2026 using the [Agents Everywhere guidance](https://github.com/CopilotKit/agents-everywhere-starter-kit). This prepares a submission; it does not submit an entry or assert organizer acceptance. Valencia's current portal/handbook takes precedence. Its documentation fetch returned HTTP 403, so the deadline and local posting instructions remain unverified here.
@@ -117,6 +121,8 @@ Secrets belong in backend environments/private files. `.env`, agent work and loc
 
 We built Firewatch, an incident copilot embedded in a live sensor, camera and radio workspace. It updates a source-linked briefing, answers questions about the replay, and keeps missing information visible. Our training demo combines synthetic building observations with independent historical radio; it does not control emergency equipment. Built with OpenAI Agents SDK and model inference through OpenRouter.
 
-Code: https://github.com/Anastassy/fire-incident-copilot  
-Demo: [add the public Sharp S6 video URL]  
+Code: https://github.com/Anastassy/fire-incident-copilot
+
+Demo: [add the public Sharp S6 video URL]
+
 Partner tags: [use the Valencia organizer's exact instructions]
