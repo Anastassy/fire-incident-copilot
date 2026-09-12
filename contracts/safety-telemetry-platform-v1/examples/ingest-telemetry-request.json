@@ -1,0 +1,18 @@
+{
+  "device": {
+    "external_id": "cam-12",
+    "type": "cctv",
+    "name": "Camera warehouse A-2",
+    "location": {"building": "A", "floor": 2, "zone": "warehouse"}
+  },
+  "metric_type": "video_event",
+  "ts": "2026-09-12T10:00:00Z",
+  "end_ts": null,
+  "value": null,
+  "unit": null,
+  "payload": {"event": "smoke_detected", "confidence": 0.87},
+  "quality": "valid",
+  "availability": "fresh",
+  "provenance": {"source_id": "sim-dataset-7", "origin": "synthetic"},
+  "external_event_id": "evt-abc-123"
+}

@@ -1,0 +1,13 @@
+{
+  "type": "fire",
+  "severity": "high",
+  "location": {"building": "A", "zone": "warehouse"},
+  "summary": "Smoke detected in warehouse A",
+  "evidence": [
+    {
+      "device_id": "550e8400-e29b-41d4-a716-446655440000",
+      "reading_id": 42,
+      "note": "smoke detected by CCTV model v2"
+    }
+  ]
+}

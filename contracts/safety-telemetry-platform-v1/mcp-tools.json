@@ -1,0 +1,181 @@
+{
+  "schema_version": "1.0.0",
+  "source": "Introspected live from app.mcp.server.mcp via mcp.list_tools() (mcp SDK 2.2.0, MCPServer). input_schema is authoritative and machine-generated from the actual tool signatures in app/mcp/server.py. `returns` is hand-authored from reading app/mcp/server.py's *_to_dict() helpers and the underlying Pydantic *Out schemas, since the SDK's generic output_schema for dict-returning tools is just {\"result\": {\"type\": \"object\", \"additionalProperties\": true}}.",
+  "transport": "streamable-http, mounted at /mcp-server (reachable at /mcp-server/mcp), auth via X-API-Key header",
+  "tools": [
+    {
+      "name": "list_devices",
+      "description": "List devices, optionally filtered by type and/or status.",
+      "input_schema": {
+        "properties": {
+          "type": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Type", "description": "cctv | iot | fire_panel | alarm | water_sensor | other"},
+          "status": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Status", "description": "online | offline | fault"}
+        },
+        "title": "list_devicesArguments",
+        "type": "object"
+      },
+      "returns": "list[Device] — each: {id, external_id, type, name, location, status, metadata, first_seen_at, last_seen_at}"
+    },
+    {
+      "name": "get_device",
+      "description": "Get a single device by id.",
+      "input_schema": {
+        "properties": {"device_id": {"title": "Device Id", "type": "string", "description": "device UUID (the platform id, not external_id)"}},
+        "required": ["device_id"],
+        "title": "get_deviceArguments",
+        "type": "object"
+      },
+      "returns": "Device dict (see list_devices) or null if not found"
+    },
+    {
+      "name": "query_telemetry",
+      "description": "Query telemetry readings, optionally filtered by device, metric type, and time range.",
+      "input_schema": {
+        "properties": {
+          "device_id": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Device Id"},
+          "metric_type": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Metric Type"},
+          "since": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Since", "description": "ISO 8601 datetime string"},
+          "until": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Until", "description": "ISO 8601 datetime string"},
+          "limit": {"default": 100, "title": "Limit", "type": "integer"}
+        },
+        "title": "query_telemetryArguments",
+        "type": "object"
+      },
+      "returns": "list[TelemetryReading] — each: {id, device_id, ts, end_ts, metric_type, value, unit, payload, quality, availability, provenance, external_event_id, ingested_at}"
+    },
+    {
+      "name": "get_latest_readings",
+      "description": "Get the latest reading per device, optionally filtered by device ids or device type.",
+      "input_schema": {
+        "properties": {
+          "device_ids": {"anyOf": [{"items": {"type": "string"}, "type": "array"}, {"type": "null"}], "default": null, "title": "Device Ids"},
+          "type": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Type"}
+        },
+        "title": "get_latest_readingsArguments",
+        "type": "object"
+      },
+      "returns": "list[TelemetryReading], one entry per device (see query_telemetry for shape)"
+    },
+    {
+      "name": "list_incidents",
+      "description": "List incidents, optionally filtered by status, type, and opened-since timestamp.",
+      "input_schema": {
+        "properties": {
+          "status": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Status", "description": "open | acknowledged | resolved | escalated"},
+          "type": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Type", "description": "fire | flood | intrusion | equipment_fault | other"},
+          "since": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Since", "description": "ISO 8601 datetime string"}
+        },
+        "title": "list_incidentsArguments",
+        "type": "object"
+      },
+      "returns": "list[Incident] with evidence always [] — each: {id, type, status, severity, location, summary, metadata, opened_at, updated_at, closed_at, evidence: []}"
+    },
+    {
+      "name": "get_incident",
+      "description": "Get a single incident by id, including its linked evidence.",
+      "input_schema": {
+        "properties": {"incident_id": {"title": "Incident Id", "type": "string"}},
+        "required": ["incident_id"],
+        "title": "get_incidentArguments",
+        "type": "object"
+      },
+      "returns": "Incident dict with full evidence array populated, or null if not found. evidence item: {id, incident_id, device_id, reading_id, note, created_at}"
+    },
+    {
+      "name": "create_incident",
+      "description": "Create a new incident hypothesis, optionally with supporting evidence.",
+      "input_schema": {
+        "properties": {
+          "type": {"title": "Type", "type": "string", "description": "fire | flood | intrusion | equipment_fault | other"},
+          "severity": {"title": "Severity", "type": "string", "description": "low | medium | high | critical"},
+          "location": {"additionalProperties": true, "title": "Location", "type": "object", "description": "free-form dict, e.g. {building, floor, zone, lat, lon}"},
+          "summary": {"title": "Summary", "type": "string"},
+          "evidence": {"anyOf": [{"items": {"additionalProperties": true, "type": "object"}, "type": "array"}, {"type": "null"}], "default": null, "title": "Evidence", "description": "optional list of {device_id?, reading_id?, note?} to link immediately"}
+        },
+        "required": ["type", "severity", "location", "summary"],
+        "title": "create_incidentArguments",
+        "type": "object"
+      },
+      "returns": "created Incident dict, status defaults to \"open\", evidence populated from the evidence argument (see get_incident for shape)"
+    },
+    {
+      "name": "update_incident",
+      "description": "Update an incident's status/severity, or append a note.",
+      "input_schema": {
+        "properties": {
+          "incident_id": {"title": "Incident Id", "type": "string"},
+          "status": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Status", "description": "open | acknowledged | resolved | escalated; setting resolved also stamps closed_at"},
+          "severity": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Severity", "description": "low | medium | high | critical"},
+          "note": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Note", "description": "appended to metadata.notes (a list), not a replacement"}
+        },
+        "required": ["incident_id"],
+        "title": "update_incidentArguments",
+        "type": "object"
+      },
+      "returns": "updated Incident dict with full evidence array (see get_incident for shape)"
+    },
+    {
+      "name": "link_evidence",
+      "description": "Link a piece of evidence (device reading and/or note) to an existing incident.",
+      "input_schema": {
+        "properties": {
+          "incident_id": {"title": "Incident Id", "type": "string"},
+          "device_id": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Device Id"},
+          "reading_id": {"anyOf": [{"type": "integer"}, {"type": "null"}], "default": null, "title": "Reading Id", "description": "TelemetryReading.id (bigint), not a UUID"},
+          "note": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Note"}
+        },
+        "required": ["incident_id"],
+        "title": "link_evidenceArguments",
+        "type": "object"
+      },
+      "returns": "updated Incident dict with the new evidence row included (see get_incident for shape)"
+    },
+    {
+      "name": "list_dashboards",
+      "description": "List all dashboard specs.",
+      "input_schema": {"properties": {}, "title": "list_dashboardsArguments", "type": "object"},
+      "returns": "list[DashboardSpec] — each: {id, title, created_by, spec, version, created_at, updated_at}"
+    },
+    {
+      "name": "get_dashboard",
+      "description": "Get a single dashboard spec by id.",
+      "input_schema": {
+        "properties": {"dashboard_id": {"title": "Dashboard Id", "type": "string"}},
+        "required": ["dashboard_id"],
+        "title": "get_dashboardArguments",
+        "type": "object"
+      },
+      "returns": "DashboardSpec dict (see list_dashboards) or null if not found"
+    },
+    {
+      "name": "create_dashboard",
+      "description": "Create a new custom dashboard spec for the operator dashboard app to pick up.",
+      "input_schema": {
+        "properties": {
+          "title": {"title": "Title", "type": "string"},
+          "spec": {"additionalProperties": true, "title": "Spec", "type": "object", "description": "free-form dict, e.g. {layout, widgets: [...]}"},
+          "created_by": {"default": "agent", "title": "Created By", "type": "string", "description": "agent | operator | default"}
+        },
+        "required": ["title", "spec"],
+        "title": "create_dashboardArguments",
+        "type": "object"
+      },
+      "returns": "created DashboardSpec dict, version = 1"
+    },
+    {
+      "name": "update_dashboard",
+      "description": "Update an existing dashboard's title and/or spec, bumping its version.",
+      "input_schema": {
+        "properties": {
+          "dashboard_id": {"title": "Dashboard Id", "type": "string"},
+          "title": {"anyOf": [{"type": "string"}, {"type": "null"}], "default": null, "title": "Title"},
+          "spec": {"anyOf": [{"additionalProperties": true, "type": "object"}, {"type": "null"}], "default": null, "title": "Spec", "description": "when provided, replaces the whole spec dict (not merged)"}
+        },
+        "required": ["dashboard_id"],
+        "title": "update_dashboardArguments",
+        "type": "object"
+      },
+      "returns": "updated DashboardSpec dict with version incremented by 1"
+    }
+  ]
+}

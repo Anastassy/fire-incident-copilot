@@ -47,10 +47,10 @@ class IncidentOut(BaseModel):
     severity: str
     location: dict
     summary: str
-    metadata: dict = Field(alias="metadata_")
+    metadata_: dict = Field(serialization_alias="metadata")
     opened_at: datetime
     updated_at: datetime
     closed_at: Optional[datetime] = None
     evidence: list[EvidenceOut] = Field(default_factory=list)
 
-    model_config = {"from_attributes": True, "populate_by_name": True}
+    model_config = {"from_attributes": True}

@@ -31,8 +31,8 @@ class DeviceOut(BaseModel):
     name: Optional[str] = None
     location: dict
     status: str
-    metadata: dict = Field(alias="metadata_")
+    metadata_: dict = Field(serialization_alias="metadata")
     first_seen_at: datetime
     last_seen_at: datetime
 
-    model_config = {"from_attributes": True, "populate_by_name": True}
+    model_config = {"from_attributes": True}

@@ -3,39 +3,613 @@
 Backend-платформа для хакатона: приём телеметрии с сенсоров (CCTV/IoT/пожарные панели/alarm-системы),
 хранение и два независимых интерфейса доступа к данным:
 
-- **REST + WS/SSE** (`/devices`, `/telemetry`, `/incidents`, `/dashboards`, `/stream/*`) — для
+- **REST + SSE** (`/devices`, `/telemetry`, `/incidents`, `/dashboards`, `/stream/*`) — для
   автономного дашборд-приложения.
-- **MCP** (`app/mcp/server.py`) — для агентной системы: чтение телеметрии/инцидентов, запись
+- **MCP** (`/mcp-server`, транспорт streamable-http) — для агентной системы: чтение телеметрии/инцидентов, запись
   инцидентов (гипотезы) и кастомных dashboard-specs по запросу оператора.
 
 Полная архитектура и разбивка ответственности — см. план в `/Users/vitalynec/.claude/plans/swirling-meandering-aho.md`.
 
-## Контракт приёма данных (для команды симулятора)
+---
 
-`POST /ingest/telemetry` принимает один объект или список объектов:
+## Для команды симулятора (ingestion)
 
+### Контракт приёма данных
+
+Два способа отправить телеметрию:
+
+#### 1. HTTP (POST `/ingest/telemetry`)
+
+Единый объект или список объектов:
+
+```bash
+curl -X POST http://localhost:8000/ingest/telemetry \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: dev-secret-change-me" \
+  -d '{
+    "device": {
+      "external_id": "cam-12",
+      "type": "cctv",
+      "name": "Camera warehouse A-2",
+      "location": {"building": "A", "floor": 2, "zone": "warehouse"}
+    },
+    "metric_type": "video_event",
+    "ts": "2026-09-12T10:00:00Z",
+    "end_ts": null,
+    "value": null,
+    "unit": null,
+    "payload": {"event": "smoke_detected", "confidence": 0.87},
+    "quality": "valid",
+    "availability": "fresh",
+    "provenance": {"source_id": "sim-dataset-7", "origin": "synthetic"},
+    "external_event_id": "evt-abc-123"
+  }'
+```
+
+**Ответ:**
 ```json
-{
-  "device": {
+{"ingested": 1}
+```
+
+#### 2. WebSocket (WS `/ingest/stream`)
+
+Постоянное соединение, по одному объекту на строку (JSON):
+
+```javascript
+const ws = new WebSocket('ws://localhost:8000/ingest/stream', [], {
+  headers: {'X-API-Key': 'dev-secret-change-me'}
+});
+
+ws.on('message', (msg) => {
+  console.log(JSON.parse(msg));  // {"status": "ok"} или {"status": "error", "detail": "..."}
+});
+
+ws.send(JSON.stringify({
+  device: {
+    external_id: "iot-temp-01",
+    type: "iot",
+    name: "Temperature sensor zone B",
+    location: {building: "B", floor: 1}
+  },
+  metric_type: "temperature",
+  ts: "2026-09-12T10:05:30Z",
+  end_ts: null,
+  value: 23.5,
+  unit: "°C",
+  payload: {}
+}));
+```
+
+### Схема TelemetryIn
+
+| Поле | Тип | Опционально | Описание |
+|------|-----|-------------|---------|
+| `device` | DeviceIn | нет | Обвязка устройства |
+| `device.external_id` | string | нет | Уникальный ID в системе источника |
+| `device.type` | enum | нет | `cctv`, `iot`, `fire_panel`, `alarm`, `water_sensor`, `other` |
+| `device.name` | string | да | Человеко-читаемое имя |
+| `device.location` | DeviceLocation | да | Здание, этаж, зона, координаты |
+| `metric_type` | enum | нет | `temperature`, `smoke`, `water_level`, `motion`, `video_event`, `heartbeat`, `other`, `access`, `occupancy`, `radio_audio`, `system`, `obscuration`, `co`, `eco2` |
+| `ts` | ISO 8601 datetime | нет | Начало события |
+| `end_ts` | ISO 8601 datetime | да | **Только для событий с длительностью** (motion с ts по end_ts). Для точечных событий не передавать или `null`. |
+| `value` | float | да | Для скалярных метрик (температура, уровень воды) |
+| `unit` | string | да | Единица измерения (°C, m, % и т.д.) |
+| `payload` | dict | да | Произвольные структурированные данные (детекции, статусы) |
+| `quality` | enum | да | Качество исходного значения: `valid`, `missing`, `invalid` |
+| `availability` | enum | да | Свежесть/связность устройства на момент показания: `fresh`, `stale`, `missing`, `invalid`, `disconnected` |
+| `provenance` | dict | да | Произвольные метаданные о происхождении данных (например, `source_id` исходного датасета, исходное время записи, тип происхождения — `recorded`/`synthetic`/`derived`/`human_report`) |
+| `external_event_id` | string | да | Непрозрачный ID события/наблюдения из системы-источника — для идемпотентности и сверки с записями источника |
+
+### Авторизация
+
+**Все запросы требуют заголовок:**
+```
+X-API-Key: <значение из .env API_KEY>
+```
+
+По умолчанию: `dev-secret-change-me` (см. `app/core/config.py`).
+
+---
+
+## Для команды дашборда (REST + SSE)
+
+### REST API endpoints
+
+#### Устройства
+
+**`GET /devices`** — список устройств с фильтрацией
+
+Параметры:
+- `type` (query, optional): фильтр по типу (cctv, iot, fire_panel, alarm, water_sensor, other)
+- `status` (query, optional): фильтр по статусу (online, offline, fault)
+- `building` (query, optional): здание
+- `floor` (query, optional): этаж
+- `zone` (query, optional): зона
+
+```bash
+curl -X GET "http://localhost:8000/devices?type=cctv&building=A" \
+  -H "X-API-Key: dev-secret-change-me"
+```
+
+**Ответ:** `list[DeviceOut]`
+```json
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
     "external_id": "cam-12",
     "type": "cctv",
     "name": "Camera warehouse A-2",
-    "location": {"building": "A", "floor": 2, "zone": "warehouse"}
-  },
-  "metric_type": "video_event",
-  "ts": "2026-09-12T10:00:00Z",
-  "value": null,
-  "unit": null,
-  "payload": {"event": "smoke_detected", "confidence": 0.87}
+    "location": {"building": "A", "floor": 2, "zone": "warehouse"},
+    "status": "online",
+    "metadata": {},
+    "first_seen_at": "2026-09-12T09:30:00Z",
+    "last_seen_at": "2026-09-12T10:15:00Z"
+  }
+]
+```
+
+**`GET /devices/{device_id}`** — одно устройство
+
+```bash
+curl -X GET "http://localhost:8000/devices/550e8400-e29b-41d4-a716-446655440000" \
+  -H "X-API-Key: dev-secret-change-me"
+```
+
+**Ответ:** `DeviceOut` (см. выше)
+
+---
+
+#### Телеметрия
+
+**`GET /telemetry`** — запрос показаний с фильтрацией
+
+Параметры:
+- `device_id` (query, optional, UUID): ID устройства
+- `metric_type` (query, optional): тип метрики
+- `since` (query, optional, ISO 8601): начало диапазона
+- `until` (query, optional, ISO 8601): конец диапазона
+- `limit` (query, default=100): максимальное число результатов
+
+```bash
+curl -X GET "http://localhost:8000/telemetry?device_id=550e8400-e29b-41d4-a716-446655440000&metric_type=video_event&since=2026-09-12T09:00:00Z&limit=50" \
+  -H "X-API-Key: dev-secret-change-me"
+```
+
+**Ответ:** `list[TelemetryOut]`
+```json
+[
+  {
+    "id": 42,
+    "device_id": "550e8400-e29b-41d4-a716-446655440000",
+    "ts": "2026-09-12T10:00:00Z",
+    "end_ts": null,
+    "metric_type": "video_event",
+    "value": null,
+    "unit": null,
+    "payload": {"event": "smoke_detected", "confidence": 0.87},
+    "ingested_at": "2026-09-12T10:00:05Z"
+  }
+]
+```
+
+**`GET /telemetry/latest`** — последние показания по устройствам
+
+Параметры:
+- `device_id` (query, optional, list[UUID]): список ID устройств (может повторяться)
+- `type` (query, optional): тип устройства
+- `building` (query, optional): здание
+- `floor` (query, optional): этаж
+- `zone` (query, optional): зона
+
+```bash
+curl -X GET "http://localhost:8000/telemetry/latest?device_id=550e8400-e29b-41d4-a716-446655440000&device_id=660e8400-e29b-41d4-a716-446655440001&type=cctv" \
+  -H "X-API-Key: dev-secret-change-me"
+```
+
+**Ответ:** `list[TelemetryOut]` (одно на устройство, самое свежее)
+
+---
+
+#### Инциденты
+
+**`GET /incidents`** — список инцидентов с фильтрацией
+
+Параметры:
+- `status` (query, optional): фильтр по статусу (open, acknowledged, resolved, escalated)
+- `type` (query, optional): тип инцидента (fire, flood, intrusion, equipment_fault, other)
+- `since` (query, optional, ISO 8601): открыт начиная с этой даты
+
+```bash
+curl -X GET "http://localhost:8000/incidents?status=open&type=fire" \
+  -H "X-API-Key: dev-secret-change-me"
+```
+
+**Ответ:** `list[IncidentOut]` (без evidence, для производительности)
+```json
+[
+  {
+    "id": "11111111-2222-3333-4444-555555555555",
+    "type": "fire",
+    "status": "open",
+    "severity": "high",
+    "location": {"building": "A", "zone": "warehouse"},
+    "summary": "Smoke detected in warehouse A",
+    "metadata": {},
+    "opened_at": "2026-09-12T10:00:00Z",
+    "updated_at": "2026-09-12T10:05:00Z",
+    "closed_at": null,
+    "evidence": []
+  }
+]
+```
+
+**`GET /incidents/{incident_id}`** — одинцидент с evidence
+
+```bash
+curl -X GET "http://localhost:8000/incidents/11111111-2222-3333-4444-555555555555" \
+  -H "X-API-Key: dev-secret-change-me"
+```
+
+**Ответ:** `IncidentOut` (с полным массивом evidence)
+```json
+{
+  "id": "11111111-2222-3333-4444-555555555555",
+  "type": "fire",
+  "status": "open",
+  "severity": "high",
+  "location": {"building": "A", "zone": "warehouse"},
+  "summary": "Smoke detected in warehouse A",
+  "metadata": {},
+  "opened_at": "2026-09-12T10:00:00Z",
+  "updated_at": "2026-09-12T10:05:00Z",
+  "closed_at": null,
+  "evidence": [
+    {
+      "id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+      "device_id": "550e8400-e29b-41d4-a716-446655440000",
+      "reading_id": 42,
+      "note": "smoke detected by CCTV model v2",
+      "created_at": "2026-09-12T10:00:00Z"
+    }
+  ]
 }
 ```
 
-- `device.type`: `cctv | iot | fire_panel | alarm | water_sensor | other`
-- `metric_type`: `temperature | smoke | water_level | motion | video_event | heartbeat | other`
-- `value`/`unit` — для скалярных метрик (температура, уровень воды); `payload` — для произвольных
-  структурированных данных (детекции, статусы, кадры).
-- Устройство авто-регистрируется/апсертится по `external_id` при первом событии.
-- Альтернатива HTTP — `WS /ingest/stream`: тот же payload построчно, для постоянного соединения.
+---
+
+#### Дашборды
+
+**`GET /dashboards`** — список dashboard specs
+
+```bash
+curl -X GET "http://localhost:8000/dashboards" \
+  -H "X-API-Key: dev-secret-change-me"
+```
+
+**Ответ:** `list[DashboardOut]`
+```json
+[
+  {
+    "id": "cccccccc-dddd-eeee-ffff-000000000000",
+    "title": "Warehouse A Monitoring",
+    "created_by": "agent",
+    "spec": {"layout": "grid", "widgets": [...]},
+    "version": 2,
+    "created_at": "2026-09-12T09:00:00Z",
+    "updated_at": "2026-09-12T10:15:00Z"
+  }
+]
+```
+
+**`GET /dashboards/{dashboard_id}`** — один dashboard
+
+```bash
+curl -X GET "http://localhost:8000/dashboards/cccccccc-dddd-eeee-ffff-000000000000" \
+  -H "X-API-Key: dev-secret-change-me"
+```
+
+**Ответ:** `DashboardOut` (см. выше)
+
+---
+
+### SSE Streams
+
+Три потока для real-time обновлений (Server-Sent Events). Подписка без параметров, фильтрация на клиенте.
+
+**`GET /stream/telemetry`** — события телеметрии
+
+```bash
+curl -X GET "http://localhost:8000/stream/telemetry" \
+  -H "X-API-Key: dev-secret-change-me"
+```
+
+Сообщение на канале (raw JSON):
+```json
+{
+  "id": 42,
+  "device_id": "550e8400-e29b-41d4-a716-446655440000",
+  "ts": "2026-09-12T10:00:00Z",
+  "end_ts": null,
+  "metric_type": "video_event",
+  "value": null,
+  "unit": null,
+  "payload": {"event": "smoke_detected"},
+  "ingested_at": "2026-09-12T10:00:05Z"
+}
+```
+
+**`GET /stream/incidents`** — события инцидентов
+
+```bash
+curl -X GET "http://localhost:8000/stream/incidents" \
+  -H "X-API-Key: dev-secret-change-me"
+```
+
+Сообщение на канале:
+```json
+{
+  "id": "11111111-2222-3333-4444-555555555555",
+  "type": "fire",
+  "status": "open",
+  "severity": "high",
+  "location": {...},
+  "summary": "...",
+  "metadata": {},
+  "opened_at": "...",
+  "updated_at": "...",
+  "closed_at": null
+}
+```
+
+**`GET /stream/dashboards/{dashboard_id}`** — события дашборда
+
+```bash
+curl -X GET "http://localhost:8000/stream/dashboards/cccccccc-dddd-eeee-ffff-000000000000" \
+  -H "X-API-Key: dev-secret-change-me"
+```
+
+Сообщение на канале: обновления DashboardOut (текущая реализация транслирует все события на общий канал; фильтрация по dashboard_id пока на клиенте).
+
+---
+
+### Swagger UI (для исследования)
+
+**`GET /docs`** — интерактивный Swagger UI
+
+- **Доступен без авторизации** — статический просмотр
+- **"Try it out" требует X-API-Key** в заголовках (вводится в интерфейс)
+- Полный перечень параметров и примеры
+
+---
+
+## Для агентной системы (MCP)
+
+### Транспорт и монтирование
+
+- **Путь:** `/mcp-server`
+- **Транспорт:** streamable-http (Starlette SSE)
+- **Авторизация:** X-API-Key header (как REST API)
+- **Соединение:** инициируется агентом; платформа слушает на `/mcp-server/mcp`
+
+```bash
+# Пример curl подписки на инструменты MCP (SSE)
+curl -X POST "http://localhost:8000/mcp-server/mcp" \
+  -H "X-API-Key: dev-secret-change-me" \
+  -H "Content-Type: application/json"
+```
+
+### MCP Tools
+
+#### Устройства
+
+**`list_devices(type: str | None, status: str | None) → list[dict]`**
+
+Список устройств, опционально отфильтрованный по типу и/или статусу.
+
+Параметры:
+- `type`: фильтр по типу (cctv, iot, fire_panel, alarm, water_sensor, other)
+- `status`: фильтр по статусу (online, offline, fault)
+
+Возвращает:
+```json
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "external_id": "cam-12",
+    "type": "cctv",
+    "name": "Camera warehouse A-2",
+    "location": {"building": "A", "floor": 2, "zone": "warehouse"},
+    "status": "online",
+    "metadata": {},
+    "first_seen_at": "2026-09-12T09:30:00Z",
+    "last_seen_at": "2026-09-12T10:15:00Z"
+  }
+]
+```
+
+**`get_device(device_id: str) → dict | None`**
+
+Получить одно устройство по ID.
+
+Параметры:
+- `device_id`: UUID устройства
+
+Возвращает: объект Device или None.
+
+---
+
+#### Телеметрия
+
+**`query_telemetry(device_id: str | None, metric_type: str | None, since: str | None, until: str | None, limit: int = 100) → list[dict]`**
+
+Запрос показаний с фильтрацией.
+
+Параметры:
+- `device_id`: UUID устройства (опционально)
+- `metric_type`: тип метрики (опционально)
+- `since`: ISO 8601 начало диапазона (опционально)
+- `until`: ISO 8601 конец диапазона (опционально)
+- `limit`: максимум результатов (по умолчанию 100)
+
+Возвращает:
+```json
+[
+  {
+    "id": 42,
+    "device_id": "550e8400-e29b-41d4-a716-446655440000",
+    "ts": "2026-09-12T10:00:00Z",
+    "end_ts": null,
+    "metric_type": "video_event",
+    "value": null,
+    "unit": null,
+    "payload": {"event": "smoke_detected", "confidence": 0.87},
+    "ingested_at": "2026-09-12T10:00:05Z"
+  }
+]
+```
+
+**`get_latest_readings(device_ids: list[str] | None, type: str | None) → list[dict]`**
+
+Последние показания по устройствам.
+
+Параметры:
+- `device_ids`: список UUID (опционально)
+- `type`: фильтр по типу устройства (опционально)
+
+Возвращает: одно TelemetryOut на устройство.
+
+---
+
+#### Инциденты
+
+**`list_incidents(status: str | None, type: str | None, since: str | None) → list[dict]`**
+
+Список инцидентов с фильтрацией.
+
+Параметры:
+- `status`: фильтр по статусу (open, acknowledged, resolved, escalated)
+- `type`: фильтр по типу (fire, flood, intrusion, equipment_fault, other)
+- `since`: ISO 8601, открыт начиная с этой даты (опционально)
+
+Возвращает: список IncidentOut (без evidence).
+
+**`get_incident(incident_id: str) → dict | None`**
+
+Получить один инцидент с полным evidence.
+
+Параметры:
+- `incident_id`: ID инцидента (UUID)
+
+Возвращает: IncidentOut с массивом evidence или None.
+
+**`create_incident(type: str, severity: str, location: dict, summary: str, evidence: list[dict] | None) → dict`**
+
+Создать новый инцидент (гипотезу).
+
+Параметры:
+- `type`: тип инцидента (fire, flood, intrusion, equipment_fault, other)
+- `severity`: серьёзность (low, medium, high, critical)
+- `location`: dict с building/floor/zone/lat/lon
+- `summary`: описание
+- `evidence`: опциональный список {device_id, reading_id, note} для начальной привязки
+
+Возвращает: созданный IncidentOut.
+
+**`update_incident(incident_id: str, status: str | None, severity: str | None, note: str | None) → dict`**
+
+Обновить статус/серьёзность инцидента или добавить note.
+
+Параметры:
+- `incident_id`: UUID инцидента
+- `status`: новый статус (open, acknowledged, resolved, escalated), опционально
+- `severity`: новая серьёзность (low, medium, high, critical), опционально
+- `note`: текст note для добавления в metadata, опционально
+
+Возвращает: обновленный IncidentOut.
+
+**`link_evidence(incident_id: str, device_id: str | None, reading_id: int | None, note: str | None) → dict`**
+
+Привязать evidence (показание устройства и/или примечание) к существующему инциденту.
+
+Параметры:
+- `incident_id`: UUID инцидента
+- `device_id`: UUID устройства (опционально)
+- `reading_id`: ID показания (опционально)
+- `note`: текстовое примечание (опционально)
+
+Возвращает: обновленный IncidentOut с добавленным evidence.
+
+---
+
+#### Дашборды
+
+**`list_dashboards() → list[dict]`**
+
+Список всех dashboard specs.
+
+Параметров нет.
+
+Возвращает:
+```json
+[
+  {
+    "id": "cccccccc-dddd-eeee-ffff-000000000000",
+    "title": "Warehouse A Monitoring",
+    "created_by": "agent",
+    "spec": {"layout": "grid", "widgets": [...]},
+    "version": 2,
+    "created_at": "2026-09-12T09:00:00Z",
+    "updated_at": "2026-09-12T10:15:00Z"
+  }
+]
+```
+
+**`get_dashboard(dashboard_id: str) → dict | None`**
+
+Получить один dashboard по ID.
+
+Параметры:
+- `dashboard_id`: UUID дашборда
+
+Возвращает: DashboardOut или None.
+
+**`create_dashboard(title: str, spec: dict, created_by: str = "agent") → dict`**
+
+Создать новый dashboard spec.
+
+Параметры:
+- `title`: название
+- `spec`: произвольный dict с layout/widgets/etc
+- `created_by`: источник (agent, operator, default); по умолчанию "agent"
+
+Возвращает: созданный DashboardOut (version = 1).
+
+**`update_dashboard(dashboard_id: str, title: str | None, spec: dict | None) → dict`**
+
+Обновить dashboard (title и/или spec), увеличив version.
+
+Параметры:
+- `dashboard_id`: UUID дашборда
+- `title`: новое название (опционально)
+- `spec`: новый spec (опционально)
+
+Возвращает: обновленный DashboardOut с incremented version.
+
+---
+
+### Конфигурация окружения
+
+Переменные из `.env`:
+
+```env
+DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5433/platform
+REDIS_URL=redis://localhost:6379/0
+API_KEY=dev-secret-change-me  # используется как X-API-Key для всех запросов
+```
+
+Значения по умолчанию см. в `app/core/config.py`.
+
+---
 
 ## Запуск (локально, для разработки)
 

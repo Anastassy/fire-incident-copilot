@@ -1,0 +1,11 @@
+{
+  "title": "Warehouse A Monitoring",
+  "created_by": "agent",
+  "spec": {
+    "layout": "grid",
+    "widgets": [
+      {"type": "device_card", "device_id": "550e8400-e29b-41d4-a716-446655440000"},
+      {"type": "incident_list", "filter": {"status": "open", "type": "fire"}}
+    ]
+  }
+}
