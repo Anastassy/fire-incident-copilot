@@ -1,0 +1,13 @@
+.git
+.venv
+venv
+__pycache__
+*.pyc
+.pytest_cache
+*.egg-info
+dist
+.claude
+
+# Never bake real secrets into the image (env vars are injected at run time instead).
+.env
+.state_machine_bridge_state.json

@@ -1,0 +1,41 @@
+{
+  "id": 101,
+  "device_id": "550e8400-e29b-41d4-a716-446655440001",
+  "ts": "2026-09-12T10:05:30Z",
+  "end_ts": "2026-09-12T10:05:42Z",
+  "metric_type": "radio_audio",
+  "value": null,
+  "unit": null,
+  "transcript": "Engine 12 to command, we have heavy smoke on the third floor, east wing. Visibility is very low.",
+  "quality": "valid",
+  "availability": "fresh",
+  "provenance": {
+    "origin": "recorded",
+    "model": "mlx-community/whisper-large-v3-turbo-q4",
+    "delivery": "prerecorded",
+    "machine_generated": true,
+    "human_verified": false,
+    "audio_source_file": "archive/2026-09-12-radio-a.wav",
+    "audio_source_sha256": "a1b2c3d4e5f6789abcdef0123456789abcdef0123456789abcdef0123456789a",
+    "source_id": "broadcastify-archive-import",
+    "acquisition_id": "session-2026-09-12-001"
+  },
+  "external_event_id": "ev-radio-text-001",
+  "audio_url": null,
+  "audio_duration_ms": 12000,
+  "payload": {
+    "language": "en",
+    "channel_id": "RADIO-A",
+    "stream_id": "RADIO-A-primary",
+    "speaker": "engine-12",
+    "confidence": 0.94,
+    "words": [
+      {"word": "Engine", "start_ms": 0, "end_ms": 250, "confidence": 0.99},
+      {"word": "12", "start_ms": 280, "end_ms": 450, "confidence": 0.98},
+      {"word": "to", "start_ms": 480, "end_ms": 620, "confidence": 0.97},
+      {"word": "command", "start_ms": 650, "end_ms": 900, "confidence": 0.96}
+    ],
+    "timing_notes": ["Early word detected 340ms before segment boundary"]
+  },
+  "ingested_at": "2026-09-12T10:05:32Z"
+}

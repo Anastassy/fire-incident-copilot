@@ -1,0 +1,101 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: platform
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Deploy-oriented by default: built image only, no bind mount, no --reload. For local
+  # hot-reload dev, docker-compose.override.yml (auto-merged by `docker compose up`) adds
+  # both back -- this base file stays what you'd actually run on a server.
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/platform
+      REDIS_URL: redis://redis:6379/0
+      # Shared secret checked by ApiKeyMiddleware. The `dev-secret-change-me` fallback
+      # here only mirrors Settings' own Python-level default so a bare `docker compose
+      # up` with no .env still boots end-to-end; a real deploy MUST set API_KEY in .env
+      # to a real generated secret -- this fallback is never what it should run with.
+      API_KEY: ${API_KEY:-dev-secret-change-me}
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  # Long-running State Machine adapter (app/adapter/bridge.py) -- pulls live sensor
+  # events and re-posts them to our own /ingest/telemetry. Not part of the FastAPI
+  # process; safe to stop/restart independently of `app`.
+  bridge:
+    build: .
+    depends_on:
+      app:
+        condition: service_healthy
+    environment:
+      STATE_MACHINE_BASE_URL: ${STATE_MACHINE_BASE_URL:-https://api.aitinkerers.space/api/v1}
+      # Left unset here on purpose: an empty token isn't a compose-level failure --
+      # app/adapter/bridge.py's own guard logs "STATE_MACHINE_BEARER_TOKEN is not set"
+      # and exits cleanly rather than crash-looping. Set it in .env to actually run.
+      STATE_MACHINE_BEARER_TOKEN: ${STATE_MACHINE_BEARER_TOKEN:-}
+      STATE_MACHINE_SCENARIO_ID: ${STATE_MACHINE_SCENARIO_ID:-degraded}
+      # Internal docker network hostname, not localhost -- `app` is a separate container.
+      OUR_API_BASE_URL: http://app:8000
+      API_KEY: ${API_KEY:-dev-secret-change-me}
+      # `python -m ...` puts the CURRENT WORKING DIRECTORY on sys.path[0] (not the image's
+      # WORKDIR) -- since working_dir below is /state, not /code, app.adapter would not be
+      # importable without this.
+      PYTHONPATH: /code
+    # Bypasses the Dockerfile's migration entrypoint -- `app` already applies migrations
+    # once; the bridge just needs to run the adapter process.
+    entrypoint: ["python", "-m", "app.adapter.bridge"]
+    # app/adapter/state_store.py resolves its resume-state file as a path RELATIVE to the
+    # process's cwd (`.state_machine_bridge_state.json`, not overridable via env). Running
+    # the bridge with cwd=/state (a plain named volume, always safely mountable, unlike a
+    # volume aimed at one specific file) means that file lives at /state/.state_machine_
+    # bridge_state.json, entirely inside the volume -- so its atomic write-tmp-then-rename
+    # (state_store.save_state) never crosses a mount boundary (which would otherwise raise
+    # EXDEV), and restarts resume the same State Machine run instead of starting a new one.
+    working_dir: /state
+    volumes:
+      - bridge_state:/state
+    # NOT unless-stopped: app/adapter/bridge.py's main() deliberately RETURNS (exit 0,
+    # not an exception) when it decides not to retry -- no STATE_MACHINE_BEARER_TOKEN,
+    # or a FatalAuthError/RUN_EXPIRED from the State Machine API ("not retrying" cases,
+    # see bridge.py). unless-stopped would fight that decision and restart-loop forever;
+    # on-failure only restarts on an actual non-zero-exit crash, which is what we want --
+    # the process already retries transient errors internally with backoff.
+    restart: on-failure
+
+volumes:
+  pgdata:
+  bridge_state:
