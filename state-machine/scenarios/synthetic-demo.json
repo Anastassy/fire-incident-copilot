@@ -1,0 +1,8 @@
+{
+  "description": "Полностью вымышленная проверочная запись: показания, тестовые изображения, звуковые тоны и авторский текст. Это не пожар и не распознанная речь.",
+  "building_id": "synthetic-office",
+  "media_duration_ms": 6000,
+  "measurement_times_ms": [0, 1000, 2000, 3000, 4000, 5000, 6000, 10000, 60000, 120000, 180000, 240000, 300000, 360000, 420000, 480000, 540000, 600000],
+  "stale_after_ms": 5000,
+  "synthetic_transcript": "Synthetic test signal. This authored text is not recognized speech."
+}

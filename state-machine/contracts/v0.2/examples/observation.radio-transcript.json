@@ -1,0 +1,50 @@
+{
+  "evidence_id": "ev-radio-text-1",
+  "run_id": "run-demo-001",
+  "generation": 0,
+  "device_id": "RADIO-A",
+  "room_id": null,
+  "observed_sim_time_ms": 1800,
+  "received_sim_time_ms": 2000,
+  "received_at": "2026-09-12T10:30:02Z",
+  "provenance": {
+    "source_id": "fixture-transcript",
+    "acquisition_id": "fixture-session-001",
+    "origin": "synthetic",
+    "source_file": null,
+    "source_url": null,
+    "source_sha256": null,
+    "source_row": null,
+    "source_channel": null,
+    "recorded_time": {
+      "value": null,
+      "unit": "unknown",
+      "reference": null
+    },
+    "transformation": "Синтетический пример контракта; не запись реального инцидента.",
+    "time_mapping": "Фикстура: время задано непосредственно в миллисекундах сценария.",
+    "independence_group": "fixture-transcript",
+    "composition_note": "Полностью вымышленные данные для разработки UI.",
+    "attribution": null
+  },
+  "kind": "radio_transcript",
+  "data": {
+    "channel_id": "RADIO-A",
+    "stream_id": "RADIO-A",
+    "segment_id": "fixture-0001",
+    "source_segment_id": "1",
+    "language": "en",
+    "text": "Test radio message.",
+    "audio_start_sim_time_ms": 500,
+    "audio_end_sim_time_ms": 1800,
+    "full_recording_offset_ms": 0,
+    "delivery": "prerecorded",
+    "machine_generated": true,
+    "human_verified": false,
+    "model": "fixture-model",
+    "audio_source_file": "fixture/audio.wav",
+    "audio_source_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "words": [],
+    "timing_notes": []
+  }
+}

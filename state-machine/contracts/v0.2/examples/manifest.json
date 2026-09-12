@@ -1,0 +1,23 @@
+{
+  "synthetic": true,
+  "description": "Вымышленные JSON/SSE для команды UI, без реальных аудио, видео и секретов.",
+  "examples": {
+    "snapshot.initial.json": "Snapshot",
+    "snapshot.after-play.json": "Snapshot",
+    "media.video.json": "Media",
+    "media.audio.json": "Media",
+    "create-run.request.json": "CreateRun",
+    "create-run.response.json": "Run",
+    "play.request.json": "Command",
+    "play.response.json": "CommandResult",
+    "heartbeat.json": "Heartbeat",
+    "error.cursor-expired.json": "Error",
+    "event.reset.json": "Event",
+    "observation.people-count.json": "Observation",
+    "observation.radio-transcript.json": "Observation",
+    "occupancy.source-count.json": "Occupancy",
+    "media-streams.json": "MediaStreamList"
+  },
+  "events_file": "events.json",
+  "event_schema": "Event"
+}

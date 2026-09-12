@@ -1,0 +1,3 @@
+# Runtime uses Python's standard library; these dependencies validate the contract.
+jsonschema==4.24.0
+openapi-spec-validator==0.8.4

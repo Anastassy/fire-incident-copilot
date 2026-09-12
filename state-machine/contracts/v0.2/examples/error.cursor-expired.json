@@ -1,0 +1,11 @@
+{
+  "error": {
+    "code": "CURSOR_EXPIRED",
+    "message": "Получите новый снимок.",
+    "request_id": "req-demo-1",
+    "retryable": false,
+    "details": {
+      "snapshot_url": "/api/v1/runs/run-demo-001/snapshot"
+    }
+  }
+}

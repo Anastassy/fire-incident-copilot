@@ -1,0 +1,26 @@
+{
+  "result": "PASS",
+  "contract_version": "0.2.2",
+  "checked_at": "2026-09-12T12:34:34.938552+00:00",
+  "openapi": "3.1.1",
+  "schema_count": 57,
+  "path_count": 20,
+  "json_examples": 15,
+  "event_examples": 22,
+  "sse_frames": 24,
+  "semantic_checks": [
+    "evidence references",
+    "no future media",
+    "prerecorded transcript timing and provenance",
+    "raw data boundary",
+    "source-only people counts",
+    "unknown occupancy",
+    "disconnected preserves last raw reading",
+    "reconnect deduplication",
+    "reset generation barrier",
+    "SSE cursor identity",
+    "four invalid payloads rejected",
+    "package links"
+  ],
+  "scope": "Contract and synthetic fixtures only; backend runtime and deployment not tested."
+}

@@ -1,0 +1,5611 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Fire Safety State Machine — передача сырых данных",
+    "version": "0.2.2",
+    "description": "Исходные наблюдения и готовая расшифровка из пакета через SSE, непрерывные HTTP-медиа. Сервер не выполняет распознавание и анализ. Контракт от 12 сентября 2026. Файлы examples синтетические."
+  },
+  "servers": [
+    {
+      "url": "/api/v1",
+      "description": "Сервер State Machine; доступ к данным по токену приложения."
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "getHealth",
+        "summary": "Доступность сервиса",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "security": []
+      }
+    },
+    "/capabilities": {
+      "get": {
+        "operationId": "getCapabilities",
+        "summary": "Поддерживаемые функции сервера",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Capabilities"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/scenarios": {
+      "get": {
+        "operationId": "listScenarios",
+        "summary": "Сценарии без будущих наблюдений",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/runs": {
+      "post": {
+        "operationId": "createRun",
+        "summary": "Создать изолированный запуск на паузе",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Run"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRun"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}": {
+      "get": {
+        "operationId": "getRun",
+        "summary": "Часы и управление выбранным запуском",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Run"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/commands": {
+      "post": {
+        "operationId": "applyCommand",
+        "summary": "Play, pause, reset, speed, seek",
+        "description": "Атомарная команда; дедупликация command_id раньше проверки expected_generation. После reset/seek generation увеличивается.",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Command"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/snapshot": {
+      "get": {
+        "operationId": "getSnapshot",
+        "summary": "Полный текущий наблюдаемый снимок",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Snapshot"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/devices": {
+      "get": {
+        "operationId": "listDevices",
+        "summary": "Текущие приборы",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/cameras": {
+      "get": {
+        "operationId": "listCameras",
+        "summary": "Камеры и последние media ID",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CameraList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/occupancy": {
+      "get": {
+        "operationId": "getOccupancy",
+        "summary": "Число людей только по прямому значению источника",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OccupancyList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/access": {
+      "get": {
+        "operationId": "getAccess",
+        "summary": "Счётчики зарегистрированных проходов",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/system": {
+      "get": {
+        "operationId": "getSystem",
+        "summary": "Техническое состояние конвейера",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemHealth"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/devices/{device_id}": {
+      "get": {
+        "operationId": "getDevice",
+        "summary": "Карточка устройства",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceState"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "device_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "generation",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Поколение из текущего снимка; старое поколение даёт 409."
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/observations": {
+      "get": {
+        "operationId": "listObservations",
+        "summary": "История наблюдений для графиков и журнала",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationPage"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "generation",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Поколение из текущего снимка; старое поколение даёт 409."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": ""
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500,
+              "default": 100
+            },
+            "description": ""
+          },
+          {
+            "name": "device_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "from_ms",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Миллисекунды от начала сценария; не Unix time."
+            },
+            "description": ""
+          },
+          {
+            "name": "to_ms",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Миллисекунды от начала сценария; не Unix time."
+            },
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/evidence/{evidence_id}": {
+      "get": {
+        "operationId": "getEvidence",
+        "summary": "Неизменяемое исходное наблюдение",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Observation"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "evidence_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "generation",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Поколение из текущего снимка; старое поколение даёт 409."
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/media/{media_id}": {
+      "get": {
+        "operationId": "getMedia",
+        "summary": "Описание медиа и обновляемая ссылка загрузки",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Media"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "media_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "generation",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Поколение из текущего снимка; старое поколение даёт 409."
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/media-streams": {
+      "get": {
+        "operationId": "listMediaStreams",
+        "summary": "Непрерывные HTTP-потоки камер и радио",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaStreamList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/media-streams/{stream_id}/content": {
+      "get": {
+        "operationId": "streamMediaContent",
+        "summary": "Один HTTP-ответ: init + fMP4-фрагменты по часам run",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Потоковый fragmented MP4 без Content-Length/Range. Новые фрагменты пишет сервер после Play; Pause останавливает выдачу. EOF при конце записи/reset/seek/потере канала.",
+            "headers": {
+              "Accept-Ranges": {
+                "schema": {
+                  "type": "string",
+                  "const": "none"
+                }
+              },
+              "X-Media-Framing": {
+                "schema": {
+                  "type": "string",
+                  "const": "fragmented-mp4"
+                }
+              }
+            },
+            "content": {
+              "video/mp4": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "audio/mp4": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "stream_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "generation",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Поколение из текущего снимка; старое поколение даёт 409."
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "mediaTicket": []
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/stream": {
+      "get": {
+        "operationId": "streamEvents",
+        "summary": "SSE: снимок, события и heartbeat",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Долгое SSE-соединение. Без курсора первый кадр snapshot; с курсором — журнал после него.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no-cache, no-transform"
+              },
+              "X-Accel-Buffering": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "no"
+              }
+            },
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "x-sse-events": {
+              "snapshot": {
+                "$ref": "#/components/schemas/Snapshot"
+              },
+              "event": {
+                "$ref": "#/components/schemas/Event"
+              },
+              "heartbeat": {
+                "$ref": "#/components/schemas/Heartbeat"
+              },
+              "stream_error": {
+                "$ref": "#/components/schemas/Error"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "Last-Event-ID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Курсор последнего полностью применённого события."
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Курсор для fetch-клиента; нельзя вместе с Last-Event-ID."
+          }
+        ]
+      }
+    },
+    "/runs/{run_id}/media/{media_id}/content": {
+      "get": {
+        "operationId": "getMediaBytes",
+        "summary": "Загрузка видео/аудио/кадра",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "mediaTicket": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "media_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "generation",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Поколение из текущего снимка; старое поколение даёт 409."
+          },
+          {
+            "name": "Range",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Один byte range; неверный/множественный — 416."
+          },
+          {
+            "name": "If-Range",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ETag; при несовпадении возвращается полный 200."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Бинарное содержимое только уже опубликованного фрагмента.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Accept-Ranges": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Range": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "video/mp4": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "audio/mpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "audio/wav": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "audio/ogg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "206": {
+            "description": "Бинарное содержимое только уже опубликованного фрагмента.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Accept-Ranges": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Range": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "video/mp4": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "audio/mpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "audio/wav": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "audio/ogg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "416": {
+            "description": "Структурированная ошибка; для 429 присутствует Retry-After.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Идентификатор запроса из error.request_id."
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Обязателен для 429: число секунд или HTTP-date."
+              },
+              "Content-Range": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "bytes */<length>, полный размер ресурса в байтах."
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "409": {
+            "$ref": "#/components/responses/Error"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error"
+          },
+          "422": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          },
+          "503": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      },
+      "head": {
+        "operationId": "headMediaBytes",
+        "summary": "Заголовки медиа без тела",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "mediaTicket": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "media_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "description": ""
+          },
+          {
+            "name": "generation",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Поколение из текущего снимка; старое поколение даёт 409."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Бинарное содержимое только уже опубликованного фрагмента.",
+            "headers": {
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Accept-Ranges": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Range": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Структурированная ошибка; для 429 присутствует Retry-After.",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Идентификатор запроса из error.request_id."
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Обязателен для 429: число секунд или HTTP-date."
+              }
+            }
+          },
+          "401": {
+            "description": "Структурированная ошибка; для 429 присутствует Retry-After.",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Идентификатор запроса из error.request_id."
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Обязателен для 429: число секунд или HTTP-date."
+              }
+            }
+          },
+          "403": {
+            "description": "Структурированная ошибка; для 429 присутствует Retry-After.",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Идентификатор запроса из error.request_id."
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Обязателен для 429: число секунд или HTTP-date."
+              }
+            }
+          },
+          "404": {
+            "description": "Структурированная ошибка; для 429 присутствует Retry-After.",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Идентификатор запроса из error.request_id."
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Обязателен для 429: число секунд или HTTP-date."
+              }
+            }
+          },
+          "409": {
+            "description": "Структурированная ошибка; для 429 присутствует Retry-After.",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Идентификатор запроса из error.request_id."
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Обязателен для 429: число секунд или HTTP-date."
+              }
+            }
+          },
+          "410": {
+            "description": "Структурированная ошибка; для 429 присутствует Retry-After.",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Идентификатор запроса из error.request_id."
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Обязателен для 429: число секунд или HTTP-date."
+              }
+            }
+          },
+          "422": {
+            "description": "Структурированная ошибка; для 429 присутствует Retry-After.",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Идентификатор запроса из error.request_id."
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Обязателен для 429: число секунд или HTTP-date."
+              }
+            }
+          },
+          "429": {
+            "description": "Структурированная ошибка; для 429 присутствует Retry-After.",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Идентификатор запроса из error.request_id."
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Обязателен для 429: число секунд или HTTP-date."
+              }
+            }
+          },
+          "503": {
+            "description": "Структурированная ошибка; для 429 присутствует Retry-After.",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Идентификатор запроса из error.request_id."
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Обязателен для 429: число секунд или HTTP-date."
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Токен приложения, выдаваемый отдельно. Не Cloudflare/Hetzner/1Password token."
+      },
+      "mediaTicket": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "ticket",
+        "description": "Краткоживущий ticket из content_url, ограниченный run/generation/media; только GET/HEAD."
+      }
+    },
+    "responses": {
+      "Error": {
+        "description": "Структурированная ошибка; для 429 присутствует Retry-After.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        },
+        "headers": {
+          "X-Request-ID": {
+            "schema": {
+              "type": "string"
+            },
+            "description": "Идентификатор запроса из error.request_id."
+          },
+          "Retry-After": {
+            "schema": {
+              "type": "string"
+            },
+            "description": "Обязателен для 429: число секунд или HTTP-date."
+          }
+        }
+      }
+    },
+    "schemas": {
+      "RecordedTime": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "number",
+              "null"
+            ]
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "rfc3339",
+              "unix_s",
+              "relative_s",
+              "unknown"
+            ]
+          },
+          "reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "unit",
+          "reference"
+        ],
+        "additionalProperties": true
+      },
+      "Provenance": {
+        "type": "object",
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "acquisition_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "recorded",
+              "derived",
+              "synthetic",
+              "human_report"
+            ]
+          },
+          "source_file": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "Логический путь относительно источника; не абсолютный путь сервера."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_sha256": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_row": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_channel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "recorded_time": {
+            "$ref": "#/components/schemas/RecordedTime"
+          },
+          "transformation": {
+            "type": "string"
+          },
+          "time_mapping": {
+            "type": "string"
+          },
+          "independence_group": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "composition_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "attribution": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "source_id",
+          "acquisition_id",
+          "origin",
+          "source_file",
+          "source_url",
+          "source_sha256",
+          "source_row",
+          "source_channel",
+          "recorded_time",
+          "transformation",
+          "time_mapping",
+          "independence_group",
+          "composition_note",
+          "attribution"
+        ],
+        "additionalProperties": true
+      },
+      "Run": {
+        "type": "object",
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "scenario_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "scenario_version": {
+            "type": "string"
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "paused",
+              "playing",
+              "completed",
+              "error"
+            ]
+          },
+          "sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "duration_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "speed": {
+            "type": "number",
+            "enum": [
+              1,
+              10,
+              60
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "links": {
+            "type": "object",
+            "properties": {
+              "snapshot": {
+                "type": "string",
+                "format": "uri-reference"
+              },
+              "stream": {
+                "type": "string",
+                "format": "uri-reference"
+              },
+              "commands": {
+                "type": "string",
+                "format": "uri-reference"
+              }
+            },
+            "required": [
+              "snapshot",
+              "stream",
+              "commands"
+            ],
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "run_id",
+          "scenario_id",
+          "scenario_version",
+          "generation",
+          "status",
+          "sim_time_ms",
+          "duration_ms",
+          "speed",
+          "created_at",
+          "expires_at",
+          "links"
+        ],
+        "additionalProperties": true
+      },
+      "Scenario": {
+        "type": "object",
+        "properties": {
+          "scenario_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "scenario_version": {
+            "type": "string"
+          },
+          "duration_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "building_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "supported_speeds": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "enum": [
+                1,
+                10,
+                60
+              ]
+            }
+          },
+          "modalities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "smoke",
+                "temperature",
+                "camera",
+                "access",
+                "occupancy",
+                "radio"
+              ]
+            }
+          },
+          "composition_note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "scenario_id",
+          "name",
+          "description",
+          "scenario_version",
+          "duration_ms",
+          "building_id",
+          "supported_speeds",
+          "modalities",
+          "composition_note"
+        ],
+        "additionalProperties": true
+      },
+      "Capabilities": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "0.2"
+          },
+          "api_version": {
+            "type": "string",
+            "const": "v1"
+          },
+          "features": {
+            "type": "object",
+            "properties": {
+              "sse": {
+                "type": "boolean"
+              },
+              "camera_clips": {
+                "type": "boolean"
+              },
+              "radio_audio": {
+                "type": "boolean"
+              },
+              "source_people_counts": {
+                "type": "boolean"
+              },
+              "continuous_media": {
+                "type": "boolean"
+              },
+              "prerecorded_radio_transcripts": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "sse",
+              "camera_clips",
+              "radio_audio",
+              "source_people_counts",
+              "continuous_media"
+            ],
+            "additionalProperties": true
+          },
+          "heartbeat_interval_ms": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "stream_timeout_ms": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "max_page_size": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "event_retention": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "schema_version",
+          "api_version",
+          "features",
+          "heartbeat_interval_ms",
+          "stream_timeout_ms",
+          "max_page_size",
+          "event_retention"
+        ],
+        "additionalProperties": true
+      },
+      "CreateRun": {
+        "type": "object",
+        "properties": {
+          "scenario_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "speed": {
+            "type": "number",
+            "enum": [
+              1,
+              10,
+              60
+            ],
+            "default": 1
+          }
+        },
+        "required": [
+          "scenario_id"
+        ],
+        "additionalProperties": false
+      },
+      "Command": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "command_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "expected_generation": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "action": {
+                "type": "string",
+                "const": "play"
+              }
+            },
+            "required": [
+              "command_id",
+              "expected_generation",
+              "action"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "command_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "expected_generation": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "action": {
+                "type": "string",
+                "const": "pause"
+              }
+            },
+            "required": [
+              "command_id",
+              "expected_generation",
+              "action"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "command_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "expected_generation": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "action": {
+                "type": "string",
+                "const": "reset"
+              }
+            },
+            "required": [
+              "command_id",
+              "expected_generation",
+              "action"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "command_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "expected_generation": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "action": {
+                "type": "string",
+                "const": "set_speed"
+              },
+              "speed": {
+                "type": "number",
+                "enum": [
+                  1,
+                  10,
+                  60
+                ]
+              }
+            },
+            "required": [
+              "command_id",
+              "expected_generation",
+              "action",
+              "speed"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "command_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "expected_generation": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "action": {
+                "type": "string",
+                "const": "seek"
+              },
+              "position_ms": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Миллисекунды от начала сценария; не Unix time."
+              }
+            },
+            "required": [
+              "command_id",
+              "expected_generation",
+              "action",
+              "position_ms"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "description": "Разные команды — разные command_id. Повтор того же тела с тем же ID возвращает прежний результат."
+      },
+      "CommandResult": {
+        "type": "object",
+        "properties": {
+          "command_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "applied_sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "applied"
+            ]
+          },
+          "run": {
+            "$ref": "#/components/schemas/Run"
+          }
+        },
+        "required": [
+          "command_id",
+          "run_id",
+          "generation",
+          "applied_sequence",
+          "status",
+          "run"
+        ],
+        "additionalProperties": true
+      },
+      "Reading": {
+        "type": "object",
+        "properties": {
+          "metric": {
+            "type": "string",
+            "description": "Например temperature, obscuration, smoke_detected, co, eco2."
+          },
+          "value": {
+            "type": [
+              "number",
+              "boolean",
+              "null"
+            ]
+          },
+          "unit": {
+            "type": "string"
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "fresh",
+              "stale",
+              "missing",
+              "invalid",
+              "disconnected"
+            ]
+          },
+          "observation_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "observed_sim_time_ms": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Миллисекунды от начала сценария; не Unix time."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "age_ms": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Миллисекунды от начала сценария; не Unix time."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "stale_after_ms": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "metric",
+          "value",
+          "unit",
+          "availability",
+          "observation_id",
+          "observed_sim_time_ms",
+          "age_ms",
+          "stale_after_ms"
+        ],
+        "additionalProperties": true
+      },
+      "DeviceState": {
+        "type": "object",
+        "properties": {
+          "device_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "temperature_sensor",
+              "smoke_sensor",
+              "multisensor",
+              "camera",
+              "access_reader",
+              "people_counter",
+              "radio_channel"
+            ]
+          },
+          "building_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "room_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "floor_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "position_m": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "fresh",
+              "stale",
+              "missing",
+              "invalid",
+              "disconnected"
+            ]
+          },
+          "readings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Reading"
+            }
+          },
+          "last_observation_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "last_observed_sim_time_ms": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Миллисекунды от начала сценария; не Unix time."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "device_id",
+          "name",
+          "kind",
+          "building_id",
+          "room_id",
+          "floor_id",
+          "position_m",
+          "availability",
+          "readings",
+          "last_observation_id",
+          "last_observed_sim_time_ms"
+        ],
+        "additionalProperties": true
+      },
+      "RoomState": {
+        "type": "object",
+        "properties": {
+          "room_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "name": {
+            "type": "string"
+          },
+          "building_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "floor_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "device_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "unavailable_device_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          }
+        },
+        "required": [
+          "room_id",
+          "name",
+          "building_id",
+          "floor_id",
+          "device_ids",
+          "unavailable_device_ids"
+        ],
+        "additionalProperties": true
+      },
+      "CameraState": {
+        "type": "object",
+        "properties": {
+          "camera_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "device_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "room_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "fresh",
+              "stale",
+              "missing",
+              "invalid",
+              "disconnected"
+            ]
+          },
+          "latest_video_media_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latest_frame_media_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "playback_delay_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          }
+        },
+        "required": [
+          "camera_id",
+          "device_id",
+          "room_id",
+          "availability",
+          "latest_video_media_id",
+          "latest_frame_media_id",
+          "playback_delay_ms"
+        ],
+        "additionalProperties": true
+      },
+      "Occupancy": {
+        "type": "object",
+        "properties": {
+          "scope_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "scope_type": {
+            "type": "string",
+            "enum": [
+              "building",
+              "room"
+            ]
+          },
+          "count": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "basis": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "source_count"
+            ]
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "fresh",
+              "stale",
+              "missing",
+              "invalid",
+              "disconnected"
+            ]
+          },
+          "as_of_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "observation_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "scope_id",
+          "scope_type",
+          "count",
+          "basis",
+          "availability",
+          "as_of_sim_time_ms",
+          "observation_id",
+          "limitations"
+        ],
+        "additionalProperties": true,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "basis": {
+                  "const": "unknown"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "count": {
+                  "type": "null"
+                },
+                "observation_id": {
+                  "type": "null"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "basis": {
+                  "const": "source_count"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "observation_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                }
+              }
+            }
+          }
+        ]
+      },
+      "AccessSummary": {
+        "type": "object",
+        "properties": {
+          "scope_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "window_start_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "window_end_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "confirmed_entries": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "confirmed_exits": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "fresh",
+              "stale",
+              "missing",
+              "invalid",
+              "disconnected"
+            ]
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "scope_id",
+          "window_start_sim_time_ms",
+          "window_end_sim_time_ms",
+          "confirmed_entries",
+          "confirmed_exits",
+          "availability",
+          "evidence_ids",
+          "limitations"
+        ],
+        "additionalProperties": true
+      },
+      "MeasurementData": {
+        "type": "object",
+        "properties": {
+          "metric": {
+            "type": "string"
+          },
+          "value": {
+            "type": [
+              "number",
+              "boolean",
+              "null"
+            ]
+          },
+          "unit": {
+            "type": "string"
+          },
+          "quality": {
+            "type": "string",
+            "enum": [
+              "valid",
+              "missing",
+              "invalid"
+            ]
+          }
+        },
+        "required": [
+          "metric",
+          "value",
+          "unit",
+          "quality"
+        ],
+        "additionalProperties": true,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "quality": {
+                  "enum": [
+                    "missing",
+                    "invalid"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "CameraData": {
+        "type": "object",
+        "properties": {
+          "camera_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "media_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "media_kind": {
+            "type": "string",
+            "enum": [
+              "image",
+              "video"
+            ]
+          },
+          "capture_start_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "capture_end_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          }
+        },
+        "required": [
+          "camera_id",
+          "media_id",
+          "media_kind",
+          "capture_start_sim_time_ms",
+          "capture_end_sim_time_ms"
+        ],
+        "additionalProperties": true
+      },
+      "AccessData": {
+        "type": "object",
+        "properties": {
+          "reader_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "door_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "badge_presented",
+              "access_granted",
+              "access_denied",
+              "passage_detected",
+              "door_opened",
+              "door_closed"
+            ]
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "enter",
+              "exit",
+              "unknown"
+            ]
+          },
+          "subject_ref": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "passage_count": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "from_room_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "to_room_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "reader_id",
+          "door_id",
+          "action",
+          "direction",
+          "subject_ref",
+          "passage_count",
+          "from_room_id",
+          "to_room_id"
+        ],
+        "additionalProperties": true
+      },
+      "RadioAudioData": {
+        "type": "object",
+        "properties": {
+          "channel_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "media_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "chunk_index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "audio_start_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "audio_end_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          }
+        },
+        "required": [
+          "channel_id",
+          "media_id",
+          "chunk_index",
+          "audio_start_sim_time_ms",
+          "audio_end_sim_time_ms"
+        ],
+        "additionalProperties": true
+      },
+      "TranscriptWord": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "start_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "end_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "probability": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "text",
+          "start_sim_time_ms",
+          "end_sim_time_ms",
+          "probability"
+        ],
+        "additionalProperties": true
+      },
+      "RadioTranscriptData": {
+        "type": "object",
+        "properties": {
+          "channel_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "stream_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "segment_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "source_segment_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "language": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "audio_start_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "audio_end_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "full_recording_offset_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "delivery": {
+            "type": "string",
+            "const": "prerecorded"
+          },
+          "machine_generated": {
+            "type": "boolean"
+          },
+          "human_verified": {
+            "type": "boolean"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "audio_source_file": {
+            "type": "string"
+          },
+          "audio_source_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "words": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TranscriptWord"
+            }
+          },
+          "timing_notes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "channel_id",
+          "stream_id",
+          "segment_id",
+          "source_segment_id",
+          "language",
+          "text",
+          "audio_start_sim_time_ms",
+          "audio_end_sim_time_ms",
+          "full_recording_offset_ms",
+          "delivery",
+          "machine_generated",
+          "human_verified",
+          "model",
+          "audio_source_file",
+          "audio_source_sha256",
+          "words",
+          "timing_notes"
+        ],
+        "additionalProperties": true,
+        "description": "Готовый текст из пакета, выдаваемый по часам аудио. Сервер не выполняет ASR. Оценка probability — показатель исходной модели, не измеренная точность."
+      },
+      "PeopleCountData": {
+        "type": "object",
+        "properties": {
+          "scope_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "scope_type": {
+            "type": "string",
+            "enum": [
+              "building",
+              "room"
+            ]
+          },
+          "count": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit": {
+            "type": "string",
+            "const": "people"
+          },
+          "quality": {
+            "type": "string",
+            "enum": [
+              "valid",
+              "missing",
+              "invalid"
+            ]
+          }
+        },
+        "required": [
+          "scope_id",
+          "scope_type",
+          "count",
+          "unit",
+          "quality"
+        ],
+        "additionalProperties": true,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "quality": {
+                  "enum": [
+                    "missing",
+                    "invalid"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "count": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ConnectivityData": {
+        "type": "object",
+        "properties": {
+          "connected": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "connected",
+          "reason"
+        ],
+        "additionalProperties": true
+      },
+      "ObservationMeasurement": {
+        "type": "object",
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "device_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "room_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "observed_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "received_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          },
+          "kind": {
+            "type": "string",
+            "const": "measurement"
+          },
+          "data": {
+            "$ref": "#/components/schemas/MeasurementData"
+          }
+        },
+        "required": [
+          "evidence_id",
+          "run_id",
+          "generation",
+          "device_id",
+          "room_id",
+          "observed_sim_time_ms",
+          "received_sim_time_ms",
+          "received_at",
+          "provenance",
+          "kind",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "ObservationCamera": {
+        "type": "object",
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "device_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "room_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "observed_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "received_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          },
+          "kind": {
+            "type": "string",
+            "const": "camera"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CameraData"
+          }
+        },
+        "required": [
+          "evidence_id",
+          "run_id",
+          "generation",
+          "device_id",
+          "room_id",
+          "observed_sim_time_ms",
+          "received_sim_time_ms",
+          "received_at",
+          "provenance",
+          "kind",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "ObservationAccess": {
+        "type": "object",
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "device_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "room_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "observed_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "received_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          },
+          "kind": {
+            "type": "string",
+            "const": "access"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AccessData"
+          }
+        },
+        "required": [
+          "evidence_id",
+          "run_id",
+          "generation",
+          "device_id",
+          "room_id",
+          "observed_sim_time_ms",
+          "received_sim_time_ms",
+          "received_at",
+          "provenance",
+          "kind",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "ObservationRadioAudio": {
+        "type": "object",
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "device_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "room_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "observed_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "received_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          },
+          "kind": {
+            "type": "string",
+            "const": "radio_audio"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RadioAudioData"
+          }
+        },
+        "required": [
+          "evidence_id",
+          "run_id",
+          "generation",
+          "device_id",
+          "room_id",
+          "observed_sim_time_ms",
+          "received_sim_time_ms",
+          "received_at",
+          "provenance",
+          "kind",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "ObservationRadioTranscript": {
+        "type": "object",
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "device_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "room_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "observed_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "received_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          },
+          "kind": {
+            "type": "string",
+            "const": "radio_transcript"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RadioTranscriptData"
+          }
+        },
+        "required": [
+          "evidence_id",
+          "run_id",
+          "generation",
+          "device_id",
+          "room_id",
+          "observed_sim_time_ms",
+          "received_sim_time_ms",
+          "received_at",
+          "provenance",
+          "kind",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "ObservationPeopleCount": {
+        "type": "object",
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "device_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "room_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "observed_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "received_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          },
+          "kind": {
+            "type": "string",
+            "const": "people_count"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PeopleCountData"
+          }
+        },
+        "required": [
+          "evidence_id",
+          "run_id",
+          "generation",
+          "device_id",
+          "room_id",
+          "observed_sim_time_ms",
+          "received_sim_time_ms",
+          "received_at",
+          "provenance",
+          "kind",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "ObservationConnectivity": {
+        "type": "object",
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "device_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "room_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "observed_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "received_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          },
+          "kind": {
+            "type": "string",
+            "const": "connectivity"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ConnectivityData"
+          }
+        },
+        "required": [
+          "evidence_id",
+          "run_id",
+          "generation",
+          "device_id",
+          "room_id",
+          "observed_sim_time_ms",
+          "received_sim_time_ms",
+          "received_at",
+          "provenance",
+          "kind",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "Observation": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ObservationMeasurement"
+          },
+          {
+            "$ref": "#/components/schemas/ObservationCamera"
+          },
+          {
+            "$ref": "#/components/schemas/ObservationAccess"
+          },
+          {
+            "$ref": "#/components/schemas/ObservationRadioAudio"
+          },
+          {
+            "$ref": "#/components/schemas/ObservationRadioTranscript"
+          },
+          {
+            "$ref": "#/components/schemas/ObservationPeopleCount"
+          },
+          {
+            "$ref": "#/components/schemas/ObservationConnectivity"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "measurement": "#/components/schemas/ObservationMeasurement",
+            "camera": "#/components/schemas/ObservationCamera",
+            "access": "#/components/schemas/ObservationAccess",
+            "radio_audio": "#/components/schemas/ObservationRadioAudio",
+            "radio_transcript": "#/components/schemas/ObservationRadioTranscript",
+            "people_count": "#/components/schemas/ObservationPeopleCount",
+            "connectivity": "#/components/schemas/ObservationConnectivity"
+          }
+        }
+      },
+      "RadioChannel": {
+        "type": "object",
+        "properties": {
+          "channel_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "device_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "name": {
+            "type": "string"
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "fresh",
+              "stale",
+              "missing",
+              "invalid",
+              "disconnected"
+            ]
+          },
+          "latest_audio_media_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transcript_delivery": {
+            "type": "string",
+            "const": "prerecorded"
+          },
+          "latest_transcript": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ObservationRadioTranscript"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "channel_id",
+          "device_id",
+          "name",
+          "availability",
+          "latest_audio_media_id"
+        ],
+        "additionalProperties": true
+      },
+      "SystemHealth": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "healthy",
+              "degraded",
+              "error"
+            ]
+          },
+          "clock": {
+            "type": "object",
+            "properties": {
+              "sim_time_ms": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Миллисекунды от начала сценария; не Unix time."
+              },
+              "wall_time": {
+                "type": "string",
+                "format": "date-time",
+                "description": "RFC 3339, UTC с Z."
+              },
+              "processing_lag_ms": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Миллисекунды от начала сценария; не Unix time."
+              }
+            },
+            "required": [
+              "sim_time_ms",
+              "wall_time",
+              "processing_lag_ms"
+            ],
+            "additionalProperties": true
+          },
+          "events": {
+            "type": "object",
+            "properties": {
+              "processed": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "observed": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "suppressed": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "transport_controls": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "dropped": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "processed",
+              "observed",
+              "suppressed",
+              "transport_controls",
+              "dropped"
+            ],
+            "additionalProperties": true
+          },
+          "blender": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "not_connected",
+                  "synced",
+                  "catching_up",
+                  "disconnected"
+                ]
+              },
+              "last_ack_at": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "RFC 3339, UTC с Z."
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "sim_lag_ms": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "status",
+              "last_ack_at",
+              "sim_lag_ms"
+            ],
+            "additionalProperties": true
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "component": {
+                  "type": "string"
+                },
+                "at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "RFC 3339, UTC с Z."
+                }
+              },
+              "required": [
+                "code",
+                "message",
+                "component",
+                "at"
+              ],
+              "additionalProperties": true
+            }
+          }
+        },
+        "required": [
+          "status",
+          "clock",
+          "events",
+          "blender",
+          "errors"
+        ],
+        "additionalProperties": true
+      },
+      "Media": {
+        "type": "object",
+        "properties": {
+          "media_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "device_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "image",
+              "video",
+              "audio"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "failed"
+            ]
+          },
+          "mime_type": {
+            "type": "string"
+          },
+          "codec": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "byte_length": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "duration_ms": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Миллисекунды от начала сценария; не Unix time."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "width": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "height": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sample_rate_hz": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "channels": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "capture_start_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "capture_end_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "published_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "chunk_index": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "content_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri-reference"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "url_expires_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "description": "RFC 3339, UTC с Z."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "supports_range": {
+            "type": "boolean"
+          },
+          "failure_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          }
+        },
+        "required": [
+          "media_id",
+          "run_id",
+          "generation",
+          "device_id",
+          "kind",
+          "status",
+          "mime_type",
+          "codec",
+          "byte_length",
+          "sha256",
+          "duration_ms",
+          "width",
+          "height",
+          "sample_rate_hz",
+          "channels",
+          "capture_start_sim_time_ms",
+          "capture_end_sim_time_ms",
+          "published_sim_time_ms",
+          "chunk_index",
+          "content_url",
+          "url_expires_at",
+          "supports_range",
+          "failure_code",
+          "provenance"
+        ],
+        "additionalProperties": true,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "ready"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "content_url": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "byte_length": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "failed"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "content_url": {
+                  "type": "null"
+                },
+                "failure_code": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        ]
+      },
+      "MediaStream": {
+        "type": "object",
+        "properties": {
+          "stream_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "device_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "video",
+              "audio"
+            ]
+          },
+          "mime_type": {
+            "type": "string",
+            "enum": [
+              "video/mp4",
+              "audio/mp4"
+            ]
+          },
+          "codec": {
+            "type": "string"
+          },
+          "framing": {
+            "type": "string",
+            "const": "fragmented_mp4"
+          },
+          "capture_start_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "duration_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "available_until_sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "waiting",
+              "streaming",
+              "paused",
+              "completed"
+            ]
+          },
+          "content_url": {
+            "type": "string",
+            "format": "uri-reference"
+          },
+          "url_expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/Provenance"
+          },
+          "media_timestamp_offset_ms": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Если задано: source_sim_ms = max(0, encoded_pts_ms - offset). duration/available_until используют часы источника."
+          }
+        },
+        "required": [
+          "stream_id",
+          "run_id",
+          "generation",
+          "device_id",
+          "kind",
+          "mime_type",
+          "codec",
+          "framing",
+          "capture_start_sim_time_ms",
+          "duration_ms",
+          "available_until_sim_time_ms",
+          "status",
+          "content_url",
+          "url_expires_at",
+          "provenance"
+        ],
+        "additionalProperties": true
+      },
+      "MediaStreamList": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MediaStream"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": true
+      },
+      "Snapshot": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "0.2"
+          },
+          "run": {
+            "$ref": "#/components/schemas/Run"
+          },
+          "as_of": {
+            "type": "object",
+            "properties": {
+              "sequence": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "cursor": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "sequence",
+              "cursor"
+            ],
+            "additionalProperties": true
+          },
+          "devices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeviceState"
+            }
+          },
+          "rooms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoomState"
+            }
+          },
+          "cameras": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CameraState"
+            }
+          },
+          "access": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccessSummary"
+            }
+          },
+          "occupancy": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Occupancy"
+            }
+          },
+          "radio": {
+            "type": "object",
+            "properties": {
+              "channels": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RadioChannel"
+                }
+              }
+            },
+            "required": [
+              "channels"
+            ],
+            "additionalProperties": true
+          },
+          "system": {
+            "$ref": "#/components/schemas/SystemHealth"
+          }
+        },
+        "required": [
+          "schema_version",
+          "run",
+          "as_of",
+          "devices",
+          "rooms",
+          "cameras",
+          "access",
+          "occupancy",
+          "radio",
+          "system"
+        ],
+        "additionalProperties": true
+      },
+      "StreamReset": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "enum": [
+              "reset",
+              "seek"
+            ]
+          },
+          "snapshot_url": {
+            "type": "string",
+            "format": "uri-reference"
+          }
+        },
+        "required": [
+          "reason",
+          "snapshot_url"
+        ],
+        "additionalProperties": true
+      },
+      "EventRunUpdated": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "0.2"
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "const": "run.updated"
+          },
+          "sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "emitted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "data": {
+            "$ref": "#/components/schemas/Run"
+          }
+        },
+        "required": [
+          "schema_version",
+          "event_id",
+          "run_id",
+          "generation",
+          "sequence",
+          "cursor",
+          "kind",
+          "sim_time_ms",
+          "emitted_at",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "EventObservationCreated": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "0.2"
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "const": "observation.created"
+          },
+          "sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "emitted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "data": {
+            "$ref": "#/components/schemas/Observation"
+          }
+        },
+        "required": [
+          "schema_version",
+          "event_id",
+          "run_id",
+          "generation",
+          "sequence",
+          "cursor",
+          "kind",
+          "sim_time_ms",
+          "emitted_at",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "EventDeviceUpdated": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "0.2"
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "const": "device.updated"
+          },
+          "sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "emitted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "data": {
+            "$ref": "#/components/schemas/DeviceState"
+          }
+        },
+        "required": [
+          "schema_version",
+          "event_id",
+          "run_id",
+          "generation",
+          "sequence",
+          "cursor",
+          "kind",
+          "sim_time_ms",
+          "emitted_at",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "EventRoomUpdated": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "0.2"
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "const": "room.updated"
+          },
+          "sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "emitted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "data": {
+            "$ref": "#/components/schemas/RoomState"
+          }
+        },
+        "required": [
+          "schema_version",
+          "event_id",
+          "run_id",
+          "generation",
+          "sequence",
+          "cursor",
+          "kind",
+          "sim_time_ms",
+          "emitted_at",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "EventCameraUpdated": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "0.2"
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "const": "camera.updated"
+          },
+          "sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "emitted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "data": {
+            "$ref": "#/components/schemas/CameraState"
+          }
+        },
+        "required": [
+          "schema_version",
+          "event_id",
+          "run_id",
+          "generation",
+          "sequence",
+          "cursor",
+          "kind",
+          "sim_time_ms",
+          "emitted_at",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "EventAccessUpdated": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "0.2"
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "const": "access.updated"
+          },
+          "sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "emitted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "data": {
+            "$ref": "#/components/schemas/AccessSummary"
+          }
+        },
+        "required": [
+          "schema_version",
+          "event_id",
+          "run_id",
+          "generation",
+          "sequence",
+          "cursor",
+          "kind",
+          "sim_time_ms",
+          "emitted_at",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "EventOccupancyUpdated": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "0.2"
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "const": "occupancy.updated"
+          },
+          "sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "emitted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "data": {
+            "$ref": "#/components/schemas/Occupancy"
+          }
+        },
+        "required": [
+          "schema_version",
+          "event_id",
+          "run_id",
+          "generation",
+          "sequence",
+          "cursor",
+          "kind",
+          "sim_time_ms",
+          "emitted_at",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "EventRadioChannelUpdated": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "0.2"
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "const": "radio.channel.updated"
+          },
+          "sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "emitted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "data": {
+            "$ref": "#/components/schemas/RadioChannel"
+          }
+        },
+        "required": [
+          "schema_version",
+          "event_id",
+          "run_id",
+          "generation",
+          "sequence",
+          "cursor",
+          "kind",
+          "sim_time_ms",
+          "emitted_at",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "EventSystemUpdated": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "0.2"
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "const": "system.updated"
+          },
+          "sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "emitted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "data": {
+            "$ref": "#/components/schemas/SystemHealth"
+          }
+        },
+        "required": [
+          "schema_version",
+          "event_id",
+          "run_id",
+          "generation",
+          "sequence",
+          "cursor",
+          "kind",
+          "sim_time_ms",
+          "emitted_at",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "EventStreamReset": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "0.2"
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "const": "stream.reset"
+          },
+          "sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "emitted_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          },
+          "data": {
+            "$ref": "#/components/schemas/StreamReset"
+          }
+        },
+        "required": [
+          "schema_version",
+          "event_id",
+          "run_id",
+          "generation",
+          "sequence",
+          "cursor",
+          "kind",
+          "sim_time_ms",
+          "emitted_at",
+          "data"
+        ],
+        "additionalProperties": true
+      },
+      "Event": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/EventRunUpdated"
+          },
+          {
+            "$ref": "#/components/schemas/EventObservationCreated"
+          },
+          {
+            "$ref": "#/components/schemas/EventDeviceUpdated"
+          },
+          {
+            "$ref": "#/components/schemas/EventRoomUpdated"
+          },
+          {
+            "$ref": "#/components/schemas/EventCameraUpdated"
+          },
+          {
+            "$ref": "#/components/schemas/EventAccessUpdated"
+          },
+          {
+            "$ref": "#/components/schemas/EventOccupancyUpdated"
+          },
+          {
+            "$ref": "#/components/schemas/EventRadioChannelUpdated"
+          },
+          {
+            "$ref": "#/components/schemas/EventSystemUpdated"
+          },
+          {
+            "$ref": "#/components/schemas/EventStreamReset"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "kind",
+          "mapping": {
+            "run.updated": "#/components/schemas/EventRunUpdated",
+            "observation.created": "#/components/schemas/EventObservationCreated",
+            "device.updated": "#/components/schemas/EventDeviceUpdated",
+            "room.updated": "#/components/schemas/EventRoomUpdated",
+            "camera.updated": "#/components/schemas/EventCameraUpdated",
+            "access.updated": "#/components/schemas/EventAccessUpdated",
+            "occupancy.updated": "#/components/schemas/EventOccupancyUpdated",
+            "radio.channel.updated": "#/components/schemas/EventRadioChannelUpdated",
+            "system.updated": "#/components/schemas/EventSystemUpdated",
+            "stream.reset": "#/components/schemas/EventStreamReset"
+          }
+        }
+      },
+      "Heartbeat": {
+        "type": "object",
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "last_sequence": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sim_time_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Миллисекунды от начала сценария; не Unix time."
+          },
+          "server_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339, UTC с Z."
+          }
+        },
+        "required": [
+          "run_id",
+          "generation",
+          "last_sequence",
+          "sim_time_ms",
+          "server_time"
+        ],
+        "additionalProperties": true
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "request_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "retryable": {
+                "type": "boolean"
+              },
+              "details": {
+                "type": "object",
+                "properties": {
+                  "snapshot_url": {
+                    "type": "string",
+                    "format": "uri-reference"
+                  },
+                  "current_generation": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "retry_after_ms": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "required": [],
+                "additionalProperties": true
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "request_id",
+              "retryable",
+              "details"
+            ],
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": true
+      },
+      "Health": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "unavailable"
+            ]
+          },
+          "schema_version": {
+            "type": "string",
+            "const": "0.2"
+          }
+        },
+        "required": [
+          "status",
+          "schema_version"
+        ],
+        "additionalProperties": true
+      },
+      "ScenarioList": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Scenario"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": true
+      },
+      "DeviceList": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeviceState"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": true
+      },
+      "CameraList": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CameraState"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": true
+      },
+      "OccupancyList": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Occupancy"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": true
+      },
+      "AccessList": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccessSummary"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": true
+      },
+      "ObservationPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Observation"
+            }
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "as_of_sequence": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor",
+          "generation",
+          "as_of_sequence"
+        ],
+        "additionalProperties": true
+      }
+    }
+  }
+}

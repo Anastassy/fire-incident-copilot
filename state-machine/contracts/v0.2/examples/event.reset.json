@@ -1,0 +1,15 @@
+{
+  "schema_version": "0.2",
+  "event_id": "evt-demo-reset",
+  "run_id": "run-demo-001",
+  "generation": 1,
+  "sequence": 23,
+  "cursor": "run-demo-001:23",
+  "kind": "stream.reset",
+  "sim_time_ms": 0,
+  "emitted_at": "2026-09-12T10:30:06Z",
+  "data": {
+    "reason": "reset",
+    "snapshot_url": "/api/v1/runs/run-demo-001/snapshot"
+  }
+}

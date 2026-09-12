@@ -1,0 +1,21 @@
+[Unit]
+Description=State Machine demo instance
+After=network.target
+
+[Service]
+Type=simple
+User=state-machine-demo
+Group=state-machine-demo
+WorkingDirectory=/opt/state-machine-demo
+ExecStart=/usr/bin/python3 -m state_api --bundle /opt/state-machine-demo/var/demo-bundle --database /opt/state-machine-demo/var/private/state.sqlite --config /opt/state-machine-demo/var/private/server.json --host 127.0.0.1 --port 18787
+Restart=on-failure
+RestartSec=3
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/state-machine-demo/var/private
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,38 @@
+{
+  "evidence_id": "ev-people-example",
+  "run_id": "run-demo-001",
+  "generation": 0,
+  "device_id": "COUNTER-DEMO",
+  "room_id": null,
+  "observed_sim_time_ms": 2500,
+  "received_sim_time_ms": 2500,
+  "received_at": "2026-09-12T10:30:02.500000Z",
+  "provenance": {
+    "source_id": "fixture-people-counter",
+    "acquisition_id": "fixture-session-001",
+    "origin": "synthetic",
+    "source_file": null,
+    "source_url": null,
+    "source_sha256": null,
+    "source_row": null,
+    "source_channel": null,
+    "recorded_time": {
+      "value": null,
+      "unit": "unknown",
+      "reference": null
+    },
+    "transformation": "Синтетический пример контракта; не запись реального инцидента.",
+    "time_mapping": "Фикстура: время задано непосредственно в миллисекундах сценария.",
+    "independence_group": "fixture-people-counter",
+    "composition_note": "Полностью вымышленные данные для разработки UI.",
+    "attribution": null
+  },
+  "kind": "people_count",
+  "data": {
+    "scope_id": "office-demo",
+    "scope_type": "building",
+    "count": 12,
+    "unit": "people",
+    "quality": "valid"
+  }
+}

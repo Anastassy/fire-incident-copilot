@@ -1,0 +1,204 @@
+{
+  "schema_version": "0.2",
+  "run": {
+    "run_id": "run-demo-001",
+    "scenario_id": "contract-demo",
+    "scenario_version": "fixture-v1",
+    "generation": 0,
+    "status": "paused",
+    "sim_time_ms": 4000,
+    "duration_ms": 600000,
+    "speed": 1,
+    "created_at": "2026-09-12T10:30:00Z",
+    "expires_at": "2026-09-13T10:30:00Z",
+    "links": {
+      "snapshot": "/api/v1/runs/run-demo-001/snapshot",
+      "stream": "/api/v1/runs/run-demo-001/stream",
+      "commands": "/api/v1/runs/run-demo-001/commands"
+    }
+  },
+  "as_of": {
+    "sequence": 22,
+    "cursor": "run-demo-001:22"
+  },
+  "devices": [
+    {
+      "device_id": "TMP-SRV",
+      "name": "TMP-SRV",
+      "kind": "temperature_sensor",
+      "building_id": "office-demo",
+      "room_id": "server",
+      "floor_id": "floor-1",
+      "position_m": null,
+      "availability": "fresh",
+      "readings": [
+        {
+          "metric": "temperature",
+          "value": 42.2,
+          "unit": "degC",
+          "availability": "fresh",
+          "observation_id": "ev-temp-1",
+          "observed_sim_time_ms": 1000,
+          "age_ms": 3000,
+          "stale_after_ms": 5000
+        }
+      ],
+      "last_observation_id": "ev-temp-1",
+      "last_observed_sim_time_ms": 1000
+    },
+    {
+      "device_id": "SMK-SRV",
+      "name": "SMK-SRV",
+      "kind": "smoke_sensor",
+      "building_id": "office-demo",
+      "room_id": "server",
+      "floor_id": "floor-1",
+      "position_m": null,
+      "availability": "disconnected",
+      "readings": [
+        {
+          "metric": "obscuration",
+          "value": 11.017,
+          "unit": "%/ft",
+          "availability": "disconnected",
+          "observation_id": "ev-smoke-1",
+          "observed_sim_time_ms": 1000,
+          "age_ms": 3000,
+          "stale_after_ms": 5000
+        }
+      ],
+      "last_observation_id": "ev-offline-1",
+      "last_observed_sim_time_ms": 4000
+    },
+    {
+      "device_id": "CAM-SRV",
+      "name": "CAM-SRV",
+      "kind": "camera",
+      "building_id": "office-demo",
+      "room_id": "server",
+      "floor_id": "floor-1",
+      "position_m": null,
+      "availability": "fresh",
+      "readings": [],
+      "last_observation_id": "ev-camera-1",
+      "last_observed_sim_time_ms": 2000
+    },
+    {
+      "device_id": "ACCESS",
+      "name": "ACCESS",
+      "kind": "access_reader",
+      "building_id": "office-demo",
+      "room_id": "server",
+      "floor_id": "floor-1",
+      "position_m": null,
+      "availability": "fresh",
+      "readings": [],
+      "last_observation_id": "ev-access-1",
+      "last_observed_sim_time_ms": 2500
+    },
+    {
+      "device_id": "RADIO-A",
+      "name": "RADIO-A",
+      "kind": "radio_channel",
+      "building_id": "office-demo",
+      "room_id": "server",
+      "floor_id": "floor-1",
+      "position_m": null,
+      "availability": "fresh",
+      "readings": [],
+      "last_observation_id": "ev-radio-audio-1",
+      "last_observed_sim_time_ms": 2000
+    }
+  ],
+  "rooms": [
+    {
+      "room_id": "server",
+      "name": "Серверная / учебная зона",
+      "building_id": "office-demo",
+      "floor_id": "floor-1",
+      "device_ids": [
+        "TMP-SRV",
+        "SMK-SRV",
+        "CAM-SRV",
+        "ACCESS",
+        "RADIO-A"
+      ],
+      "unavailable_device_ids": [
+        "SMK-SRV"
+      ]
+    }
+  ],
+  "cameras": [
+    {
+      "camera_id": "CAM-SRV",
+      "device_id": "CAM-SRV",
+      "room_id": "server",
+      "availability": "fresh",
+      "latest_video_media_id": "media-camera-001",
+      "latest_frame_media_id": null,
+      "playback_delay_ms": 2000
+    }
+  ],
+  "access": [
+    {
+      "scope_id": "office-demo",
+      "window_start_sim_time_ms": 0,
+      "window_end_sim_time_ms": 2500,
+      "confirmed_entries": null,
+      "confirmed_exits": null,
+      "availability": "fresh",
+      "evidence_ids": [
+        "ev-access-1"
+      ],
+      "limitations": [
+        "Нет данных о зарегистрированных проходах."
+      ]
+    }
+  ],
+  "occupancy": [
+    {
+      "scope_id": "office-demo",
+      "scope_type": "building",
+      "count": null,
+      "basis": "unknown",
+      "availability": "missing",
+      "as_of_sim_time_ms": 2500,
+      "observation_id": null,
+      "limitations": [
+        "Разрешение прохода не доказывает проход или присутствие."
+      ]
+    }
+  ],
+  "radio": {
+    "channels": [
+      {
+        "channel_id": "RADIO-A",
+        "device_id": "RADIO-A",
+        "name": "Учебный канал A",
+        "availability": "fresh",
+        "latest_audio_media_id": "media-radio-001"
+      }
+    ]
+  },
+  "system": {
+    "status": "degraded",
+    "clock": {
+      "sim_time_ms": 4000,
+      "wall_time": "2026-09-12T10:30:04Z",
+      "processing_lag_ms": 0
+    },
+    "events": {
+      "processed": 6,
+      "observed": 6,
+      "suppressed": 0,
+      "transport_controls": 0,
+      "dropped": 0
+    },
+    "blender": {
+      "status": "not_connected",
+      "last_ack_at": null,
+      "sim_lag_ms": null
+    },
+    "errors": []
+  }
+}

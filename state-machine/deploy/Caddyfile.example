@@ -1,0 +1,6 @@
+# Add this site block to the proxy configuration after replacing the example host.
+state-api.example.com {
+    reverse_proxy 127.0.0.1:18787 {
+        flush_interval -1
+    }
+}

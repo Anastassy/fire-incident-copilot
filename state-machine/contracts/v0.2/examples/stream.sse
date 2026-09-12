@@ -1,0 +1,97 @@
+retry: 2000
+
+id: run-demo-001:0
+event: snapshot
+data: {"schema_version":"0.2","run":{"run_id":"run-demo-001","scenario_id":"contract-demo","scenario_version":"fixture-v1","generation":0,"status":"paused","sim_time_ms":0,"duration_ms":600000,"speed":1,"created_at":"2026-09-12T10:30:00Z","expires_at":"2026-09-13T10:30:00Z","links":{"snapshot":"/api/v1/runs/run-demo-001/snapshot","stream":"/api/v1/runs/run-demo-001/stream","commands":"/api/v1/runs/run-demo-001/commands"}},"as_of":{"sequence":0,"cursor":"run-demo-001:0"},"devices":[{"device_id":"TMP-SRV","name":"TMP-SRV","kind":"temperature_sensor","building_id":"office-demo","room_id":"server","floor_id":"floor-1","position_m":null,"availability":"missing","readings":[{"metric":"temperature","value":null,"unit":"degC","availability":"missing","observation_id":null,"observed_sim_time_ms":null,"age_ms":null,"stale_after_ms":5000}],"last_observation_id":null,"last_observed_sim_time_ms":null},{"device_id":"SMK-SRV","name":"SMK-SRV","kind":"smoke_sensor","building_id":"office-demo","room_id":"server","floor_id":"floor-1","position_m":null,"availability":"missing","readings":[{"metric":"obscuration","value":null,"unit":"%/ft","availability":"missing","observation_id":null,"observed_sim_time_ms":null,"age_ms":null,"stale_after_ms":5000}],"last_observation_id":null,"last_observed_sim_time_ms":null},{"device_id":"CAM-SRV","name":"CAM-SRV","kind":"camera","building_id":"office-demo","room_id":"server","floor_id":"floor-1","position_m":null,"availability":"missing","readings":[],"last_observation_id":null,"last_observed_sim_time_ms":null},{"device_id":"ACCESS","name":"ACCESS","kind":"access_reader","building_id":"office-demo","room_id":"server","floor_id":"floor-1","position_m":null,"availability":"missing","readings":[],"last_observation_id":null,"last_observed_sim_time_ms":null},{"device_id":"RADIO-A","name":"RADIO-A","kind":"radio_channel","building_id":"office-demo","room_id":"server","floor_id":"floor-1","position_m":null,"availability":"missing","readings":[],"last_observation_id":null,"last_observed_sim_time_ms":null}],"rooms":[{"room_id":"server","name":"Серверная / учебная зона","building_id":"office-demo","floor_id":"floor-1","device_ids":["TMP-SRV","SMK-SRV","CAM-SRV","ACCESS","RADIO-A"],"unavailable_device_ids":["TMP-SRV","SMK-SRV","CAM-SRV","ACCESS","RADIO-A"]}],"cameras":[{"camera_id":"CAM-SRV","device_id":"CAM-SRV","room_id":"server","availability":"missing","latest_video_media_id":null,"latest_frame_media_id":null,"playback_delay_ms":2000}],"access":[{"scope_id":"office-demo","window_start_sim_time_ms":0,"window_end_sim_time_ms":0,"confirmed_entries":null,"confirmed_exits":null,"availability":"missing","evidence_ids":[],"limitations":["Нет данных о зарегистрированных проходах."]}],"occupancy":[{"scope_id":"office-demo","scope_type":"building","count":null,"basis":"unknown","availability":"missing","as_of_sim_time_ms":0,"observation_id":null,"limitations":["Нет подтверждённых данных о присутствии людей."]}],"radio":{"channels":[{"channel_id":"RADIO-A","device_id":"RADIO-A","name":"Учебный канал A","availability":"missing","latest_audio_media_id":null}]},"system":{"status":"healthy","clock":{"sim_time_ms":0,"wall_time":"2026-09-12T10:30:00Z","processing_lag_ms":0},"events":{"processed":0,"observed":0,"suppressed":0,"transport_controls":0,"dropped":0},"blender":{"status":"not_connected","last_ack_at":null,"sim_lag_ms":null},"errors":[]}}
+
+id: run-demo-001:1
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-1","run_id":"run-demo-001","generation":0,"sequence":1,"cursor":"run-demo-001:1","kind":"run.updated","sim_time_ms":0,"emitted_at":"2026-09-12T10:30:00Z","data":{"run_id":"run-demo-001","scenario_id":"contract-demo","scenario_version":"fixture-v1","generation":0,"status":"playing","sim_time_ms":0,"duration_ms":600000,"speed":1,"created_at":"2026-09-12T10:30:00Z","expires_at":"2026-09-13T10:30:00Z","links":{"snapshot":"/api/v1/runs/run-demo-001/snapshot","stream":"/api/v1/runs/run-demo-001/stream","commands":"/api/v1/runs/run-demo-001/commands"}}}
+
+id: run-demo-001:2
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-2","run_id":"run-demo-001","generation":0,"sequence":2,"cursor":"run-demo-001:2","kind":"observation.created","sim_time_ms":1000,"emitted_at":"2026-09-12T10:30:01Z","data":{"evidence_id":"ev-temp-1","run_id":"run-demo-001","generation":0,"device_id":"TMP-SRV","room_id":"server","observed_sim_time_ms":1000,"received_sim_time_ms":1000,"received_at":"2026-09-12T10:30:01Z","provenance":{"source_id":"fixture-sensors","acquisition_id":"fixture-session-001","origin":"synthetic","source_file":null,"source_url":null,"source_sha256":null,"source_row":null,"source_channel":null,"recorded_time":{"value":null,"unit":"unknown","reference":null},"transformation":"Синтетический пример контракта; не запись реального инцидента.","time_mapping":"Фикстура: время задано непосредственно в миллисекундах сценария.","independence_group":"fixture-sensors","composition_note":"Полностью вымышленные данные для разработки UI.","attribution":null},"kind":"measurement","data":{"metric":"temperature","value":42.2,"unit":"degC","quality":"valid"}}}
+
+id: run-demo-001:3
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-3","run_id":"run-demo-001","generation":0,"sequence":3,"cursor":"run-demo-001:3","kind":"device.updated","sim_time_ms":1000,"emitted_at":"2026-09-12T10:30:01Z","data":{"device_id":"TMP-SRV","name":"TMP-SRV","kind":"temperature_sensor","building_id":"office-demo","room_id":"server","floor_id":"floor-1","position_m":null,"availability":"fresh","readings":[{"metric":"temperature","value":42.2,"unit":"degC","availability":"fresh","observation_id":"ev-temp-1","observed_sim_time_ms":1000,"age_ms":0,"stale_after_ms":5000}],"last_observation_id":"ev-temp-1","last_observed_sim_time_ms":1000}}
+
+id: run-demo-001:4
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-4","run_id":"run-demo-001","generation":0,"sequence":4,"cursor":"run-demo-001:4","kind":"observation.created","sim_time_ms":1000,"emitted_at":"2026-09-12T10:30:01Z","data":{"evidence_id":"ev-smoke-1","run_id":"run-demo-001","generation":0,"device_id":"SMK-SRV","room_id":"server","observed_sim_time_ms":1000,"received_sim_time_ms":1000,"received_at":"2026-09-12T10:30:01Z","provenance":{"source_id":"fixture-sensors","acquisition_id":"fixture-session-001","origin":"synthetic","source_file":null,"source_url":null,"source_sha256":null,"source_row":null,"source_channel":null,"recorded_time":{"value":null,"unit":"unknown","reference":null},"transformation":"Синтетический пример контракта; не запись реального инцидента.","time_mapping":"Фикстура: время задано непосредственно в миллисекундах сценария.","independence_group":"fixture-sensors","composition_note":"Полностью вымышленные данные для разработки UI.","attribution":null},"kind":"measurement","data":{"metric":"obscuration","value":11.017,"unit":"%/ft","quality":"valid"}}}
+
+id: run-demo-001:5
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-5","run_id":"run-demo-001","generation":0,"sequence":5,"cursor":"run-demo-001:5","kind":"device.updated","sim_time_ms":1000,"emitted_at":"2026-09-12T10:30:01Z","data":{"device_id":"SMK-SRV","name":"SMK-SRV","kind":"smoke_sensor","building_id":"office-demo","room_id":"server","floor_id":"floor-1","position_m":null,"availability":"fresh","readings":[{"metric":"obscuration","value":11.017,"unit":"%/ft","availability":"fresh","observation_id":"ev-smoke-1","observed_sim_time_ms":1000,"age_ms":0,"stale_after_ms":5000}],"last_observation_id":"ev-smoke-1","last_observed_sim_time_ms":1000}}
+
+id: run-demo-001:6
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-6","run_id":"run-demo-001","generation":0,"sequence":6,"cursor":"run-demo-001:6","kind":"observation.created","sim_time_ms":2000,"emitted_at":"2026-09-12T10:30:02Z","data":{"evidence_id":"ev-camera-1","run_id":"run-demo-001","generation":0,"device_id":"CAM-SRV","room_id":"server","observed_sim_time_ms":2000,"received_sim_time_ms":2000,"received_at":"2026-09-12T10:30:02Z","provenance":{"source_id":"fixture-camera","acquisition_id":"fixture-session-001","origin":"synthetic","source_file":null,"source_url":null,"source_sha256":null,"source_row":null,"source_channel":null,"recorded_time":{"value":null,"unit":"unknown","reference":null},"transformation":"Синтетический пример контракта; не запись реального инцидента.","time_mapping":"Фикстура: время задано непосредственно в миллисекундах сценария.","independence_group":"fixture-camera","composition_note":"Полностью вымышленные данные для разработки UI.","attribution":null},"kind":"camera","data":{"camera_id":"CAM-SRV","media_id":"media-camera-001","media_kind":"video","capture_start_sim_time_ms":0,"capture_end_sim_time_ms":2000}}}
+
+id: run-demo-001:7
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-7","run_id":"run-demo-001","generation":0,"sequence":7,"cursor":"run-demo-001:7","kind":"device.updated","sim_time_ms":2000,"emitted_at":"2026-09-12T10:30:02Z","data":{"device_id":"CAM-SRV","name":"CAM-SRV","kind":"camera","building_id":"office-demo","room_id":"server","floor_id":"floor-1","position_m":null,"availability":"fresh","readings":[],"last_observation_id":"ev-camera-1","last_observed_sim_time_ms":2000}}
+
+id: run-demo-001:8
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-8","run_id":"run-demo-001","generation":0,"sequence":8,"cursor":"run-demo-001:8","kind":"camera.updated","sim_time_ms":2000,"emitted_at":"2026-09-12T10:30:02Z","data":{"camera_id":"CAM-SRV","device_id":"CAM-SRV","room_id":"server","availability":"fresh","latest_video_media_id":"media-camera-001","latest_frame_media_id":null,"playback_delay_ms":2000}}
+
+id: run-demo-001:9
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-9","run_id":"run-demo-001","generation":0,"sequence":9,"cursor":"run-demo-001:9","kind":"observation.created","sim_time_ms":2000,"emitted_at":"2026-09-12T10:30:02Z","data":{"evidence_id":"ev-radio-audio-1","run_id":"run-demo-001","generation":0,"device_id":"RADIO-A","room_id":"server","observed_sim_time_ms":2000,"received_sim_time_ms":2000,"received_at":"2026-09-12T10:30:02Z","provenance":{"source_id":"fixture-radio","acquisition_id":"fixture-session-001","origin":"synthetic","source_file":null,"source_url":null,"source_sha256":null,"source_row":null,"source_channel":null,"recorded_time":{"value":null,"unit":"unknown","reference":null},"transformation":"Синтетический пример контракта; не запись реального инцидента.","time_mapping":"Фикстура: время задано непосредственно в миллисекундах сценария.","independence_group":"fixture-radio","composition_note":"Полностью вымышленные данные для разработки UI.","attribution":null},"kind":"radio_audio","data":{"channel_id":"RADIO-A","media_id":"media-radio-001","chunk_index":0,"audio_start_sim_time_ms":0,"audio_end_sim_time_ms":2000}}}
+
+id: run-demo-001:10
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-10","run_id":"run-demo-001","generation":0,"sequence":10,"cursor":"run-demo-001:10","kind":"device.updated","sim_time_ms":2000,"emitted_at":"2026-09-12T10:30:02Z","data":{"device_id":"RADIO-A","name":"RADIO-A","kind":"radio_channel","building_id":"office-demo","room_id":"server","floor_id":"floor-1","position_m":null,"availability":"fresh","readings":[],"last_observation_id":"ev-radio-audio-1","last_observed_sim_time_ms":2000}}
+
+id: run-demo-001:11
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-11","run_id":"run-demo-001","generation":0,"sequence":11,"cursor":"run-demo-001:11","kind":"radio.channel.updated","sim_time_ms":2000,"emitted_at":"2026-09-12T10:30:02Z","data":{"channel_id":"RADIO-A","device_id":"RADIO-A","name":"Учебный канал A","availability":"fresh","latest_audio_media_id":"media-radio-001"}}
+
+id: run-demo-001:12
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-12","run_id":"run-demo-001","generation":0,"sequence":12,"cursor":"run-demo-001:12","kind":"observation.created","sim_time_ms":2500,"emitted_at":"2026-09-12T10:30:02.500000Z","data":{"evidence_id":"ev-access-1","run_id":"run-demo-001","generation":0,"device_id":"ACCESS","room_id":"server","observed_sim_time_ms":2500,"received_sim_time_ms":2500,"received_at":"2026-09-12T10:30:02.500000Z","provenance":{"source_id":"fixture-access","acquisition_id":"fixture-session-001","origin":"synthetic","source_file":null,"source_url":null,"source_sha256":null,"source_row":null,"source_channel":null,"recorded_time":{"value":null,"unit":"unknown","reference":null},"transformation":"Синтетический пример контракта; не запись реального инцидента.","time_mapping":"Фикстура: время задано непосредственно в миллисекундах сценария.","independence_group":"fixture-access","composition_note":"Полностью вымышленные данные для разработки UI.","attribution":null},"kind":"access","data":{"reader_id":"ACCESS","door_id":"door-server","action":"access_granted","direction":"enter","subject_ref":"badge-demo-01","passage_count":null,"from_room_id":null,"to_room_id":"server"}}}
+
+id: run-demo-001:13
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-13","run_id":"run-demo-001","generation":0,"sequence":13,"cursor":"run-demo-001:13","kind":"device.updated","sim_time_ms":2500,"emitted_at":"2026-09-12T10:30:02.500000Z","data":{"device_id":"ACCESS","name":"ACCESS","kind":"access_reader","building_id":"office-demo","room_id":"server","floor_id":"floor-1","position_m":null,"availability":"fresh","readings":[],"last_observation_id":"ev-access-1","last_observed_sim_time_ms":2500}}
+
+id: run-demo-001:14
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-14","run_id":"run-demo-001","generation":0,"sequence":14,"cursor":"run-demo-001:14","kind":"access.updated","sim_time_ms":2500,"emitted_at":"2026-09-12T10:30:02.500000Z","data":{"scope_id":"office-demo","window_start_sim_time_ms":0,"window_end_sim_time_ms":2500,"confirmed_entries":null,"confirmed_exits":null,"availability":"fresh","evidence_ids":["ev-access-1"],"limitations":["Нет данных о зарегистрированных проходах."]}}
+
+id: run-demo-001:15
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-15","run_id":"run-demo-001","generation":0,"sequence":15,"cursor":"run-demo-001:15","kind":"occupancy.updated","sim_time_ms":2500,"emitted_at":"2026-09-12T10:30:02.500000Z","data":{"scope_id":"office-demo","scope_type":"building","count":null,"basis":"unknown","availability":"missing","as_of_sim_time_ms":2500,"observation_id":null,"limitations":["Разрешение прохода не доказывает проход или присутствие."]}}
+
+id: run-demo-001:16
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-16","run_id":"run-demo-001","generation":0,"sequence":16,"cursor":"run-demo-001:16","kind":"room.updated","sim_time_ms":2500,"emitted_at":"2026-09-12T10:30:02.500000Z","data":{"room_id":"server","name":"Серверная / учебная зона","building_id":"office-demo","floor_id":"floor-1","device_ids":["TMP-SRV","SMK-SRV","CAM-SRV","ACCESS","RADIO-A"],"unavailable_device_ids":[]}}
+
+id: run-demo-001:17
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-17","run_id":"run-demo-001","generation":0,"sequence":17,"cursor":"run-demo-001:17","kind":"observation.created","sim_time_ms":4000,"emitted_at":"2026-09-12T10:30:04Z","data":{"evidence_id":"ev-offline-1","run_id":"run-demo-001","generation":0,"device_id":"SMK-SRV","room_id":"server","observed_sim_time_ms":4000,"received_sim_time_ms":4000,"received_at":"2026-09-12T10:30:04Z","provenance":{"source_id":"fixture-power","acquisition_id":"fixture-session-001","origin":"synthetic","source_file":null,"source_url":null,"source_sha256":null,"source_row":null,"source_channel":null,"recorded_time":{"value":null,"unit":"unknown","reference":null},"transformation":"Синтетический пример контракта; не запись реального инцидента.","time_mapping":"Фикстура: время задано непосредственно в миллисекундах сценария.","independence_group":"fixture-power","composition_note":"Полностью вымышленные данные для разработки UI.","attribution":null},"kind":"connectivity","data":{"connected":false,"reason":"synthetic_power_loss"}}}
+
+id: run-demo-001:18
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-18","run_id":"run-demo-001","generation":0,"sequence":18,"cursor":"run-demo-001:18","kind":"device.updated","sim_time_ms":4000,"emitted_at":"2026-09-12T10:30:04Z","data":{"device_id":"SMK-SRV","name":"SMK-SRV","kind":"smoke_sensor","building_id":"office-demo","room_id":"server","floor_id":"floor-1","position_m":null,"availability":"disconnected","readings":[{"metric":"obscuration","value":11.017,"unit":"%/ft","availability":"disconnected","observation_id":"ev-smoke-1","observed_sim_time_ms":1000,"age_ms":3000,"stale_after_ms":5000}],"last_observation_id":"ev-offline-1","last_observed_sim_time_ms":4000}}
+
+id: run-demo-001:19
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-19","run_id":"run-demo-001","generation":0,"sequence":19,"cursor":"run-demo-001:19","kind":"device.updated","sim_time_ms":4000,"emitted_at":"2026-09-12T10:30:04Z","data":{"device_id":"TMP-SRV","name":"TMP-SRV","kind":"temperature_sensor","building_id":"office-demo","room_id":"server","floor_id":"floor-1","position_m":null,"availability":"fresh","readings":[{"metric":"temperature","value":42.2,"unit":"degC","availability":"fresh","observation_id":"ev-temp-1","observed_sim_time_ms":1000,"age_ms":3000,"stale_after_ms":5000}],"last_observation_id":"ev-temp-1","last_observed_sim_time_ms":1000}}
+
+id: run-demo-001:20
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-20","run_id":"run-demo-001","generation":0,"sequence":20,"cursor":"run-demo-001:20","kind":"room.updated","sim_time_ms":4000,"emitted_at":"2026-09-12T10:30:04Z","data":{"room_id":"server","name":"Серверная / учебная зона","building_id":"office-demo","floor_id":"floor-1","device_ids":["TMP-SRV","SMK-SRV","CAM-SRV","ACCESS","RADIO-A"],"unavailable_device_ids":["SMK-SRV"]}}
+
+id: run-demo-001:21
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-21","run_id":"run-demo-001","generation":0,"sequence":21,"cursor":"run-demo-001:21","kind":"system.updated","sim_time_ms":4000,"emitted_at":"2026-09-12T10:30:04Z","data":{"status":"degraded","clock":{"sim_time_ms":4000,"wall_time":"2026-09-12T10:30:04Z","processing_lag_ms":0},"events":{"processed":6,"observed":6,"suppressed":0,"transport_controls":0,"dropped":0},"blender":{"status":"not_connected","last_ack_at":null,"sim_lag_ms":null},"errors":[]}}
+
+id: run-demo-001:22
+event: event
+data: {"schema_version":"0.2","event_id":"evt-demo-22","run_id":"run-demo-001","generation":0,"sequence":22,"cursor":"run-demo-001:22","kind":"run.updated","sim_time_ms":4000,"emitted_at":"2026-09-12T10:30:04Z","data":{"run_id":"run-demo-001","scenario_id":"contract-demo","scenario_version":"fixture-v1","generation":0,"status":"paused","sim_time_ms":4000,"duration_ms":600000,"speed":1,"created_at":"2026-09-12T10:30:00Z","expires_at":"2026-09-13T10:30:00Z","links":{"snapshot":"/api/v1/runs/run-demo-001/snapshot","stream":"/api/v1/runs/run-demo-001/stream","commands":"/api/v1/runs/run-demo-001/commands"}}}
+
+event: heartbeat
+data: {"run_id":"run-demo-001","generation":0,"last_sequence":22,"sim_time_ms":4000,"server_time":"2026-09-12T10:30:05Z"}
+

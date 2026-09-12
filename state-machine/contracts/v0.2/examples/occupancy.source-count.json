@@ -1,0 +1,12 @@
+{
+  "scope_id": "office-demo",
+  "scope_type": "building",
+  "count": 12,
+  "basis": "source_count",
+  "availability": "fresh",
+  "as_of_sim_time_ms": 2500,
+  "observation_id": "ev-people-example",
+  "limitations": [
+    "Значение вымышленного источника; State Machine не проверяет фактическое присутствие."
+  ]
+}

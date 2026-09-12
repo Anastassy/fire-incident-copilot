@@ -1,0 +1,14 @@
+var/
+output/
+datasets/
+.env
+.env.*
+.venv/
+__pycache__/
+*.py[cod]
+*.sqlite*
+*.db*
+*.pem
+*.key
+*.log
+.DS_Store
