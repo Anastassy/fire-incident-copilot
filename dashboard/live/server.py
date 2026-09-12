@@ -74,14 +74,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
             action = body.get('action')
             if action not in ['request', 'assign', 'acknowledge', 'reset']:
                 return self.json({'error': 'Unknown fixture action'}, 422)
-            sid = 'dashboard-channel-demo'
+            sid = 'dashboard-channel-demo-en'
             session = self.request_json('agent', '/sessions/' + sid, 'POST', {})
             if action == 'reset':
                 session = self.request_json('agent', '/sessions/' + sid + '/reset', 'POST', {})
             else:
-                phase = {'request': (1, 1000, 'channel_requested', None, 'Demo Group', 'Синтетический тест: Demo Group запрашивает рабочий канал.'),
-                         'assign': (2, 2000, 'channel_assigned', 'V-Fire 25', None, 'Синтетический тест: назначен канал V-Fire 25.'),
-                         'acknowledge': (3, 3000, 'channel_acknowledged', 'V-Fire 25', None, 'Синтетический тест: отдельная реплика подтверждает V-Fire 25.')}[action]
+                phase = {'request': (1, 1000, 'channel_requested', None, 'Demo Group', 'Synthetic demo: Demo Group requests a working channel.'),
+                         'assign': (2, 2000, 'channel_assigned', 'V-Fire 25', None, 'Synthetic demo: V-Fire 25 is assigned.'),
+                         'acknowledge': (3, 3000, 'channel_acknowledged', 'V-Fire 25', None, 'Synthetic demo: a separate reply acknowledges V-Fire 25.')}[action]
                 reading, timestamp, fact, channel, team, description = phase
                 self.request_json('agent', '/events', 'POST', {'session_id': sid, 'generation': session['generation'],
                     'event_id': 'demo-channel-' + action, 'reading_id': reading,
@@ -168,7 +168,7 @@ def main():
     parser.add_argument('--port', type=int, default=8790)
     parser.add_argument('--state-config', type=Path)
     parser.add_argument('--agent-url', default='http://127.0.0.1:8010')
-    parser.add_argument('--agent-context', default='dashboard-channel-demo')
+    parser.add_argument('--agent-context', default='dashboard-channel-demo-en')
     parser.add_argument('--agent-generation', type=int, default=0)
     parser.add_argument('--subject', default='all')
     parser.add_argument('--scenario', default='base2-palisades-v1')

@@ -23,13 +23,13 @@ def main():
         if not healthy():
             python=AGENT/'.venv/bin/python'
             if not python.is_file():
-                raise SystemExit('Сначала выполните uv sync --frozen в agent-service/')
+                raise SystemExit('First run uv sync --frozen in agent-service/')
             children.append(subprocess.Popen([str(python),'-m','uvicorn','fire_agents.api:create_app','--factory','--host','127.0.0.1','--port','8010'],cwd=AGENT))
             for _ in range(100):
                 if healthy():break
-                if children[0].poll() is not None:raise SystemExit('Агент не запустился.')
+                if children[0].poll() is not None:raise SystemExit('The agent failed to start.')
                 time.sleep(.1)
-            else:raise SystemExit('Агент не ответил за 10 секунд.')
+            else:raise SystemExit('The agent did not respond within 10 seconds.')
         children.append(subprocess.Popen([sys.executable,str(Path(__file__).with_name('server.py')),'--demo-agent',*sys.argv[1:]],cwd=ROOT))
         children[-1].wait()
     except KeyboardInterrupt:pass
