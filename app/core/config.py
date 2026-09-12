@@ -17,5 +17,15 @@ class Settings(BaseSettings):
     state_machine_scenario_id: str = "degraded"
     our_api_base_url: str = "http://localhost:8000"
 
+    # Production mode: subscribe read-only to one externally-agreed, shared run instead
+    # of creating our own (per the simulator team's deployment handoff,
+    # raw-source/state-consumer-handoff/START_HERE.ru.md section 3: consumers must not
+    # create a run per worker/reconnect and must not send Play to a shared run). When
+    # set, use STATE_MACHINE_BEARER_TOKEN=<read_token> here, not control_token, since no
+    # run-creation or command-sending happens in this mode. Leave unset for local
+    # dev/integration testing, where creating our own run (and sending Play) is fine and
+    # is the existing, unchanged default behavior.
+    state_machine_run_id: str | None = None
+
 
 settings = Settings()

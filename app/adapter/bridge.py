@@ -50,12 +50,20 @@ class Bridge:
         our_api_base_url: str,
         api_key: str,
         scenario_id: str,
+        run_id: Optional[str] = None,
         state_path=DEFAULT_STATE_PATH,
     ):
         self._sm = state_machine
         self._our_api_base_url = our_api_base_url.rstrip("/")
         self._api_key = api_key
         self._scenario_id = scenario_id
+        # Externally-agreed, shared run_id (production): if set, we subscribe read-only
+        # to this run and never create a run or send commands to it -- see the simulator
+        # team's deployment handoff, START_HERE.ru.md section 3 ("не создавай run для
+        # каждого ... старта worker; не включай Play при подписке"). Unset (the default)
+        # keeps today's local-dev/integration-testing behavior: create/resume our own
+        # run and send Play, which the same doc explicitly still allows for that case.
+        self._external_run_id = run_id
         self._state_path = state_path
         self._state: dict[str, Any] = load_state(state_path)
         self._device_meta: DeviceMeta = {}
@@ -66,9 +74,18 @@ class Bridge:
         save_state(self._state, self._state_path)
 
     async def _ensure_run(self) -> str:
+        if self._external_run_id:
+            # Shared production run: never create/control it, just subscribe.
+            logger.info(
+                "subscribing read-only to externally-agreed run %s (not creating or "
+                "controlling it; STATE_MACHINE_BEARER_TOKEN should be a read_token here)",
+                self._external_run_id,
+            )
+            return self._external_run_id
+
         run_id = self._state.get("run_id")
         if run_id:
-            logger.info("resuming persisted run %s", run_id)
+            logger.info("resuming persisted local run %s", run_id)
             return run_id
 
         idempotency_key = self._state.get("run_create_idempotency_key") or str(uuid.uuid4())
@@ -78,7 +95,7 @@ class Bridge:
         self._state["generation"] = run["generation"]
         self._state.pop("cursor", None)
         self._save()
-        logger.info("created run %s (scenario=%s)", run["run_id"], self._scenario_id)
+        logger.info("created local run %s (scenario=%s)", run["run_id"], self._scenario_id)
         return run["run_id"]
 
     async def _maybe_play(self, run_id: str, run_status: str, generation: int) -> None:
@@ -117,7 +134,8 @@ class Bridge:
                 self._state["generation"] = data["run"]["generation"]
                 self._state["cursor"] = data["as_of"]["cursor"]
                 self._save()
-                await self._maybe_play(run_id, data["run"]["status"], data["run"]["generation"])
+                if not self._external_run_id:
+                    await self._maybe_play(run_id, data["run"]["status"], data["run"]["generation"])
                 continue
 
             if frame == "heartbeat":
@@ -244,13 +262,22 @@ async def main() -> None:
         our_api_base_url=settings.our_api_base_url,
         api_key=settings.api_key,
         scenario_id=settings.state_machine_scenario_id,
+        run_id=settings.state_machine_run_id or None,
     )
-    logger.info(
-        "starting State Machine bridge: base_url=%s scenario_id=%s -> %s",
-        settings.state_machine_base_url,
-        settings.state_machine_scenario_id,
-        settings.our_api_base_url,
-    )
+    if settings.state_machine_run_id:
+        logger.info(
+            "starting State Machine bridge in shared-run subscriber mode: base_url=%s run_id=%s -> %s",
+            settings.state_machine_base_url,
+            settings.state_machine_run_id,
+            settings.our_api_base_url,
+        )
+    else:
+        logger.info(
+            "starting State Machine bridge in local-run mode: base_url=%s scenario_id=%s -> %s",
+            settings.state_machine_base_url,
+            settings.state_machine_scenario_id,
+            settings.our_api_base_url,
+        )
     await bridge.run_forever()
 
 
