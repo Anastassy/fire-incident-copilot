@@ -1,0 +1,88 @@
+{
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "frames": 750,
+  "palette": {
+    "bg": "#EFF3F6",
+    "ink": "#1D3040",
+    "accent": "#185C85",
+    "pale": "#E7F2FA",
+    "muted": "#536B7B",
+    "line": "#CEDBE4"
+  },
+  "font": "/System/Library/Fonts/Avenir Next.ttc",
+  "mono": "/System/Library/Fonts/Menlo.ttc",
+  "layout": {
+    "margin": 80,
+    "header_y": 80,
+    "panel_y": 350,
+    "panel_bottom": 850,
+    "subtitle_y": 938
+  },
+  "scenes": [
+    0,
+    4,
+    10,
+    15,
+    21
+  ],
+  "narration": [
+    {
+      "start": 0.12,
+      "limit": 4,
+      "rate": 150,
+      "text": "A channel was assigned. Was it acknowledged?",
+      "duration": 2.758020833333333
+    },
+    {
+      "start": 4.04,
+      "limit": 8.05,
+      "rate": 160,
+      "text": "Command support pieces together the situation from radio messages.",
+      "duration": 3.8426458333333335
+    },
+    {
+      "start": 10.12,
+      "limit": 15,
+      "rate": 150,
+      "text": "An assignment, an acknowledgement, and execution are different things.",
+      "duration": 4.360791666666667
+    },
+    {
+      "start": 15.12,
+      "limit": 21,
+      "rate": 150,
+      "text": "Our copilot tracks the exchange and links findings to original audio.",
+      "duration": 4.45275
+    },
+    {
+      "start": 21.12,
+      "limit": 24.5,
+      "rate": 145,
+      "text": "Let\u2019s check the Palisades radio.",
+      "duration": 2.0921666666666665
+    }
+  ],
+  "radio": {
+    "path": "data/demo/palisades-radio-demo/audio/decision-focus.wav",
+    "source_start": 128.5,
+    "duration": 1.92,
+    "timeline_start": 8.08,
+    "text": "And what tack can I operate on?"
+  },
+  "logs": [
+    {
+      "time": "02:00.840\u201302:03.480",
+      "text": "70 Charlie 51 Charlie 03 Alpha."
+    },
+    {
+      "time": "02:03.960\u201302:05.500",
+      "text": "Coastline Structure Defense Group."
+    },
+    {
+      "time": "02:08.600\u201302:10.420",
+      "text": "And what tack can I operate on?"
+    }
+  ]
+}

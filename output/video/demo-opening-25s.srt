@@ -1,0 +1,23 @@
+1
+00:00:00,120 --> 00:00:02,878
+A channel was assigned. Was it acknowledged?
+
+2
+00:00:04,040 --> 00:00:07,883
+Command support pieces together the situation from radio messages.
+
+3
+00:00:08,080 --> 00:00:10,000
+[Original radio · V-1] And what tack can I operate on?
+
+4
+00:00:10,120 --> 00:00:14,481
+An assignment, an acknowledgement, and execution are different things.
+
+5
+00:00:15,120 --> 00:00:19,573
+Our copilot tracks the exchange and links findings to original audio.
+
+6
+00:00:21,120 --> 00:00:23,212
+Let’s check the Palisades radio.

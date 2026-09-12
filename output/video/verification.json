@@ -1,0 +1,18 @@
+{
+  "frames": 750,
+  "fps": 30,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "duration_seconds": 25.0,
+  "video": "H.264 / yuv420p",
+  "audio": "AAC / 48 kHz / mono",
+  "integrated_lufs": -16.0,
+  "true_peak_dbtp": -1.45,
+  "faststart": true,
+  "complete_decode": "passed",
+  "bytes": 1496159,
+  "last_voice_end": 23.2121666667,
+  "last_static_frame_hold_seconds": 1.7667
+}
