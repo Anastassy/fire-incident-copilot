@@ -24,6 +24,13 @@ Backend-платформа для хакатона: приём телеметр�
 
 Полная архитектура и разбивка ответственности — см. план в `/Users/vitalynec/.claude/plans/swirling-meandering-aho.md`.
 
+### Адреса развёртывания
+
+- **Production** (планируется): `https://platform.aitinkerers.space` — целевой адрес после развёртывания на Hetzner и настройки DNS/Caddy (текущий статус: инфраструктура готовится)
+- **Local development**: `http://localhost:8000` — для локальной разработки и тестирования
+
+Все примеры в этом документе используют `http://localhost:8000`; в production просто замените на `https://platform.aitinkerers.space`.
+
 ---
 
 ## Для команды симулятора (ingestion)

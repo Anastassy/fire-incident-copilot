@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.5 · 2026-09-12 · Added production domain to docs and openapi.json
+
+**Documentation**: Added production domain `https://platform.aitinkerers.space` (target address
+for Hetzner + Caddy deployment) alongside local development URL `http://localhost:8000` in:
+- `openapi.json` servers array (per OpenAPI 3.1 spec)
+- [README.md](README.md) and [CLIENT_FLOW.md](CLIENT_FLOW.md) in the contracts package
+- Root README.md in the platform repo
+
+Production DNS and Caddy routing are not yet wired up; this documents the intended target address.
+
 ## 1.0.4 · 2026-09-12 · Fixed openapi.json version sync
 
 **Fix**: OpenAPI schema version (`openapi.json` info.version) now matches the contract package

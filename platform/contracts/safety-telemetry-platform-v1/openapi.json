@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Safety Telemetry Platform",
-    "version": "1.0.4"
+    "version": "1.0.5"
   },
   "paths": {
     "/ingest/telemetry": {
@@ -1455,5 +1455,15 @@
         "title": "ValidationError"
       }
     }
-  }
+  },
+  "servers": [
+    {
+      "url": "https://platform.aitinkerers.space",
+      "description": "Production"
+    },
+    {
+      "url": "http://localhost:8000",
+      "description": "Local development"
+    }
+  ]
 }

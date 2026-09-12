@@ -2,9 +2,10 @@
 
 **Status: implemented and running.** This is not a draft — every endpoint and MCP tool
 documented here exists in the codebase today (`app/`) and has been exercised locally.
-Base URL for local dev: `http://localhost:8000` (configurable — treat it as a client
-setting, not a constant; see `docker-compose.yml` / `.env` for how the hackathon
-deployment overrides it).
+
+**Base URLs:**
+- Production: `https://platform.aitinkerers.space` (target domain once DNS/Caddy deployment completes)
+- Local dev: `http://localhost:8000` (configurable — treat it as a client setting, not a constant; see `docker-compose.yml` / `.env` for how the hackathon deployment overrides it)
 
 Three consumer roles share one platform:
 

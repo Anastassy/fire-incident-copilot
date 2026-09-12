@@ -1,9 +1,13 @@
 # Client integration flow
 
-All three roles talk to the same running service at `http://localhost:8000` (configurable)
-with an `X-API-Key` header on every request. There is no run/session/generation/cursor
-concept anywhere in this platform — every telemetry event, incident, and dashboard write
-is independent and immediately durable. Pick your section below.
+All three roles talk to the same running service with an `X-API-Key` header on every request.
+
+**Base URLs:**
+- **Production**: `https://platform.aitinkerers.space` (target domain once DNS/Caddy deployment completes)
+- **Local dev**: `http://localhost:8000` (configurable — treat it as a client setting)
+
+There is no run/session/generation/cursor concept anywhere in this platform — every telemetry event, 
+incident, and dashboard write is independent and immediately durable. Pick your section below.
 
 - [Simulator team — push ingestion](#simulator-team--push-ingestion)
 - [Dashboard team — pull REST + push SSE](#dashboard-team--pull-rest--push-sse)
