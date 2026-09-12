@@ -6,6 +6,8 @@
 
 **Repository:** https://github.com/Anastassy/fire-incident-copilot
 
+**Project website:** https://aitinkerers.space/ — public project page, prototype screenshots and team; interactive workspace startup is documented in the quickstart.
+
 **Public demo video:** pending publication
 
 **Public project post:** pending publication
@@ -111,6 +113,7 @@ Secrets belong in backend environments/private files. `.env`, agent work and loc
 ## Final handoff
 
 - [x] Valencia participant portal recorded.
+- [x] Public project website linked and checked: https://aitinkerers.space/ (HTTP 200, September 12).
 - [ ] Confirm its actual deadline/local rules; no other city's deadline is substituted here.
 - [ ] Add the public video URL.
 - [ ] Publish a project post using the exact partner tags requested by Valencia organizers; add its URL.
@@ -120,6 +123,8 @@ Secrets belong in backend environments/private files. `.env`, agent work and loc
 ### Suggested post copy — not published
 
 We built Firewatch, an incident copilot embedded in a live sensor, camera and radio workspace. It updates a source-linked briefing, answers questions about the replay, and keeps missing information visible. Our training demo combines synthetic building observations with independent historical radio; it does not control emergency equipment. Built with OpenAI Agents SDK and model inference through OpenRouter.
+
+Project: https://aitinkerers.space/
 
 Code: https://github.com/Anastassy/fire-incident-copilot
 

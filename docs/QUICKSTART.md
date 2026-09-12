@@ -2,6 +2,8 @@
 
 Run commands from the repository root unless a step says otherwise. This starts a loopback application, not a public deployment.
 
+The public project page is **[aitinkerers.space](https://aitinkerers.space/)**. It introduces the prototype; the commands below start the interactive workspace on your own machine.
+
 ## Prerequisites and verification
 
 Git, Python 3.12+, [uv](https://docs.astral.sh/uv/), Node.js 18+ and npm. Use a recent Chrome for the demonstrated H.264/AAC playback path; other browsers were not validated. Docker Compose is needed only for a local Data Platform.

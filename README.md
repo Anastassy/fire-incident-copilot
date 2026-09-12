@@ -2,7 +2,9 @@
 
 **A live incident workspace that turns sensor changes and radio reports into a source-linked briefing.** Built for an operator supporting incident command: see what changed, ask about the current situation, inspect the evidence, and keep unknowns visible.
 
-[Run it](docs/QUICKSTART.md) · [Submission and demo](SUBMISSION.md) · [Live validation](dashboard/live/VALIDATION.md) · [Valencia hackathon](https://valencia.aitinkerers.org/hackathons/h_GVqIXzHKOYA)
+[Project website](https://aitinkerers.space/) · [Run it](docs/QUICKSTART.md) · [Submission and demo](SUBMISSION.md) · [Live validation](dashboard/live/VALIDATION.md) · [Valencia hackathon](https://valencia.aitinkerers.org/hackathons/h_GVqIXzHKOYA)
+
+**Project website: [aitinkerers.space](https://aitinkerers.space/).** The public page introduces the prototype and team, with interface screenshots and a link to the code. To run the interactive workspace, follow the quickstart below.
 
 ## The interaction
 
@@ -73,7 +75,7 @@ The [September 12 live validation](dashboard/live/VALIDATION.md) separately reco
 - **Camera and audio scope:** cameras are visible to the operator; the model does not analyze their pixels. Radio comes with a prepared machine transcript, not new speech recognition in this service.
 - **Bounded context:** answers use up to 20 selected events from the latest 500 candidates, with a 24,000-character limit. This is not full-incident recall.
 - **Timing:** a three-second analysis interval is scheduling, not an end-to-end latency guarantee. Recorded measurements are a short sample, not an SLA or accuracy evaluation.
-- **Deployment:** State and Platform were exercised on hosted services; the dashboard and agent are local processes. There is no public, credential-free hosted UI in this release.
+- **Deployment:** The public project page is at [aitinkerers.space](https://aitinkerers.space/). Recorded live validation used hosted State/Platform services and local dashboard/agent processes. The project page is not the running interactive dashboard.
 - **Decision support:** unknown occupancy remains unknown. This prototype is not certified detection, emergency dispatch or autonomous incident command.
 
 ## Two-minute demonstration
