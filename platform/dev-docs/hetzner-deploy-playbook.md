@@ -1,30 +1,30 @@
-# Плейбук: деплой platform на Hetzner (state-consumer)
+# Playbook: deploy platform on Hetzner (state-consumer)
 
-Основано на реально выполненных шагах 12 сентября 2026. Сервер общий с State Machine
-(`state-api.service`) — все команды ниже писались так, чтобы её не задеть.
+Based on steps actually performed on September 12, 2026. Server is shared with State Machine
+(`state-api.service`) — all commands below were written so as not to touch it.
 
-## Предпосылки
+## Prerequisites
 
-- Доступ к 1Password vault `aitinkerers-hack` (SSH-ключ `hetzner-state-machine-ssh`,
-  токены `State Machine API`, `Cloudflare`).
-- `op` CLI авторизован через `OP_SERVICE_ACCOUNT_TOKEN`.
-- Сервер: `167.233.195.12`, host key fingerprint `SHA256:cfE6m4XvJ6p3Z+fwz8Ryh6FnWErvxdSUBlpiqqGf6hA`
-  (сверять перед первым подключением!).
+- Access to 1Password vault `aitinkerers-hack` (SSH key `hetzner-state-machine-ssh`,
+  tokens `State Machine API`, `Cloudflare`).
+- `op` CLI authorized via `OP_SERVICE_ACCOUNT_TOKEN`.
+- Server: `167.233.195.12`, host key fingerprint `SHA256:cfE6m4XvJ6p3Z+fwz8Ryh6FnWErvxdSUBlpiqqGf6hA`
+  (verify before first connection!).
 
-## 0. SSH-ключ: конвертация PKCS#8 → OpenSSH
+## 0. SSH key: PKCS#8 → OpenSSH conversion
 
-1Password отдаёт ed25519 private key в PKCS#8 PEM с опциональным полем public key
-(RFC 5958 OneAsymmetricKey) — `ssh`/`ssh-keygen` такой формат не читают напрямую.
+1Password provides ed25519 private key in PKCS#8 PEM format with optional public key field
+(RFC 5958 OneAsymmetricKey) — `ssh`/`ssh-keygen` do not read this format directly.
 
 ```bash
 mkdir -m 700 /tmp/hetzner-ssh-XXXXXX && SSH_TMP_DIR=$(mktemp -d /tmp/hetzner-ssh-XXXXXX)
 op read "op://aitinkerers-hack/hetzner-state-machine-ssh/private key" > "$SSH_TMP_DIR/id_key"
 chmod 600 "$SSH_TMP_DIR/id_key"
 
-# Нормализация через openssl (убирает опциональное поле, которое cryptography не читает)
+# Normalization via openssl (removes optional field that cryptography does not read)
 openssl pkey -in "$SSH_TMP_DIR/id_key" -out "$SSH_TMP_DIR/id_key_norm"
 
-# Конвертация PKCS#8 -> OpenSSH формат через Python cryptography
+# PKCS#8 -> OpenSSH format conversion via Python cryptography
 python3 - "$SSH_TMP_DIR/id_key_norm" "$SSH_TMP_DIR/id_key_openssh" <<'PYEOF'
 import sys, os
 from cryptography.hazmat.primitives import serialization
@@ -45,14 +45,14 @@ print(key.public_key().public_bytes(
 PYEOF
 ```
 
-Сверить выведенный публичный ключ с полем `public key` в том же 1Password item — должны
-совпадать побайтово.
+Verify the printed public key against the `public key` field in the same 1Password item —
+they should match byte-for-byte.
 
-## 1. Проверка хоста и рекогносцировка (read-only)
+## 1. Host verification and reconnaissance (read-only)
 
 ```bash
 ssh-keyscan -t ed25519 167.233.195.12 2>/dev/null | ssh-keygen -lf - -E sha256
-# сверить с задокументированным fingerprint выше
+# verify against the documented fingerprint above
 
 ssh-keyscan -t ed25519 167.233.195.12 2>/dev/null > "$SSH_TMP_DIR/known_hosts"
 SSH="ssh -i $SSH_TMP_DIR/id_key_openssh -o IdentitiesOnly=yes -o IdentityAgent=none \
@@ -63,9 +63,9 @@ $SSH 'systemctl show state-api -p ActiveState,MainPID,NRestarts; \
       sha256sum /etc/caddy/Caddyfile'
 ```
 
-Сохранить вывод (baseline) — сверять после каждого изменения, что `state-api`/Caddy не задеты.
+Save the output (baseline) — verify after each change that `state-api`/Caddy are not affected.
 
-## 2. Установка Docker + создание пользователя/каталогов (один раз)
+## 2. Docker installation + user/directory creation (once)
 
 ```bash
 $SSH 'curl -fsSL https://get.docker.com | sh'
@@ -79,25 +79,25 @@ $SSH 'useradd --system --no-create-home --shell /usr/sbin/nologin state-consumer
       chmod 750 /etc/state-consumer'
 ```
 
-## 3. Секреты (`/etc/state-consumer/service.env`, 0600)
+## 3. Secrets (`/etc/state-consumer/service.env`, 0600)
 
-Production-воркер использует `read_token` (не `control_token`!) и подписывается на один
-согласованный `STATE_MACHINE_RUN_ID` — не создаёт свой run.
+Production worker uses `read_token` (not `control_token`!) and subscribes to one agreed
+`STATE_MACHINE_RUN_ID` — does not create its own run.
 
 ```bash
 READ_TOKEN=$(op read "op://aitinkerers-hack/State Machine API/read_token")
 {
-  echo "API_KEY=<общий X-API-Key, см. 1Password item 'Platform API_KEY (state-consumer / X-API-Key)'>"
+  echo "API_KEY=<shared X-API-Key, see 1Password item 'Platform API_KEY (state-consumer / X-API-Key)'>"
   echo "STATE_MACHINE_BASE_URL=http://127.0.0.1:8787/api/v1"
   echo "STATE_MACHINE_BEARER_TOKEN=${READ_TOKEN}"
   echo "STATE_MACHINE_SCENARIO_ID=palisades-full"
-  echo "STATE_MACHINE_RUN_ID=<run_id согласованного общего run>"
+  echo "STATE_MACHINE_RUN_ID=<run_id of agreed shared run>"
 } | $SSH 'umask 077 && cat > /etc/state-consumer/service.env && \
           chown state-consumer:state-consumer /etc/state-consumer/service.env && \
           chmod 600 /etc/state-consumer/service.env'
 ```
 
-### Создание согласованного общего run (один раз, через control_token, НЕ на сервере)
+### Creating agreed shared run (once, via control_token, NOT on server)
 
 ```bash
 CONTROL_TOKEN=$(op read "op://aitinkerers-hack/State Machine API/control_token")
@@ -105,18 +105,18 @@ IDEMKEY=$(python3 -c 'import uuid; print(uuid.uuid4())')
 curl -s -X POST "https://api.aitinkerers.space/api/v1/runs" \
   -H "Authorization: Bearer $CONTROL_TOKEN" -H "Idempotency-Key: $IDEMKEY" \
   -H "Content-Type: application/json" -d '{"scenario_id":"palisades-full","speed":1}'
-# сохранить run_id, затем:
+# save run_id, then:
 CMDKEY=$(python3 -c 'import uuid; print(uuid.uuid4())')
 curl -s -X POST "https://api.aitinkerers.space/api/v1/runs/<run_id>/commands" \
   -H "Authorization: Bearer $CONTROL_TOKEN" -H "Content-Type: application/json" \
   -d "{\"command_id\":\"$CMDKEY\",\"expected_generation\":0,\"action\":\"play\"}"
 ```
 
-## 4. Prod-compose override (`docker-compose.hetzner.yml`, лежит только на сервере, не в git)
+## 4. Production compose override (`docker-compose.hetzner.yml`, server-only, not in git)
 
-Причины: `db`/`redis` без публикации портов наружу; `app` только на loopback (Caddy сам
-проксирует снаружи); `bridge` с `network_mode: host`, чтобы достать `state-api` по
-`127.0.0.1:8787` (доступ к loopback сервера, не контейнера).
+Reasons: `db`/`redis` without exposing ports outside; `app` only on loopback (Caddy proxies from outside);
+`bridge` with `network_mode: host` to reach `state-api` at `127.0.0.1:8787`
+(loopback access from server, not container).
 
 ```yaml
 services:
@@ -138,10 +138,10 @@ services:
       STATE_MACHINE_BASE_URL: http://127.0.0.1:8787/api/v1
 ```
 
-Копировать в каждый новый релиз при деплое (см. шаг 5) — этот файл не version-controlled
-в репозитории (деплой-специфичный, живёт только на сервере).
+Copy into each new release on deploy (see step 5) — this file is not version-controlled
+in the repo (deployment-specific, lives only on server).
 
-## 5. Релиз и запуск
+## 5. Release and run
 
 ```bash
 RELEASE_ID="$(date -u +%Y%m%dT%H%M%SZ)-main"
@@ -159,38 +159,38 @@ $SSH 'sudo -u state-consumer HOME=/var/lib/state-consumer/home bash -c \
          -f docker-compose.yml -f docker-compose.hetzner.yml up -d --build"'
 ```
 
-Первый релиз compose-override копируется вручную (см. шаг 4) — последующие релизы
-переносят его из `current` перед git clone (как в команде выше).
+First release compose-override is copied manually (see step 4) — subsequent releases
+carry it from `current` before git clone (as in command above).
 
-## 6. Проверка
+## 6. Verification
 
 ```bash
 $SSH 'curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:8790/health; \
       docker logs platform-bridge-1 --tail 10 | grep -v "ingest/telemetry.*200"; \
-      systemctl show state-api -p MainPID,NRestarts'  # NRestarts должен остаться 0
+      systemctl show state-api -p MainPID,NRestarts'  # NRestarts should stay 0
 ```
 
-## 7. Caddy + DNS (публичный доступ) — отдельное подтверждение перед выполнением
+## 7. Caddy + DNS (public access) — separate confirmation before execution
 
 ```bash
-# DNS (Cloudflare) -- DNS only, без проксирования
+# DNS (Cloudflare) -- DNS only, without proxying
 CF_TOKEN=$(op read 'op://aitinkerers-hack/Cloudflare/CLOUDFLARE_API_TOKEN')
 ZONE_ID=$(op read 'op://aitinkerers-hack/Cloudflare/CLOUDFLARE_ZONE_ID')
 curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records" \
   -H "Authorization: Bearer $CF_TOKEN" -H "Content-Type: application/json" \
   -d '{"type":"A","name":"platform.aitinkerers.space","content":"167.233.195.12","ttl":300,"proxied":false}'
 
-# Caddy: бэкап, добавить один новый блок, validate, установить, reload (НЕ restart)
+# Caddy: backup, add one new block, validate, install, reload (NOT restart)
 $SSH 'cp /etc/caddy/Caddyfile /etc/caddy/Caddyfile.bak-$(date -u +%Y%m%dT%H%M%SZ)'
-# ... сформировать /tmp/Caddyfile.candidate = текущий + новый блок ...
+# ... form /tmp/Caddyfile.candidate = current + new block ...
 $SSH 'caddy validate --config /tmp/Caddyfile.candidate'
 $SSH 'cp /tmp/Caddyfile.candidate /etc/caddy/Caddyfile && systemctl reload caddy'
 
-# Проверка публично (--resolve обходит локальный DNS-кэш, если ещё не пропагировался)
+# Check publicly (--resolve bypasses local DNS cache if propagation hasn't completed)
 curl -s --resolve platform.aitinkerers.space:443:167.233.195.12 https://platform.aitinkerers.space/health
 ```
 
-Новый блок Caddy (пример, скопирован по образцу существующего `api.aitinkerers.space`):
+New Caddy block (example, copied from the pattern of existing `api.aitinkerers.space`):
 
 ```
 platform.aitinkerers.space {
@@ -205,13 +205,13 @@ platform.aitinkerers.space {
 }
 ```
 
-## Откат
+## Rollback
 
-- Приложение: `docker compose -f docker-compose.yml -f docker-compose.hetzner.yml down`,
-  переключить symlink `current` на предыдущий release, поднять заново.
-- Caddy: восстановить `/etc/caddy/Caddyfile.bak-<timestamp>`, `systemctl reload caddy`
-  (свериться, что файл с тех пор не менялся другой командой — сравнить хеш перед откатом).
-- DNS: удалить A-record `platform.aitinkerers.space` через тот же Cloudflare API
+- Application: `docker compose -f docker-compose.yml -f docker-compose.hetzner.yml down`,
+  switch `current` symlink to previous release, bring up again.
+- Caddy: restore `/etc/caddy/Caddyfile.bak-<timestamp>`, `systemctl reload caddy`
+  (verify the file has not changed since then by another command — compare hash before rollback).
+- DNS: delete A-record `platform.aitinkerers.space` via the same Cloudflare API
   (`DELETE /zones/{zone_id}/dns_records/{id}`).
-- **Никогда**: не трогать `state-api.service`, её каталоги/БД/конфиг, не `restart`/`stop`
-  для неё, не запускать её `verify_state_api_live.py`.
+- **Never**: touch `state-api.service`, its directories/DB/config, do not `restart`/`stop`
+  it, do not run its `verify_state_api_live.py`.

@@ -32,7 +32,7 @@ this formalizes the convention for what should go inside them when sending machi
 radio traffic with word-level timing, confidence scores, and origin/trust metadata.
 
 See [examples/radio-transcript-rich-response.json](examples/radio-transcript-rich-response.json)
-and root `README.md` "Для команды симулятора" section for the complete mapping and examples.
+and root `README.md` "For the simulator team" section for the complete mapping and examples.
 Updated [CLIENT_FLOW.md](CLIENT_FLOW.md) to reference the convention.
 
 ## 1.0.2 · 2026-09-12 · Radio/comms transcription support
