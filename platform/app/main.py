@@ -10,9 +10,9 @@ from app.api.telemetry import router as telemetry_router
 from app.core.security import ApiKeyMiddleware
 from app.ingestion.http import router as ingestion_http_router
 from app.ingestion.ws import router as ingestion_ws_router
-from app.mcp.server import mcp
+from app.mcp.server import mcp, transport_security_settings
 
-mcp_http_app = mcp.streamable_http_app()
+mcp_http_app = mcp.streamable_http_app(transport_security=transport_security_settings())
 
 
 @asynccontextmanager

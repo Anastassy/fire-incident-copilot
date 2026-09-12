@@ -6,6 +6,7 @@ import time
 import uuid
 from datetime import datetime, timezone
 from .models import Event, Answer as EngineAnswer
+from .model_input import compact_event
 from . import ui_models as m
 
 TERMINAL = {'ready','insufficient_data','error','cancelled'}
@@ -119,12 +120,24 @@ class UIService:
         if devices is not None:
             if not devices:return []
             sql+=' AND json_extract(body,\'$.source_id\') IN ('+','.join('?' for _ in devices)+')';args+=devices
-        sql+=' ORDER BY time_ms DESC,event_id LIMIT ?';args.append(limit)
-        events=[];size=0
-        for row in c.execute(sql,args):
-            if size+len(row['body'])>24000:break
-            size+=len(row['body']);events.append(Event.model_validate_json(row['body']))
-        return list(reversed(events))
+        sql+=' ORDER BY time_ms DESC,event_id LIMIT ?';args.append(500)
+        events=[compact_event(Event.model_validate_json(row['body'])) for row in c.execute(sql,args)]
+        rows=[(event,len(event.model_dump_json())) for event in events]
+        radio=[row for row in rows if row[0].kind=='radio']
+        latest={}
+        for row in rows:
+            event=row[0]
+            if event.kind!='radio':
+                key=(event.source_id,(event.payload.get('platform') or {}).get('metric_type',event.kind))
+                latest.setdefault(key,row)
+        # Keep source diversity even when sensor updates arrive much faster than speech.
+        candidates=list(latest.values())[:max(1,limit//2)]+radio[:limit]
+        selected=[];seen=set();size=0
+        for event,length in candidates+rows:
+            if event.event_id in seen or len(selected)>=limit:continue
+            if size+length>24000:continue
+            selected.append(event);seen.add(event.event_id);size+=length
+        return sorted(selected,key=lambda e:(e.time_ms,e.event_id))
     def _evidence_id(self,c,ctx,event):
         if event.reading_id is None or event.reading_id<=0:return None
         eid=stable('evidence',*self.scope(ctx),event.event_id)
@@ -134,7 +147,7 @@ class UIService:
         claimed=self._claim_question()
         if not claimed:return False
         answer,token=claimed;ctx=m.Context.model_validate(answer['context'])
-        query={'query_id':str(uuid.uuid4()),'tool':'local_event_query','filters':{'context':ctx.model_dump(),'as_of_ms':answer['coverage']['as_of_ms'],'limit':20,'max_characters':24000},
+        query={'query_id':str(uuid.uuid4()),'tool':'local_event_query','filters':{'context':ctx.model_dump(),'as_of_ms':answer['coverage']['as_of_ms'],'limit':20,'candidate_limit':500,'selection':'latest source metrics plus recent radio reports','max_characters':24000},
                'started_at':now(),'completed_at':None,'status':'running','completeness':'unknown','error_code':None}
         try:
             with self.store.tx() as c:
@@ -216,6 +229,7 @@ class UIService:
                     ('acknowledging reply found in transcript.' if channel['acknowledgement'] else 'reply not yet found.'))
                 value['unknowns']=['This transcript does not establish that every group member switched channels.',
                                    'Machine transcript and speaker attribution require human verification.']
+                value['unknowns'].extend(channel.get('correlation_limitations', []))
                 if not channel['assignment']:
                     value['unknowns'].append('Assignment not found in the processed exchange.')
                 elif not channel['acknowledgement']:

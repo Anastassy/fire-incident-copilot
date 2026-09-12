@@ -1,7 +1,11 @@
 from datetime import datetime
+import os
+import re
+from urllib.parse import urlsplit
 from uuid import UUID
 
 from mcp.server.mcpserver import MCPServer
+from mcp.server.transport_security import TransportSecuritySettings
 
 from app.core.db import async_session
 from app.mcp import dashboard_writer, incident_writer
@@ -16,6 +20,35 @@ from app.services import dashboard_service, device_service, incident_service, te
 #   list_dashboards, get_dashboard, create_dashboard, update_dashboard
 # Expose via streamable-http/SSE transport so it can be mounted or run standalone.
 mcp = MCPServer("safety-platform")
+
+
+def transport_security_settings() -> TransportSecuritySettings:
+    """Allow the deployed MCP host without disabling DNS rebinding protection.
+
+    MCP_PUBLIC_HOSTS accepts comma-separated DNS names with optional ports;
+    MCP_PUBLIC_HOST is the single-host equivalent. Loopback remains available.
+    """
+    hosts = ["localhost", "localhost:*", "127.0.0.1", "127.0.0.1:*", "[::1]", "[::1]:*"]
+    origins = [f"{scheme}://{host}" for scheme in ("http", "https") for host in hosts]
+    public_hosts = os.getenv("MCP_PUBLIC_HOSTS", os.getenv("MCP_PUBLIC_HOST", "platform.aitinkerers.space"))
+    for value in public_hosts.split(","):
+        host = value.strip().lower()
+        if not host:
+            continue
+        parsed = urlsplit("//" + host)
+        if (not re.fullmatch(r"[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?(?::[0-9]+)?", host)
+                or parsed.hostname is None or parsed.port == 0):
+            raise ValueError("MCP_PUBLIC_HOSTS must contain DNS host names with optional ports")
+        hosts.append(host)
+        origins.append("https://" + host)
+        if parsed.port is None:
+            hosts.append(host + ":443")
+            origins.append("https://" + host + ":443")
+    return TransportSecuritySettings(
+        enable_dns_rebinding_protection=True,
+        allowed_hosts=list(dict.fromkeys(hosts)),
+        allowed_origins=list(dict.fromkeys(origins)),
+    )
 
 
 def _iso(value: datetime | None) -> str | None:

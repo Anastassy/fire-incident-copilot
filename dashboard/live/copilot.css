@@ -23,6 +23,12 @@
 .copilot-activity[data-state='error'] { color: var(--red); }
 .copilot-purpose { font-size: 12px; line-height: 1.75; color: #b2c0c4; padding: 0 23px 15px; }
 .agent-context-note { margin: 0 23px; padding: 8px 11px; border: 1px solid #a2855838; border-radius: 4px; font-size: 9px; }
+.pipeline-status { margin: 10px 23px 0; display: grid; gap: 4px; font-size: 9px; line-height: 1.6; color: #a7b9bc; }
+.pipeline-status strong { color: #d5b98f; font-weight: 600; }
+.pipeline-status[data-state='live'] strong { color: #95cbbc; }
+.pipeline-status[data-state='error'] strong, .pipeline-status .pipeline-error { color: #e8aaa1; }
+.pipeline-status .analysis-telemetry { color: #d4c8af; }
+.send-button:disabled, .suggestions button:disabled { opacity: .45; cursor: wait; }
 .copilot-workflow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 17px 23px; gap: 8px; }
 .workflow-step { display: flex; gap: 8px; align-items: flex-start; text-align: left; border: 1px solid #3d494e; background: #111b2040; border-radius: 5px; padding: 11px 9px; min-width: 0; }
 .workflow-step:hover { border-color: #9e7c58; background: #493c2826; }
@@ -68,6 +74,15 @@
 .trace summary svg { width: 11px; height: 11px; }
 .trace pre { white-space: pre-wrap; }
 .answer-question { font-size: 14px; }
+.automatic-assessment.featured { border-left: 3px solid #d5a16c; background: linear-gradient(115deg, #3433279c, #1b2a305e); }
+.automatic-assessment.featured .answer-question { font-size: 21px; font-weight: 700; letter-spacing: -.025em; }
+.automatic-assessment.featured .claim { font-size: 12px; }
+.assessment-as-of { display: block; font: 9px var(--mono); color: #a3b9ba; margin: 7px 0 11px; }
+.assessment-update { font-size: 9px; color: #dbb990; }
+.assessment-waiting { border: 1px solid #705c403b; border-left: 3px solid #b28b56; padding: 17px; margin-bottom: 18px; background: #3432274f; }
+.assessment-waiting h3 { font-size: 18px; font-weight: 600; }
+.assessment-waiting p { color: #afbec2; font-size: 11px; line-height: 1.8; margin-top: 9px; }
+.assessment-history > .answer-card { margin-top: 13px; }
 .answer-status { justify-content: flex-start; align-items: center; font-size: 9px; }
 .answer-status button { margin-left: auto; }
 .answer-preview { display: flex; justify-content: space-between; align-items: center; gap: 14px; text-align: left; padding: 12px 0 0; width: 100%; border-top: 1px solid #3b4951; }

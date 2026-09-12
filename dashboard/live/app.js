@@ -11,6 +11,7 @@ let filter = 'all', displayLimit = 100, historyLoading = false, sound = false, s
 let radioSelection;
 let agentContext, agentSnapshot, agentAbort, agentEpoch = 0, agentTab = 'briefing', agentRefreshPending = false;
 let drawerEpoch = 0, commandPending = false, lastAgentError = '', pendingQuestion, uncertainQuestion;
+let pipelineEpoch = 0, pipelineAbort, pipelineTarget, pipelineStatus;
 const runPath = () => `/api/state/runs/${encodeURIComponent(snapshot.run.run_id)}`;
 const contextQuery = context => new URLSearchParams(context).toString();
 const toast = message => { $('toast').textContent = message; $('toast').hidden = false; clearTimeout(toast.timer); toast.timer = setTimeout(()=>$('toast').hidden=true, 6000); };
@@ -25,6 +26,7 @@ function scheduleRender() { if(!renderTimer)renderTimer=setTimeout(()=>{renderTi
 
 async function connectState(runId, scenarioId) {
   const ticket=++epoch; stateAbort?.abort(); stopMedia(); closeEvidence(); stateConnected=false;
+  if(config?.pipeline_enabled)resetPipeline();
   snapshot=null; observations=[]; renderState(); connection('state-connection',false,'Connecting…');
   try {
     if(!runId){ const run=await api('/api/state/runs',{scenario_id:scenarioId,speed:1},{headers:{'Idempotency-Key':crypto.randomUUID()}});runId=run.run_id; }
@@ -32,6 +34,7 @@ async function connectState(runId, scenarioId) {
     if(ticket!==epoch)return; snapshot=next; setClock(next.run.sim_time_ms);
     const url=new URL(location.href);url.searchParams.set('run',runId);history.replaceState(null,'',url);
     $('run-id-input').value=runId; $('scenario-select').value=next.run.scenario_id;
+    if(config.pipeline_enabled)followPipeline(ticket);
     await startMedia(ticket); if(ticket!==epoch)return;
     loadHistory(ticket); consumeState(ticket); renderState();
   }catch(error){if(ticket===epoch){connection('state-connection',false,'Disconnected');toast('State API: '+error.message);renderState();}}
@@ -40,6 +43,7 @@ async function resync(ticket) {
   const next=await api(runPath()+'/snapshot');if(ticket!==epoch)return;
   const changed=next.run.generation!==snapshot.run.generation;
   snapshot=next;setClock(next.run.sim_time_ms);
+  if(config.pipeline_enabled&&(changed||!pipelineTarget))followPipeline(ticket);
   if(changed){observations=[];displayLimit=100;stopMedia();closeEvidence();await startMedia(ticket);}
   await loadHistory(ticket);scheduleRender();
 }
@@ -53,16 +57,16 @@ async function consumeState(ticket) {
         const item=message.data;
         if(message.type==='stream_error')throw new Error(item.error?.message||'Resynchronization required');
         if(message.type==='snapshot'){
-          if(item.run.generation!==snapshot.run.generation)throw new Error('GENERATION_CHANGED');
+          if(item.run.generation!==snapshot.run.generation){if(config.pipeline_enabled)resetPipeline();throw new Error('GENERATION_CHANGED');}
           if(item.as_of.sequence>=snapshot.as_of.sequence){snapshot=item;setClock(item.run.sim_time_ms);}
         }else if(message.type==='event'){
-          if(item.generation!==snapshot.run.generation||item.kind==='stream.reset')throw new Error('GENERATION_CHANGED');
+          if(item.generation!==snapshot.run.generation||item.kind==='stream.reset'){if(config.pipeline_enabled)resetPipeline();throw new Error('GENERATION_CHANGED');}
           if(applyEvent(snapshot,item)){
             if(item.kind==='observation.created')observe(item.data);
             if(item.kind==='run.updated')setClock(item.data.sim_time_ms);
           }
         }else if(message.type==='heartbeat'){
-          if(item.generation!==snapshot.run.generation)throw new Error('GENERATION_CHANGED');
+          if(item.generation!==snapshot.run.generation){if(config.pipeline_enabled)resetPipeline();throw new Error('GENERATION_CHANGED');}
           setClock(item.sim_time_ms);
         }
         scheduleRender();
@@ -118,7 +122,7 @@ async function command(action,extra={}){
   const ticket=epoch;
   try {const result=await api(runPath()+'/commands',{command_id:crypto.randomUUID(),expected_generation:snapshot.run.generation,action,...extra});
     if(ticket!==epoch)return;
-    if(result.run.generation!==snapshot.run.generation){stateAbort?.abort();await resync(ticket);consumeState(ticket);}
+    if(result.run.generation!==snapshot.run.generation){stateAbort?.abort();if(config.pipeline_enabled)resetPipeline();await resync(ticket);consumeState(ticket);}
     else{snapshot.run=result.run;setClock(result.run.sim_time_ms);}
     scheduleRender();
   }catch(error){toast('Command: '+error.message);if(error.status===409)await resync(ticket);}
@@ -189,6 +193,66 @@ function applyCameraLayout(){
   document.querySelectorAll('[data-layout]').forEach(el=>el.classList.toggle('selected',el.dataset.layout===selectedCamera));
 }
 
+function resetPipeline(){
+  pipelineEpoch++;pipelineAbort?.abort();pipelineTarget=null;pipelineStatus=null;
+  agentEpoch++;agentAbort?.abort();agentContext=null;agentSnapshot=null;pendingQuestion=null;uncertainQuestion=null;lastAgentError='';
+  closeEvidence();connection('agent-connection',false,'Waiting for source import');
+  for(const id of ['agent-context-input','agent-generation-input','agent-subject-input'])$(id).value='';
+  renderPipeline();renderAgent();
+}
+function renderPipeline(){
+  const el=$('pipeline-status');el.hidden=!config?.pipeline_enabled;if(el.hidden)return;
+  const state=pipelineStatus?.state||'connecting';el.dataset.state=state;
+  const count=value=>Number.isInteger(value)&&value>=0?value:'—';
+  const title=state==='live'?'Source pipeline live':state==='error'?'Source import interrupted':'Connecting source pipeline';
+  const time=Number.isFinite(pipelineStatus?.last_sim_time_ms)?timecode(pipelineStatus.last_sim_time_ms):'—';
+  const analysis=pipelineStatus?.latest_analysis,analysisParts=[];
+  if(Number.isFinite(analysis?.as_of_sim_time_ms))analysisParts.push(`Assessment input as of ${timecode(analysis.as_of_sim_time_ms)}`);
+  if(Number.isFinite(analysis?.latency_ms))analysisParts.push(`${['queued','running'].includes(analysis.status)?'Processing':'Response'} ${(analysis.latency_ms/1000).toFixed(1)} s`);
+  const hasCurrentClock=state==='live'&&stateConnected&&snapshot?.run.run_id===pipelineStatus?.run_id&&snapshot?.run.generation===pipelineStatus?.generation;
+  const stateTime=hasCurrentClock?simTime():null;
+  const sourceLag=Number.isFinite(stateTime)&&Number.isFinite(pipelineStatus?.last_sim_time_ms)?Math.max(0,stateTime-pipelineStatus.last_sim_time_ms):null;
+  if(sourceLag!==null){
+    analysisParts.push(`Source lag ${(sourceLag/1000).toFixed(1)} s (State clock)`);
+    if(Number.isFinite(pipelineStatus?.analysis_lag_ms)&&pipelineStatus.analysis_lag_ms>=0)analysisParts.push(`Total assessment lag ${((sourceLag+pipelineStatus.analysis_lag_ms)/1000).toFixed(1)} s (State clock)`);
+  }
+  el.innerHTML=`<strong>${esc(title)}${pipelineTarget?' · G'+pipelineTarget.generation:''}</strong><span>${count(pipelineStatus?.published)} published · ${count(pipelineStatus?.imported)} imported · ${count(pipelineStatus?.skipped)} skipped · through ${time}</span>${analysisParts.length?`<span class="analysis-telemetry">${esc(analysisParts.join(' · '))}</span>`:''}${pipelineStatus?.error?`<span class="pipeline-error">${esc(pipelineStatus.error)}</span>`:''}${pipelineStatus?.analysis_error?`<span class="pipeline-error">Assessment update: ${esc(pipelineStatus.analysis_error)}</span>`:''}`;
+  $('agent-context-note').textContent=state==='live'?'Copilot updates its assessment automatically as this run’s readings arrive. Each conclusion remains linked to its evidence, coverage and unknowns.':state==='error'?'Source import is interrupted. Existing assessments cover only previously imported readings; new events may be missing.':'Connecting this State run to the Data Platform and Copilot. Assessments from previous runs and generations are cleared.';
+}
+async function followPipeline(stateTicket=epoch){
+  if(!config?.pipeline_enabled||!snapshot)return;
+  resetPipeline();
+  const target={run_id:snapshot.run.run_id,generation:snapshot.run.generation};
+  const expectedContext={demo_context_id:`state-${target.run_id}-g${target.generation}`,generation:0,subject_id:'all'};
+  pipelineTarget=target;pipelineStatus={state:'connecting'};
+  const ticket=pipelineEpoch;pipelineAbort=new AbortController();const signal=pipelineAbort.signal;
+  const current=()=>ticket===pipelineEpoch&&stateTicket===epoch&&!signal.aborted&&snapshot?.run.run_id===target.run_id&&snapshot?.run.generation===target.generation;
+  renderPipeline();renderAgent();let requested=false;
+  while(current()){
+    try{
+      if(!requested){await api('/api/pipeline/connect',{run_id:target.run_id},{signal});if(!current())return;requested=true;}
+      const next=await api('/api/pipeline/status?'+new URLSearchParams(target),undefined,{signal});
+      if(!current())return;
+      if(next.run_id!==target.run_id||next.generation!==target.generation){
+        pipelineStatus={state:'connecting'};
+      }else{
+        pipelineStatus=next;
+        const context=next.context;
+        if(next.state==='live'){
+          if(!contextEqual(context,expectedContext))pipelineStatus={...next,state:'error',error:'The pipeline returned a different agent context. Waiting for this run and generation.'};
+          else if(!contextEqual(context,agentContext))connectAgent(context);
+        }
+      }
+      renderPipeline();renderAgent();
+    }catch(error){
+      if(!current())return;
+      if(error.status===404||error.status===503)requested=false;
+      pipelineStatus={...pipelineStatus,state:'error',error:error.message};renderPipeline();renderAgent();
+    }
+    await sleep(2000);
+  }
+}
+
 // The agent owns the projections; SSE messages only invalidate this local view.
 async function refreshAgent(){
   if(!agentContext)return;
@@ -230,30 +294,50 @@ function agentEvidence(){
 function checkMarkup(c,featured=false){
   return `<article class="check-card${featured?' featured':''}"><div class="card-status-line"><span class="status-tag ${esc(c.assessment)}">${esc(statusLabel(c.assessment))}</span><span>${esc(statusLabel(c.lifecycle))} · v${c.revision}</span></div><h3>${esc(c.statement)}</h3>${c.claims.map(claimMarkup).join('')}${traceMarkup(c)}<details class="trace"><summary>Check status</summary><p>Lifecycle: ${esc(statusLabel(c.lifecycle))}</p><p>Publication: ${esc(c.publication_status)}. Pending can also mean publication is not in use.</p><p>Platform status: ${esc(c.platform_status||'not assigned')}</p>${c.closure_reason?`<p>${esc(c.closure_reason)}</p>`:''}<button class="evidence-link" data-card="${esc(c.hypothesis_id)}">Full API card</button></details></article>`;
 }
-function answerMarkup(a){
-  return `<article class="answer-card"><div class="answer-question">${esc(a.question)}</div><div class="answer-status ${esc(a.status)}">${icon(a.status==='ready'?'check':'spark')}${esc(statusLabel(a.status))}${['queued','running'].includes(a.status)?`<button class="evidence-link" data-cancel="${esc(a.request_id)}">Cancel</button>`:''}</div>${a.claims.map(claimMarkup).join('')}${a.error?`<p class="unknowns">${esc(a.error.message)}</p>`:''}${traceMarkup(a)}${a.status==='error'?`<button class="evidence-link" data-retry="${esc(a.request_id)}">Retry question</button>`:''}</article>`;
+function isAutomaticAnswer(answer){return answer.question?.startsWith('Live assessment:');}
+function answerMarkup(a,featured=false){
+  const automatic=isAutomaticAnswer(a);
+  const asOf=automatic&&Number.isFinite(a.coverage?.checked_until_ms)?`<span class="assessment-as-of">Evidence through ${timecode(a.coverage.checked_until_ms)}</span>`:'';
+  return `<article class="answer-card${automatic?' automatic-assessment':''}${featured?' featured':''}"><div class="answer-question">${automatic?'Live assessment':esc(a.question)}</div>${asOf}<div class="answer-status ${esc(a.status)}">${icon(a.status==='ready'?'check':'spark')}${esc(statusLabel(a.status))}${['queued','running'].includes(a.status)?`<button class="evidence-link" data-cancel="${esc(a.request_id)}">Cancel${automatic?' update':''}</button>`:''}</div>${a.claims.map(claimMarkup).join('')}${a.error?`<p class="unknowns">${esc(a.error.message)}</p>`:''}${traceMarkup(a)}${automatic?`<details class="trace"><summary>Automatic assessment request</summary><p>${esc(a.question)}</p></details>`:''}${a.status==='error'&&!automatic?`<button class="evidence-link" data-retry="${esc(a.request_id)}">Retry question</button>`:''}</article>`;
 }
 function renderAgent(){
   const answers=[...(agentSnapshot?.answers||[])].sort((a,b)=>b.created_at.localeCompare(a.created_at));
+  const automaticAnswers=answers.filter(isAutomaticAnswer),manualAnswers=answers.filter(a=>!isAutomaticAnswer(a));
+  const latestAssessment=automaticAnswers.find(a=>['ready','insufficient_data'].includes(a.status));
+  const updatingAssessment=automaticAnswers.some(a=>['queued','running'].includes(a.status))||['queued','running'].includes(pipelineStatus?.latest_analysis?.status);
   const cards=[...(agentSnapshot?.cards||[])].sort((a,b)=>(b.checked_at||'').localeCompare(a.checked_at||''));
   const active=cards.filter(c=>c.lifecycle==='active').length;
   const running=answers.filter(a=>['queued','running'].includes(a.status)).length;
   const completed=answers.filter(a=>['ready','insufficient_data'].includes(a.status)).length;
   const sourceCount=agentEvidence().size;
-  $('check-count').textContent=cards.length;$('answer-count').textContent=answers.length;
+  $('check-count').textContent=cards.length;$('answer-count').textContent=manualAnswers.length;
   $('workflow-evidence').textContent=`${sourceCount} linked source${sourceCount===1?'':'s'}`;
   $('workflow-checks').textContent=`${active} active check${active===1?'':'s'}`;
   $('workflow-answers').textContent=`${completed} completed answer${completed===1?'':'s'}`;
-  $('copilot-activity').textContent=lastAgentError?'Agent unavailable':!agentSnapshot?'Connecting…':pendingQuestion?'Sending question…':running?`Working on ${running} question${running===1?'':'s'}`:active?`${active} active check${active===1?'':'s'}`:'Ready for a question';
-  $('copilot-activity').dataset.state=lastAgentError?'error':pendingQuestion||running?'busy':'ready';
+  const pipelineError=config?.pipeline_enabled&&pipelineStatus?.state==='error';
+  $('copilot-activity').textContent=pipelineError?'Source import interrupted':lastAgentError?'Agent unavailable':!agentSnapshot?config?.pipeline_enabled?'Importing this run…':'Connecting…':updatingAssessment?'Updating live assessment…':pendingQuestion?'Sending question…':running?`Working on ${running} question${running===1?'':'s'}`:latestAssessment?'Live assessment available':active?`${active} active check${active===1?'':'s'}`:'Ready for a question';
+  $('copilot-activity').dataset.state=lastAgentError||pipelineError?'error':pendingQuestion||running||updatingAssessment?'busy':'ready';
+  const canAsk=Boolean(agentContext&&agentSnapshot&&!pendingQuestion);
+  $('question-form').querySelector('button[type="submit"]').disabled=!canAsk;
+  $('suggestions').querySelectorAll('button').forEach(button=>button.disabled=!canAsk);
   document.querySelectorAll('.agent-tabs [data-agent-tab]').forEach(el=>{el.classList.toggle('selected',el.dataset.agentTab===agentTab);el.setAttribute('aria-pressed',String(el.dataset.agentTab===agentTab));});
   const welcome='<div class="copilot-welcome"><span class="eyebrow">EVIDENCE BEFORE CONCLUSIONS</span><h3>Your incident briefing starts here.</h3><p>Ask a question to check the sources in the agent context. Copilot shows its claims, evidence and what still needs confirmation.</p></div>';
   let content='';
   if(agentTab==='checks')content=cards.map(c=>checkMarkup(c)).join('')||'<div class="empty-inline">No checks in this context yet.</div>';
   else if(agentTab==='briefing'){
-    content=cards.length?`<div class="briefing-label"><span class="eyebrow">LATEST CHECK · WHAT THE EVIDENCE SUPPORTS</span><button data-agent-tab="checks">View all ${cards.length}</button></div>${checkMarkup(cards[0],true)}`:welcome;
-    if(answers.length)content+=`<button class="answer-preview" data-agent-tab="assistant"><div><span class="micro">LATEST QUESTION · ${esc(statusLabel(answers[0].status))}</span><strong>${esc(answers[0].question)}</strong></div>${icon('arrow')}</button>`;
-  }else content=answers.map(answerMarkup).join('')||welcome;
+    if(config?.pipeline_enabled||automaticAnswers.length){
+      content=`<div class="briefing-label"><span class="eyebrow">AUTOMATIC INCIDENT ASSESSMENT</span><span class="assessment-update">${updatingAssessment?'Updating…':latestAssessment?'Latest completed update':'Waiting for an assessment'}</span></div>`;
+      content+=latestAssessment?answerMarkup(latestAssessment,true):automaticAnswers[0]?answerMarkup(automaticAnswers[0],true):'<div class="assessment-waiting"><h3>Watching incoming evidence.</h3><p>Copilot will assess the current readings automatically. Its first interpretation will appear here as soon as processing completes.</p></div>';
+      const latest=automaticAnswers[0];
+      if(latest?.status==='error'&&latestAssessment)content+=`<p class="unknowns">The latest update failed. Showing the last completed assessment. ${esc(latest.error?.message||'')}</p>`;
+    }
+    if(cards.length)content+=`<div class="briefing-label"><span class="eyebrow">LATEST CHECK · WHAT THE EVIDENCE SUPPORTS</span><button data-agent-tab="checks">View all ${cards.length}</button></div>${checkMarkup(cards[0],!config?.pipeline_enabled&&!automaticAnswers.length)}`;
+    if(!content)content=welcome;
+    if(manualAnswers.length)content+=`<button class="answer-preview" data-agent-tab="assistant"><div><span class="micro">LATEST QUESTION · ${esc(statusLabel(manualAnswers[0].status))}</span><strong>${esc(manualAnswers[0].question)}</strong></div>${icon('arrow')}</button>`;
+  }else{
+    content=manualAnswers.map(a=>answerMarkup(a)).join('')||welcome;
+    if(automaticAnswers.length)content+=`<details class="assessment-history trace"><summary>Automatic assessment history (${automaticAnswers.length})</summary>${automaticAnswers.map(a=>answerMarkup(a)).join('')}</details>`;
+  }
   if(pendingQuestion)content=`<div class="loading-text">${esc(pendingQuestion.question)} · sending…</div>`+content;
   if(uncertainQuestion)content='<div class="empty-inline">Submission response not received. <button class="evidence-link" data-resend="true">Retry with the same ID</button></div>'+content;
   if(lastAgentError)content=`<div class="empty-inline">${esc(lastAgentError)}</div>`+content;
@@ -262,7 +346,7 @@ function renderAgent(){
   if(oldHTML!==content){const top=target.dataset.tab===agentTab?target.scrollTop:0;target.innerHTML=content;target.dataset.rendered=content;target.dataset.tab=agentTab;target.scrollTop=top;}
 }
 async function askQuestion(text,reuseBody){
-  if(!text.trim()||!agentContext||pendingQuestion)return;
+  if(!text.trim()||!agentContext||!agentSnapshot||pendingQuestion)return;
   const context={...agentContext},ticket=agentEpoch;
   const body=reuseBody||{context,client_request_id:crypto.randomUUID(),question:text.trim(),language:'en'};
   pendingQuestion=body;agentTab='assistant';renderAgent();
@@ -302,15 +386,33 @@ async function openAgentEvidence(id){
   const context={...agentContext};openDrawer('Agent evidence','<p>Loading source evidence…</p>');const ticket=drawerEpoch;
   try{const e=await api('/api/agent/agent/v1/evidence/'+encodeURIComponent(id)+'?'+contextQuery(context));if(ticket!==drawerEpoch||!contextEqual(context,agentContext))return;
     openDrawer(e.source_label,`<div class="evidence-meta">${timecode(e.event_from_ms)}–${timecode(e.event_until_ms)} · reading ${e.reading_id}</div><p>${esc(e.text)}</p><div class="evidence-meta">${esc(e.origin)} · ${esc(e.text_kind)} · ${esc(e.verification)}</div>`,e.raw_reading);
+    const provenance=e.raw_reading?.provenance?.state_machine;
+    const original=provenance&&provenance.run_id===snapshot?.run.run_id&&provenance.generation===snapshot?.run.generation?observations.find(o=>o.evidence_id===provenance.evidence_id&&o.run_id===provenance.run_id&&o.generation===provenance.generation):null;
+    if(original){
+      const label=original.kind.startsWith('radio')?'Open original radio source':original.kind==='camera'?'Open original video source':'Open original source';
+      $('evidence-body').insertAdjacentHTML('beforeend',`<button class="primary-button" data-observation="${esc(original.evidence_id)}" data-source-run="${esc(original.run_id)}" data-source-generation="${original.generation}">${icon(original.kind==='camera'?'camera':original.kind.startsWith('radio')?'radio':'link')}${label}</button><p class="evidence-meta">Exact source match · State generation ${original.generation} · ${timecode(timeOf(original))}</p>`);
+    }else if(provenance){
+      $('evidence-body').insertAdjacentHTML('beforeend','<p class="unknowns">The original source is not loaded for this State run and generation. Its text and provenance remain available above.</p>');
+    }
     const a=e.audio;if(a?.availability==='available'&&a.playback_url){const url=new URL(a.playback_url,location.href);if(!['http:','https:'].includes(url.protocol))throw new Error('Unsupported audio URL');const el=$('review-audio');el.hidden=false;el.src=url.href;el.onloadedmetadata=()=>el.currentTime=a.start_ms/1000;el.ontimeupdate=()=>{if(el.currentTime>=a.end_ms/1000)el.pause();};}
-    else $('evidence-body').insertAdjacentHTML('beforeend',`<p class="unknowns">Audio: ${esc(a?.availability||'missing')}. The agent service has not provided a recording for this evidence.</p>`);
+    else $('evidence-body').insertAdjacentHTML('beforeend',`<p class="unknowns">Agent audio attachment: ${esc(a?.availability||'missing')}. ${original?.kind==='radio_transcript'?'Open the original radio source above to review its recording.':'The agent service has not provided a recording for this evidence.'}</p>`);
   }catch(error){if(ticket===drawerEpoch)$('evidence-body').textContent='Evidence unavailable: '+error.message;}
+}
+async function openAgentCard(id){
+  if(!agentContext)return;
+  const context={...agentContext},ticket=agentEpoch;
+  openDrawer('Agent check','<p>Loading check…</p>');const drawerTicket=drawerEpoch;
+  try{
+    const card=await api('/api/agent/agent/v1/cards/'+encodeURIComponent(id)+'?'+contextQuery(context));
+    if(ticket!==agentEpoch||drawerTicket!==drawerEpoch||!contextEqual(context,agentContext)||!contextEqual(card.context,context))return;
+    openDrawer(card.statement,`<p>${esc(statusLabel(card.assessment))}</p>${card.claims.map(claimMarkup).join('')}${traceMarkup(card)}`,card);
+  }catch(error){if(ticket===agentEpoch&&drawerTicket===drawerEpoch)$('evidence-body').textContent='Check unavailable: '+error.message;}
 }
 function openDevice(id){const d=snapshot?.devices.find(x=>x.device_id===id);if(!d)return;openDrawer(deviceName(d),`<div class="evidence-meta">${esc(d.device_id)} · ${esc(d.room_id)} · ${esc(statusLabel(d.availability))}</div>${d.readings.map(r=>`<p>${esc(r.metric)}: <strong>${esc(valueText(r.value,r.unit))}</strong><br><span class="evidence-meta">${esc(statusLabel(r.availability))} · last measurement ${r.observed_sim_time_ms==null?'not received':timecode(r.observed_sim_time_ms)}</span></p>`).join('')}${sparkline(id)}`,d);}
 
 document.addEventListener('click',async event=>{
   const target=event.target.closest('button,[data-device]');if(!target)return;
-  if(target.dataset.observation)openObservation(target.dataset.observation);
+  if(target.dataset.observation){if(target.dataset.sourceRun&&(target.dataset.sourceRun!==snapshot?.run.run_id||Number(target.dataset.sourceGeneration)!==snapshot?.run.generation))toast('This source belongs to a different run or generation.');else openObservation(target.dataset.observation);}
   if(target.dataset.evidence)openAgentEvidence(target.dataset.evidence);
   if(target.dataset.device)openDevice(target.dataset.device);
   if(target.dataset.system)openDrawer('System and sources',`<p>State API diagnostics. Missing data does not indicate normal conditions.</p>`,{system:snapshot?.system,devices:snapshot?.devices,access:snapshot?.access,occupancy:snapshot?.occupancy});
@@ -322,7 +424,7 @@ document.addEventListener('click',async event=>{
   if(target.dataset.cancel){try{await api('/api/agent/agent/v1/questions/'+encodeURIComponent(target.dataset.cancel)+'/cancel?'+contextQuery(agentContext),{});await refreshAgent();}catch(error){toast(error.message);}}
   if(target.dataset.retry){const a=agentSnapshot.answers.find(x=>x.request_id===target.dataset.retry);if(a)askQuestion(a.question);}
   if(target.dataset.resend&&uncertainQuestion)askQuestion(uncertainQuestion.question,uncertainQuestion);
-  if(target.dataset.card){try{const c=await api('/api/agent/agent/v1/cards/'+encodeURIComponent(target.dataset.card)+'?'+contextQuery(agentContext));openDrawer(c.statement,`<p>${esc(statusLabel(c.assessment))}</p>${c.claims.map(claimMarkup).join('')}${traceMarkup(c)}`,c);}catch(error){toast(error.message);}}
+  if(target.dataset.card)openAgentCard(target.dataset.card);
   if(target.dataset.nav){const name=target.dataset.nav;document.querySelectorAll('[data-nav]').forEach(el=>el.classList.toggle('active',el===target));const panel={camera:'camera-panel',radio_transcript:'radio-panel',events:'event-panel',agent:'copilot-panel'}[name];if(panel)$(panel).scrollIntoView({behavior:'smooth',block:'start'});else window.scrollTo({top:0,behavior:'smooth'});}
 });
 $('play').onclick=async()=>{if(snapshot?.run.status==='completed'){await command('reset');await command('play');}else command(snapshot?.run.status==='playing'?'pause':'play');};
@@ -343,11 +445,11 @@ $('suggestions').onclick=e=>{const b=e.target.closest('button');if(b)askQuestion
 $('close-evidence').onclick=closeEvidence;$('drawer-backdrop').onclick=closeEvidence;
 function openSettings(){$('run-id-input').value=snapshot?.run.run_id||'';$('settings-dialog').showModal();}
 $('settings-open').onclick=openSettings;$('connect-button').onclick=openSettings;
-$('settings-connect').onclick=()=>{const context={demo_context_id:$('agent-context-input').value.trim(),generation:Number($('agent-generation-input').value),subject_id:$('agent-subject-input').value.trim()};if(!context.demo_context_id||!context.subject_id||!Number.isInteger(context.generation)||context.generation<0){toast('Enter the complete agent context');return;}$('settings-dialog').close();connectState($('run-id-input').value.trim(),$('scenario-select').value);connectAgent(context);};
+$('settings-connect').onclick=()=>{const context={demo_context_id:$('agent-context-input').value.trim(),generation:Number($('agent-generation-input').value),subject_id:$('agent-subject-input').value.trim()};if(!config.pipeline_enabled&&(!context.demo_context_id||!context.subject_id||!Number.isInteger(context.generation)||context.generation<0)){toast('Enter the complete agent context');return;}$('settings-dialog').close();connectState($('run-id-input').value.trim(),$('scenario-select').value);if(!config.pipeline_enabled)connectAgent(context);};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeEvidence();if(e.code==='Space'&&!['INPUT','TEXTAREA','SELECT','BUTTON'].includes(e.target.tagName)&&!$('settings-dialog').open){e.preventDefault();$('play').click();}if(e.key==='Enter'&&e.target.matches('[data-device]'))openDevice(e.target.dataset.device);});
 setInterval(()=>{if(agentContext&&!agentRefreshPending){agentRefreshPending=true;refreshAgent().finally(()=>agentRefreshPending=false);}},5000);
 function animate(){const time=simTime();$('run-clock').textContent=timecode(time);$('coverage-cursor').style.left=(snapshot?time/snapshot.run.duration_ms*100:0)+'%';players.forEach(p=>{p.sync(time,snapshot?.run.status==='playing'&&stateConnected,snapshot?.run.speed||1);if(p.item.kind==='video')p.el.closest('article').classList.toggle('has-frame',p.el.readyState>=2);});reviewPlayer?.syncReview();$('wave').classList.toggle('active',snapshot?.run.status==='playing'&&!$('radio-audio').paused);requestAnimationFrame(animate);}
-window.addEventListener('beforeunload',()=>{stateAbort?.abort();agentAbort?.abort();stopMedia();reviewPlayer?.destroy();});
+window.addEventListener('beforeunload',()=>{stateAbort?.abort();agentAbort?.abort();pipelineAbort?.abort();stopMedia();reviewPlayer?.destroy();});
 async function boot(){
   $('wave').innerHTML=Array.from({length:35},(_,i)=>`<i style="--h:${8+((i*17+11)%29)}px;--d:${(i%7)*-.13}s"></i>`).join('');renderState();animate();
   try{config=await api('/api/config');
@@ -355,15 +457,20 @@ async function boot(){
     $('scenario-select').innerHTML=scenarios.map(s=>`<option value="${esc(s.scenario_id)}">${esc(scenarioName(s))}</option>`).join('');$('scenario-select').value=config.scenario;
     const fixture=config.agent.engine==='FixtureEngine';
     const models=config.agent.model_configuration;
-    const modelNames={'openai/gpt-6-astra':'GPT-6 Astra','anthropic/claude-fable-5.1':'Fable 5.1'};
+    const modelNames={'openai/gpt-6-astra':'GPT-6 Astra','anthropic/claude-fable-5.1':'Fable 5.1','google/gemini-3.1-flash-lite':'Gemini Flash Lite','google/gemini-3.5-flash-lite':'Gemini 3.5 Flash Lite','openai/gpt-5.6-luna':'GPT-5.6 Luna'};
     const modelName=id=>modelNames[id]||id;
     $('agent-mode').textContent=fixture?'Demo engine · FixtureEngine':models?.primary_model?`${models.provider==='openrouter'?'OpenRouter':models.provider==='openai'?'OpenAI':models.provider} · ${modelName(models.primary_model)}${models.fallback_model?' · fallback '+modelName(models.fallback_model):''}`:config.agent.engine||'Disconnected';
     $('agent-mode').classList.toggle('has-model-config',!fixture&&Boolean(models?.primary_model));
     $('agent-mode').title=!fixture&&models?.primary_model?`Primary: ${models.primary_model}${models.fallback_model?'\nFallback: '+models.fallback_model:''}`:'';
     $('agent-context-note').textContent=fixture?'Separate agent API demo. These answers and checks do not analyze the Base2 stream.':config.agent.platform?.configured?'Answers and checks use only readings imported into the connected agent context. Each claim includes sources and coverage.':'Separate agent context. The State timeline on the right is not imported into Copilot. Answers use only the sources available in this agent context.';
-    $('agent-demo-tools').hidden=!(fixture&&config.demo_agent);
+    $('agent-demo-tools').hidden=!(fixture&&config.demo_agent&&!config.pipeline_enabled);
+    if(config.pipeline_enabled){
+      for(const id of ['agent-context-input','agent-generation-input','agent-subject-input']){$(id).readOnly=true;$(id).title='Follows the connected State run automatically';}
+      $('settings-dialog').querySelector('p').textContent='Copilot follows the selected State run and generation through the Data Platform. Agent context is assigned automatically. Credentials stay on the local server.';
+      renderPipeline();renderAgent();
+    }
     $('endpoint-info').textContent=`State: ${config.state_url}\nAgent: ${config.agent_url}\nData Platform: ${config.platform_configured?config.platform_url:'not connected yet'}\nAgent import: ${JSON.stringify(config.agent.platform||{})}${!fixture&&models?.primary_model?'\nModel provider: '+models.provider+'\nPrimary model: '+models.primary_model+'\nFallback model: '+(models.fallback_model||'not configured'):''}`;
-    if(fixture&&config.demo_agent){api('/api/agent-demo',{action:'request'}).then(connectAgent).catch(error=>{lastAgentError=error.message;connectAgent(config.agent_context);});}else connectAgent(config.agent_context);
+    if(!config.pipeline_enabled){if(fixture&&config.demo_agent){api('/api/agent-demo',{action:'request'}).then(connectAgent).catch(error=>{lastAgentError=error.message;connectAgent(config.agent_context);});}else connectAgent(config.agent_context);}
     if(config.state_configured)connectState(new URL(location.href).searchParams.get('run'),config.scenario);else toast('Provide State API credentials when starting the gateway.');
   }catch(error){toast('Connection: '+error.message);}
 }

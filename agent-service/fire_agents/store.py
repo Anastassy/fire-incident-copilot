@@ -4,6 +4,7 @@ import time
 import uuid
 from contextlib import contextmanager
 from .models import Event
+from .model_input import compact_event
 
 class StaleGeneration(ValueError): pass
 
@@ -112,9 +113,10 @@ class Store:
               'limitations':['Полнота входного потока пока не подтверждена.'], 'destination':'mock'}
         key=f'{sid}:{gen}:{ref}:{assessment}:{",".join(evidence)}'
         c.execute("INSERT OR IGNORE INTO outbox VALUES (?,?,?,?, 'pending')",(key,sid,gen,json.dumps(body,ensure_ascii=False)))
-    def tick(self,sid,gen,ms):
+    def tick(self,sid,gen,ms=None):
         with self.tx() as c:
             session=self.require(c,sid,gen)
+            if ms is None:ms=session['time_ms']
             if ms < session['time_ms']: raise ValueError('Clock cannot move backwards; reset first')
             c.execute('UPDATE sessions SET time_ms=? WHERE id=?',(ms,sid))
             # Do not evaluate missing confirmation while relevant input jobs are unfinished.
@@ -125,13 +127,13 @@ class Store:
                 c.execute("UPDATE watches SET assessment='no_confirmation',published=1 WHERE session_id=? AND generation=? AND task_ref=?",(sid,gen,w['task_ref']))
     def recent_context(self, event):
         with self.tx() as c:
-            rows = c.execute('SELECT body FROM events WHERE session_id=? AND generation=? AND time_ms>=? AND time_ms<? ORDER BY time_ms DESC,event_id LIMIT 20',
-                             (event.session_id,event.generation,max(0,event.time_ms-60000),event.time_ms)).fetchall()
+            rows = c.execute("SELECT body FROM events WHERE session_id=? AND generation=? AND time_ms>=? AND time_ms<? AND json_extract(body,'$.source_id')=? ORDER BY time_ms DESC,event_id LIMIT 20",
+                             (event.session_id,event.generation,max(0,event.time_ms-60000),event.time_ms,event.source_id)).fetchall()
             result=[];size=0
             for row in rows:
-                item=Event.model_validate_json(row['body'])
+                item=compact_event(Event.model_validate_json(row['body']))
                 if item.source_id != event.source_id:continue
-                size+=len(row['body'])
+                size+=len(item.model_dump_json())
                 if size>24000:break
                 result.append(item)
             return list(reversed(result))

@@ -30,19 +30,20 @@
 <div class="command-grid copilot-first">
 <section class="panel copilot-panel" id="copilot-panel" aria-labelledby="copilot-title">
   <div class="copilot-heading"><div class="copilot-mark"><svg><use href="#i-spark"/></svg></div><div><span class="eyebrow">YOUR REASONING WORKSPACE</span><h2 id="copilot-title">Incident Copilot</h2></div><span id="copilot-activity" class="copilot-activity" role="status">Connecting…</span></div>
-  <p class="copilot-purpose">Connect the reports. Track what is confirmed. See what is still unknown.</p>
+  <p class="copilot-purpose">An evolving incident picture, grounded in the incoming evidence.</p>
   <div class="agent-context-note" id="agent-context-note">Connecting to the agent…</div>
+  <div class="pipeline-status" id="pipeline-status" role="status" aria-live="polite" hidden></div>
   <div class="copilot-workflow" aria-label="How Copilot works">
     <button class="workflow-step" id="context-evidence"><span class="workflow-number">01</span><div><strong>Link evidence</strong><span id="workflow-evidence">Waiting for sources</span></div><svg><use href="#i-link"/></svg></button>
     <button class="workflow-step" data-agent-tab="checks"><span class="workflow-number">02</span><div><strong>Track checks</strong><span id="workflow-checks">Waiting for checks</span></div><svg><use href="#i-check"/></svg></button>
     <button class="workflow-step" data-agent-tab="assistant"><span class="workflow-number">03</span><div><strong>Answer with sources</strong><span id="workflow-answers">Ask a question below</span></div><svg><use href="#i-spark"/></svg></button>
   </div>
+  <div class="agent-tabs"><button class="selected" data-agent-tab="briefing">Briefing</button><button data-agent-tab="checks">Checks <span id="check-count">0</span></button><button data-agent-tab="assistant">Questions <span id="answer-count">0</span></button><span id="agent-mode">Operator assistant</span></div>
+  <div class="agent-content" id="agent-content"><div class="copilot-welcome"><span class="eyebrow">EVIDENCE BEFORE CONCLUSIONS</span><h3>Your incident briefing starts here.</h3><p>Copilot tracks checks and answers from its connected sources. Open any claim to inspect the original evidence.</p></div></div>
   <div class="copilot-composer">
     <form id="question-form" class="question-form"><label for="question">Ask Incident Copilot</label><textarea id="question" placeholder="What needs confirmation? What do the sources actually tell us?" rows="2" maxlength="4000" aria-label="Question for the agent"></textarea><div><span>Inspect the evidence behind every claim</span><button type="submit" class="send-button" aria-label="Send question"><span>Ask Copilot</span><svg><use href="#i-arrow"/></svg></button></div></form>
     <div class="suggestions" id="suggestions"><button>What still needs confirmation? <svg><use href="#i-arrow"/></svg></button><button>Summarize the source reports <svg><use href="#i-arrow"/></svg></button></div>
   </div>
-  <div class="agent-tabs"><button class="selected" data-agent-tab="briefing">Briefing</button><button data-agent-tab="checks">Checks <span id="check-count">0</span></button><button data-agent-tab="assistant">Questions <span id="answer-count">0</span></button><span id="agent-mode">Operator assistant</span></div>
-  <div class="agent-content" id="agent-content"><div class="copilot-welcome"><span class="eyebrow">EVIDENCE BEFORE CONCLUSIONS</span><h3>Your incident briefing starts here.</h3><p>Copilot tracks checks and answers from its connected sources. Open any claim to inspect the original evidence.</p></div></div>
   <div class="agent-demo-tools" id="agent-demo-tools" hidden><span class="demo-label">TRY THE CHANNEL CHECK</span><button data-demo="request">1 · Request</button><button data-demo="assign">2 · Assign channel</button><button data-demo="acknowledge">3 · Acknowledge</button><button data-demo="reset">Reset demo</button></div>
   <div class="copilot-footer"><svg><use href="#i-link"/></svg><span>Reports are evidence. Inferences remain explicit. Unknowns stay visible.</span></div>
 </section>

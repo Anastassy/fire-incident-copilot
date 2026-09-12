@@ -22,6 +22,8 @@ def create_app(db_path=None, engine=None, background=True):
     mode=os.getenv('FIRE_ENGINE','fixture')
     if mode not in ('fixture','sdk'):raise ValueError('FIRE_ENGINE must be fixture or sdk')
     selected=engine or (FixtureEngine() if mode=='fixture' else SDKEngine(os.environ['FIRE_MODEL']))
+    event_workers=int(os.getenv('FIRE_EVENT_WORKERS','1'))
+    if not 1 <= event_workers <= 8:raise ValueError('FIRE_EVENT_WORKERS must be between 1 and 8')
     runtime=Runtime(store,selected,int(os.getenv('FIRE_WATCH_TIMEOUT_MS','300000')))
     ui=UIService(runtime)
     platform_sync=from_environment(store,ui)
@@ -31,7 +33,8 @@ def create_app(db_path=None, engine=None, background=True):
             with store.tx() as c:
                 sessions=[dict(r) for r in c.execute('SELECT * FROM sessions')]
             for session in sessions:
-                store.tick(session['id'],session['generation'],session['time_ms'])
+                try:store.tick(session['id'],session['generation'])
+                except StaleGeneration:pass
             await asyncio.sleep(.05 if worked else .2)
     async def question_worker():
         while True:
@@ -39,7 +42,7 @@ def create_app(db_path=None, engine=None, background=True):
             await asyncio.sleep(.05 if worked else .2)
     @asynccontextmanager
     async def lifespan(app):
-        tasks=[asyncio.create_task(worker()),asyncio.create_task(question_worker())] if background else []
+        tasks=([asyncio.create_task(worker()) for _ in range(event_workers)]+[asyncio.create_task(question_worker())]) if background else []
         if background and platform_sync:
             store.start(platform_sync.scope.session_id)
             tasks.append(asyncio.create_task(platform_sync.run()))

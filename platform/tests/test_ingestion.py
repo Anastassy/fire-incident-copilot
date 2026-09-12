@@ -32,7 +32,9 @@ async def test_ingest_telemetry_persists_device_and_reading():
         response = await client.post("/ingest/telemetry", json=payload)
 
     assert response.status_code == 200
-    assert response.json() == {"ingested": 1}
+    assert response.json()["ingested"] == 1
+    assert len(response.json()["readings"]) == 1
+    assert isinstance(response.json()["readings"][0]["id"], int)
 
     async with async_session() as session:
         result = await session.execute(select(Device).where(Device.external_id == external_id))
@@ -48,6 +50,8 @@ async def test_ingest_telemetry_persists_device_and_reading():
         readings = result.scalars().all()
         assert len(readings) == 1
         reading = readings[0]
+        assert response.json()["readings"][0]["id"] == reading.id
+        assert response.json()["readings"][0]["device_id"] == str(device.id)
         assert reading.metric_type == "video_event"
         assert reading.payload["event"] == "smoke_detected"
 
@@ -72,7 +76,9 @@ async def test_ingest_telemetry_accepts_list_and_upserts_device():
         response = await client.post("/ingest/telemetry", json=payload)
 
     assert response.status_code == 200
-    assert response.json() == {"ingested": 2}
+    assert response.json()["ingested"] == 2
+    assert len(response.json()["readings"]) == 2
+    assert all(isinstance(row["id"], int) for row in response.json()["readings"])
 
     async with async_session() as session:
         result = await session.execute(select(Device).where(Device.external_id == external_id))
@@ -84,6 +90,7 @@ async def test_ingest_telemetry_accepts_list_and_upserts_device():
         )
         readings = result.scalars().all()
         assert len(readings) == 2
+        assert {row["id"] for row in response.json()["readings"]} == {row.id for row in readings}
 
 
 @pytest.mark.asyncio
@@ -112,7 +119,9 @@ async def test_ingest_telemetry_persists_quality_and_provenance_fields():
         response = await client.post("/ingest/telemetry", json=payload)
 
     assert response.status_code == 200
-    assert response.json() == {"ingested": 1}
+    assert response.json()["ingested"] == 1
+    assert len(response.json()["readings"]) == 1
+    assert isinstance(response.json()["readings"][0]["id"], int)
 
     async with async_session() as session:
         result = await session.execute(select(Device).where(Device.external_id == external_id))
@@ -123,6 +132,8 @@ async def test_ingest_telemetry_persists_quality_and_provenance_fields():
             select(TelemetryReading).where(TelemetryReading.device_id == device.id)
         )
         reading = result.scalars().one()
+        assert response.json()["readings"][0]["id"] == reading.id
+        assert response.json()["readings"][0]["device_id"] == str(device.id)
         assert reading.metric_type == "co"
         assert reading.quality == "valid"
         assert reading.availability == "fresh"
@@ -149,7 +160,9 @@ async def test_ingest_radio_transcript_without_audio():
         response = await client.post("/ingest/telemetry", json=payload)
 
     assert response.status_code == 200
-    assert response.json() == {"ingested": 1}
+    assert response.json()["ingested"] == 1
+    assert len(response.json()["readings"]) == 1
+    assert isinstance(response.json()["readings"][0]["id"], int)
 
     async with async_session() as session:
         result = await session.execute(select(Device).where(Device.external_id == external_id))
@@ -162,6 +175,8 @@ async def test_ingest_radio_transcript_without_audio():
             select(TelemetryReading).where(TelemetryReading.device_id == device.id)
         )
         reading = result.scalars().one()
+        assert response.json()["readings"][0]["id"] == reading.id
+        assert response.json()["readings"][0]["device_id"] == str(device.id)
         assert reading.metric_type == "radio_audio"
         assert reading.transcript == "Command, this is Engine 12, heavy smoke on the third floor."
         assert reading.audio_url is None

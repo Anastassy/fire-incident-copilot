@@ -5,6 +5,8 @@ import http.server
 import json
 import mimetypes
 import os
+import sys
+import uuid
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -16,9 +18,19 @@ class Gateway(http.server.ThreadingHTTPServer):
     daemon_threads = True
     def __init__(self, address, settings):
         self.settings = settings
+        self.pipeline = None
+        if settings.get('pipeline_enabled'):
+            sys.path.insert(0, str(ROOT))
+            from pipeline import LivePipeline
+            self.pipeline = LivePipeline(settings, settings['pipeline_work_dir'])
         super().__init__(address, Handler)
     def handle_error(self, request, client_address):
         pass  # Disconnects must not log request URLs carrying media tickets.
+
+    def server_close(self):
+        if self.pipeline:
+            self.pipeline.close()
+        super().server_close()
 
 
 class Handler(http.server.BaseHTTPRequestHandler):
@@ -62,9 +74,31 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return self.json({'state_configured': bool(settings.get('read_token')),
                 'state_url': settings['state_url'], 'agent_url': settings['agent_url'],
                 'agent': agent, 'demo_agent': settings['demo_agent'],
+                'pipeline_enabled': bool(self.server.pipeline),
                 'agent_context': settings['agent_context'], 'scenario': settings['scenario'],
                 'platform_configured': bool(settings.get('platform_url')),
                 'platform_url': settings.get('platform_url')})
+        if path in ('/api/pipeline/connect', '/api/pipeline/status'):
+            if not self.server.pipeline:
+                return self.json({'enabled': False, 'state': 'disabled'}, 503)
+            try:
+                if path.endswith('/connect') and self.command == 'POST':
+                    length = int(self.headers.get('Content-Length', '0'))
+                    if not 0 < length <= 4096:
+                        return self.json({'error': 'Invalid request size'}, 400)
+                    body = json.loads(self.rfile.read(length))
+                    run_id = str(uuid.UUID(body['run_id']))
+                    return self.json(self.server.pipeline.connect(run_id))
+                if path.endswith('/status') and self.command == 'GET':
+                    query = urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
+                    run_id = str(uuid.UUID(query['run_id'][0])) if query.get('run_id') else None
+                    generation = int(query['generation'][0]) if query.get('generation') else None
+                    if generation is not None and generation < 0:
+                        raise ValueError('Invalid generation')
+                    return self.json(self.server.pipeline.status(run_id, generation))
+            except (ValueError, KeyError, TypeError):
+                return self.json({'error': 'A valid run ID and generation are required'}, 400)
+            return self.json({'error': 'Method not allowed'}, 405)
         if path == '/api/agent-demo' and self.command == 'POST':
             if not settings['demo_agent']:
                 return self.json({'error': 'Demo seed is disabled'}, 403)
@@ -167,6 +201,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--port', type=int, default=8790)
     parser.add_argument('--state-config', type=Path)
+    parser.add_argument('--platform-config', type=Path)
+    parser.add_argument('--live-pipeline', action='store_true')
+    parser.add_argument('--analysis-interval', type=float, default=3)
+    parser.add_argument('--pipeline-work-dir', type=Path, default=ROOT.parents[1] / 'agent-service/work/live-pipeline')
     parser.add_argument('--agent-url', default='http://127.0.0.1:8010')
     parser.add_argument('--agent-context', default='dashboard-channel-demo-en')
     parser.add_argument('--agent-generation', type=int, default=0)
@@ -175,13 +213,19 @@ def main():
     parser.add_argument('--demo-agent', action='store_true')
     args = parser.parse_args()
     state = json.loads(args.state_config.read_text()) if args.state_config else {}
+    platform = json.loads(args.platform_config.read_text()) if args.platform_config else {}
     settings = {'state_url': state.get('base_url', os.getenv('STATE_API_URL', 'https://api.aitinkerers.space/api/v1')).rstrip('/'),
         'read_token': state.get('read_token', os.getenv('STATE_READ_TOKEN')),
         'control_token': state.get('control_token', os.getenv('STATE_CONTROL_TOKEN')),
         'agent_url': args.agent_url.rstrip('/'), 'agent_token': os.getenv('FIRE_UI_SESSION_TOKEN'),
-        'platform_url': os.getenv('PLATFORM_API_URL', '').rstrip('/'), 'platform_key': os.getenv('PLATFORM_API_KEY'),
+        'platform_url': platform.get('base_url', os.getenv('PLATFORM_API_URL', '')).rstrip('/'),
+        'platform_key': platform.get('api_key', os.getenv('PLATFORM_API_KEY')),
+        'pipeline_enabled': args.live_pipeline, 'pipeline_work_dir': args.pipeline_work_dir,
+        'analysis_interval_seconds': args.analysis_interval,
         'demo_agent': args.demo_agent, 'scenario': args.scenario,
         'agent_context': {'demo_context_id': args.agent_context, 'generation': args.agent_generation, 'subject_id': args.subject}}
+    if args.live_pipeline and not all(settings.get(k) for k in ('read_token', 'platform_url', 'platform_key')):
+        parser.error('--live-pipeline requires State read credentials and Platform configuration')
     server = Gateway(('127.0.0.1', args.port), settings)
     print(f'Command dashboard: http://127.0.0.1:{args.port}/', flush=True)
     try: server.serve_forever()
