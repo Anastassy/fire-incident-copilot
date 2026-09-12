@@ -33,7 +33,7 @@
    let text=all?'Not established. One recorded reply does not verify every team member’s radio state.':!ack?'This mock supports the two example questions. Connect the agent adapter for open-ended questions.':reply&&assignment?'A channel assignment and an acknowledging reply appear in the published transcript. Verify the source audio.':assignment?'An answer assigning V-Fire 25 is present. No acknowledging reply was found in the published transcript.':'No answer to the group’s request was found in the published transcript.';
    return {generation:g,asOf:at,text,evidenceIds:[assignment,reply].filter(Boolean).map(r=>r.id),origin:'scripted_mock'}
   }};
-  const media={async resolve(id){const r=data.getRecord(id);return {url:'../../data/demo/palisades-radio-demo/audio/decision-focus.mp3',start:r.start,end:r.end,record:r,generation}}};
+  const media={async resolve(id){const r=data.getRecord(id);return {url:'../../../data/demo/palisades-radio-demo/audio/decision-focus.mp3',start:r.start,end:r.end,record:r,generation}}};
   changed();return {data,replay,agent,media,capabilities:{mode:'mock',replay:true}};
  }
  root.createPalisadesAdapters=createPalisadesAdapters;

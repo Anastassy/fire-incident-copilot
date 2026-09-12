@@ -27,7 +27,7 @@ State Machine / фиксированный replay → адаптер → Safety 
 
 ## Agent→UI
 
-[Предлагаемый контракт v0.1](../../agent-ui-contract-v0.1/README.md): OpenAPI, JSON-примеры, snapshot, SSE, вопросы, карточки и evidence resolver. Это актуальная граница подключения вместо прежнего наброска; методы ещё требуют реализации. Контекст: demo_context_id/generation/subject_id. UI отображает серверные claims и assessment, сохраняет revision и очищает устаревший контекст.
+[Предлагаемый контракт v0.1](../../../agent-ui-contract-v0.1/README.md): OpenAPI, JSON-примеры, snapshot, SSE, вопросы, карточки и evidence resolver. Это актуальная граница подключения вместо прежнего наброска; методы ещё требуют реализации. Контекст: demo_context_id/generation/subject_id. UI отображает серверные claims и assessment, сохраняет revision и очищает устаревший контекст.
 
 ## Критерии готовности общего MVP
 
