@@ -1,0 +1,32 @@
+{
+  "hypothesis_id": "hyp-001",
+  "platform_incident_id": null,
+  "context": {
+    "demo_context_id": "demo-fixture-001",
+    "generation": 0,
+    "subject_id": "radio-topic-001"
+  },
+  "revision": 0,
+  "statement": "Check whether a channel assignment has an acknowledging reply.",
+  "assessment": "checking",
+  "lifecycle": "active",
+  "platform_status": null,
+  "publication_status": "pending",
+  "claims": [],
+  "unknowns": [
+    "Checking available evidence."
+  ],
+  "coverage": {
+    "as_of_ms": 140500,
+    "checked_from_ms": 0,
+    "checked_until_ms": 140500,
+    "completeness": "partial",
+    "limitations": [
+      "Fixture only; full source coverage is not established."
+    ]
+  },
+  "queries": [],
+  "evidence_ids": [],
+  "checked_at": "2026-09-12T12:00:01Z",
+  "closure_reason": null
+}

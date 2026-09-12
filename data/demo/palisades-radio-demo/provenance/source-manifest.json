@@ -1,0 +1,123 @@
+{
+  "created_at": "2026-09-12T10:49:57.494257+00:00",
+  "selected_candidate": "palisades-command",
+  "selection_reason_ru": "Лучший баланс связного пожарного контекста и устойчивости машинной расшифровки среди пяти проверенных отрезков: назначения групп, уточнения места, запрос и назначение тактического канала. Оценки модели не заменяют измерение точности.",
+  "source": {
+    "candidate": "palisades-command",
+    "source_path": "broadcastify-la/extracted/LA_County_Fire_v1_2025-01-07/38651-1736281253.mp3",
+    "source_sha256": "4581c204cb97ccbf830f7f58c17c23f92496554ec347e5c4721e5328e21511f6",
+    "source_start_seconds": 0,
+    "source_end_seconds": 600,
+    "audio_sha256": "e9648992b1b1797e0a6e5e2564ea1f2e4c51a29a9d4d89a958e5612091cc13ab",
+    "transformations": [
+      "continuous 600-second excerpt",
+      "mono 16000 Hz PCM s16le"
+    ],
+    "silence_removed": false,
+    "speech_synthesized": false
+  },
+  "source_publication": {
+    "url": "https://www.broadcastify.com/events/2025-01-lafire/",
+    "title": "Los Angeles County Fire V-1 / Palisades Fire Command",
+    "audio_index_entry": {
+      "path": "broadcastify-la/extracted/LA_County_Fire_v1_2025-01-07/38651-1736281253.mp3",
+      "archive_member": "LA_County_Fire_v1_2025-01-07/38651-1736281253.mp3",
+      "source_archive": "broadcastify-la/raw/LA_County_Fire_v1_2025-01-07.tar.gz",
+      "bytes": 7376000,
+      "sha256": "4581c204cb97ccbf830f7f58c17c23f92496554ec347e5c4721e5328e21511f6",
+      "ffprobe_ok": true,
+      "duration_seconds": 1844.0,
+      "codec": "mp3",
+      "sample_rate_hz": 22050,
+      "channels": 1,
+      "audio_streams": 1,
+      "duration_includes_silence": true,
+      "transformation": "none",
+      "source_id": "broadcastify-la",
+      "feed_id": "38651",
+      "recording_start_unix": 1736281253,
+      "recording_start_utc": "2025-01-07T20:20:53+00:00",
+      "time_mapping": "recording_start_unix + audio_offset_seconds; sender acquisition time unknown",
+      "channel_group": "LA_County_Fire_v1",
+      "transcript_status": "not_provided",
+      "license": "CC-BY-3.0-US",
+      "attribution": "Audio Provided by Broadcastify"
+    },
+    "clip_recording_start_utc": "2025-01-07T20:20:53+00:00",
+    "clip_recording_end_utc": "2025-01-07T20:30:53+00:00",
+    "clip_recording_start_local": "2025-01-07T12:20:53-08:00",
+    "clip_recording_end_local": "2025-01-07T12:30:53-08:00"
+  },
+  "duration_seconds": 600.0,
+  "language": "en",
+  "continuous_excerpt": true,
+  "time_mapping_note_ru": "По метке исходного аудиоблока: 2025-01-07T12:20:53-08:00 — 2025-01-07T12:30:53-08:00 (Los Angeles). Это расчётная шкала записи принимающего канала, не точное время произнесения сообщения или получения другим звеном.",
+  "silence_removed": false,
+  "denoising_applied": false,
+  "synthetic_speech": false,
+  "speaker_identification": "unknown; not performed",
+  "attribution": "Audio Provided by Broadcastify",
+  "license": "CC-BY-3.0-US per source publication",
+  "asr": {
+    "created_at": "2026-09-12T10:46:04.560337+00:00",
+    "mlx_whisper_version": "0.4.3",
+    "model": "mlx-community/whisper-large-v3-turbo-q4",
+    "temperature": 0.0,
+    "condition_on_previous_text": false,
+    "language": "en",
+    "initial_prompt": null,
+    "audio_sha256": "e9648992b1b1797e0a6e5e2564ea1f2e4c51a29a9d4d89a958e5612091cc13ab"
+  },
+  "diagnostics": {
+    "candidate": "palisades-command",
+    "model": "mlx-community/whisper-large-v3-turbo-q4",
+    "segments": 74,
+    "words": 582,
+    "mean_word_probability": 0.891058223763692,
+    "words_below_0_5_probability": 34,
+    "mean_segment_logprob": -0.3573532705081615,
+    "predicted_speech_seconds": 226.1399999999996,
+    "runtime_seconds": 37.04588012502063,
+    "note": "Model self-diagnostics only; not measured transcription accuracy or WER"
+  },
+  "accuracy_measured_against_human_reference": false,
+  "human_listening_review_performed": false,
+  "selection_scope": "five fixed ten-minute candidates, not an exhaustive search of the full archive",
+  "files": [
+    {
+      "path": "radio-demo-10min.mp3",
+      "bytes": 7201484,
+      "sha256": "f29aacdd07ddec8ae800fc62a35fe5c8e7771f27d463d46f472bd0e259f24b32"
+    },
+    {
+      "path": "radio-demo-10min.wav",
+      "bytes": 19200078,
+      "sha256": "e9648992b1b1797e0a6e5e2564ea1f2e4c51a29a9d4d89a958e5612091cc13ab"
+    },
+    {
+      "path": "review-needed.json",
+      "bytes": 7940,
+      "sha256": "17ccd5c3029d0d493982be9b96e52206c28854f7bf4bc2e8a47f5a7f47b65449"
+    },
+    {
+      "path": "transcript.en.json",
+      "bytes": 124871,
+      "sha256": "aa748c613abc1f3dae7eb89388b9cdcf40ef55d7cbae83617390285b2f438dd7"
+    },
+    {
+      "path": "transcript.en.srt",
+      "bytes": 5772,
+      "sha256": "f5ec6aefb4eb97459b931045de150458ee2e2337093897e76c688194d89b5c23"
+    },
+    {
+      "path": "transcript.en.txt",
+      "bytes": 5575,
+      "sha256": "f3750d2db424ffc48394e0e5ec2139c1fe104d02a8b11ac05cdc9fd0c5f32273"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 344,
+      "sha256": "f2d35d5dcd9f429fe6dd03fe317e6ac9d0c702990fca9021dbead6fa8f5505fe"
+    }
+  ]
+}

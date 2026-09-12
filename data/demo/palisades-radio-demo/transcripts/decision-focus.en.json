@@ -1,0 +1,3364 @@
+{
+  "language": "en",
+  "text": "Yeah, copy that. I had your location close to Villa Cortez and Palisades Drive. I've got two addresses that we have elderly trapped in. Roger that. Got in just 71-37-59-292, the leader strike team, 1041. Yeah, copy that. Let me give you the addresses and then let me know who you're going to send to those locations. I've got 131339 Ava Villa-Cortez, 17107 Palisades Drive. That's a different community. We're at, again, 618-750 Palisades Drive. Copy. Operations, L.A. County Assistant, 42 on command. Yeah, L.A. County, go for operations. Yes, sir, I got three strike teams, two Charleys, one Alpha, over in PCH and Coastline Drive in the community, looking about 10 to 15 minutes before impact. I'd like to make this Coastline Structured Defense Group, and if you could let me know what tack I can operate on. Yeah, copy that, Coastline Structured Defense. Does that also incorporate the Getty, the Getty via? Yeah, I believe so. So we'll start pushing our three resources in here. Yeah, copy that. Can you give me those numbers again that are in your Structured Defense group? 1870 Charlie, 1151 Charlie, 1103 Alpha. Copy. 70 Charlie 51 Charlie 03 Alpha. Coastline Structure Defense Group. And what tack can I operate on? We'll give you V-Fire 25 for your tack. Copy. V-Fire 25, thank you. Let them know that we're here. Coastline Structured Defense from 1151 Charlie. You up on command? Yeah, 1151 Charlie. Stage your resources at Coastline and PCH. You can continue up. Hang a right on Surf View. You'll meet me at the top. Coastline Structured Defense Group. We've already lined out our resources off of Surf View along with 1870. I also want to let you know that Getty Villa is being impacted at the end on the north side of that. Okay, copy that. We can start engaging our crews there, and we're going to be on V-Fire 25, V-Fire 25. Okay, Coastline Structure Defense, 1151 Charlie. We're going to go to V-Fire 25. And bring our resources in here.",
+  "segments": [
+    {
+      "id": 0,
+      "start": 0.62,
+      "end": 10.7,
+      "text": " Yeah, copy that. I had your location close to Villa Cortez and Palisades Drive. I've got two addresses that we have elderly trapped in.",
+      "tokens": [
+        50365,
+        865,
+        11,
+        5055,
+        300,
+        13,
+        286,
+        632,
+        428,
+        4914,
+        1998,
+        281,
+        40280,
+        28522,
+        4371,
+        293,
+        6116,
+        271,
+        2977,
+        15622,
+        13,
+        286,
+        600,
+        658,
+        732,
+        16862,
+        300,
+        321,
+        362,
+        19682,
+        14994,
+        294,
+        13,
+        51006
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.2528396519747647,
+      "compression_ratio": 1.4429223744292237,
+      "no_speech_prob": 1.8092990647367024e-11,
+      "words": [
+        {
+          "word": " Yeah,",
+          "start": 0.62,
+          "end": 1.06,
+          "probability": 0.88916015625
+        },
+        {
+          "word": " copy",
+          "start": 1.22,
+          "end": 1.42,
+          "probability": 0.931640625
+        },
+        {
+          "word": " that.",
+          "start": 1.42,
+          "end": 1.66,
+          "probability": 0.99755859375
+        },
+        {
+          "word": " I",
+          "start": 1.76,
+          "end": 1.82,
+          "probability": 0.97802734375
+        },
+        {
+          "word": " had",
+          "start": 1.82,
+          "end": 1.98,
+          "probability": 0.94775390625
+        },
+        {
+          "word": " your",
+          "start": 1.98,
+          "end": 2.2,
+          "probability": 0.9912109375
+        },
+        {
+          "word": " location",
+          "start": 2.2,
+          "end": 2.96,
+          "probability": 0.99658203125
+        },
+        {
+          "word": " close",
+          "start": 2.96,
+          "end": 3.42,
+          "probability": 0.93896484375
+        },
+        {
+          "word": " to",
+          "start": 3.42,
+          "end": 4.0,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " Villa",
+          "start": 4.0,
+          "end": 5.98,
+          "probability": 0.281982421875
+        },
+        {
+          "word": " Cortez",
+          "start": 5.98,
+          "end": 6.68,
+          "probability": 0.7607421875
+        },
+        {
+          "word": " and",
+          "start": 6.68,
+          "end": 6.86,
+          "probability": 0.8408203125
+        },
+        {
+          "word": " Palisades",
+          "start": 6.86,
+          "end": 7.3,
+          "probability": 0.95458984375
+        },
+        {
+          "word": " Drive.",
+          "start": 7.3,
+          "end": 7.6,
+          "probability": 0.9775390625
+        },
+        {
+          "word": " I've",
+          "start": 7.6,
+          "end": 7.92,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " got",
+          "start": 7.92,
+          "end": 8.08,
+          "probability": 1.0
+        },
+        {
+          "word": " two",
+          "start": 8.08,
+          "end": 8.32,
+          "probability": 0.990234375
+        },
+        {
+          "word": " addresses",
+          "start": 8.32,
+          "end": 8.84,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " that",
+          "start": 8.84,
+          "end": 9.16,
+          "probability": 0.998046875
+        },
+        {
+          "word": " we",
+          "start": 9.16,
+          "end": 9.3,
+          "probability": 1.0
+        },
+        {
+          "word": " have",
+          "start": 9.3,
+          "end": 9.54,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " elderly",
+          "start": 9.54,
+          "end": 9.98,
+          "probability": 0.974609375
+        },
+        {
+          "word": " trapped",
+          "start": 9.98,
+          "end": 10.38,
+          "probability": 0.99560546875
+        },
+        {
+          "word": " in.",
+          "start": 10.38,
+          "end": 10.7,
+          "probability": 0.99951171875
+        }
+      ],
+      "source_segment_id": 21
+    },
+    {
+      "id": 1,
+      "start": 13.5,
+      "end": 20.2,
+      "text": " Roger that. Got in just 71-37-59-292, the leader strike team, 1041.",
+      "tokens": [
+        51142,
+        17666,
+        300,
+        13,
+        5803,
+        294,
+        445,
+        30942,
+        12,
+        12851,
+        12,
+        19600,
+        12,
+        11871,
+        17,
+        11,
+        264,
+        5263,
+        9302,
+        1469,
+        11,
+        1266,
+        17344,
+        13,
+        51479
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.2528396519747647,
+      "compression_ratio": 1.4429223744292237,
+      "no_speech_prob": 1.8092990647367024e-11,
+      "words": [
+        {
+          "word": " Roger",
+          "start": 13.5,
+          "end": 13.94,
+          "probability": 0.9345703125
+        },
+        {
+          "word": " that.",
+          "start": 13.94,
+          "end": 14.14,
+          "probability": 0.982421875
+        },
+        {
+          "word": " Got",
+          "start": 14.3,
+          "end": 14.48,
+          "probability": 0.39111328125
+        },
+        {
+          "word": " in",
+          "start": 14.48,
+          "end": 14.66,
+          "probability": 0.22705078125
+        },
+        {
+          "word": " just",
+          "start": 14.66,
+          "end": 14.82,
+          "probability": 0.908203125
+        },
+        {
+          "word": " 71",
+          "start": 14.82,
+          "end": 15.34,
+          "probability": 0.66943359375
+        },
+        {
+          "word": "-37",
+          "start": 15.34,
+          "end": 16.1,
+          "probability": 0.7421875
+        },
+        {
+          "word": "-59",
+          "start": 16.1,
+          "end": 16.96,
+          "probability": 0.9931640625
+        },
+        {
+          "word": "-292,",
+          "start": 16.96,
+          "end": 18.18,
+          "probability": 0.91455078125
+        },
+        {
+          "word": " the",
+          "start": 18.18,
+          "end": 18.44,
+          "probability": 0.9912109375
+        },
+        {
+          "word": " leader",
+          "start": 18.44,
+          "end": 18.66,
+          "probability": 0.97705078125
+        },
+        {
+          "word": " strike",
+          "start": 18.66,
+          "end": 19.3,
+          "probability": 0.41162109375
+        },
+        {
+          "word": " team,",
+          "start": 19.3,
+          "end": 19.58,
+          "probability": 0.998046875
+        },
+        {
+          "word": " 1041.",
+          "start": 19.76,
+          "end": 20.2,
+          "probability": 0.931640625
+        }
+      ],
+      "source_segment_id": 22
+    },
+    {
+      "id": 2,
+      "start": 22.76,
+      "end": 27.18,
+      "text": " Yeah, copy that. Let me give you the addresses and then let me know who you're going to send to those locations.",
+      "tokens": [
+        51607,
+        865,
+        11,
+        5055,
+        300,
+        13,
+        961,
+        385,
+        976,
+        291,
+        264,
+        16862,
+        293,
+        550,
+        718,
+        385,
+        458,
+        567,
+        291,
+        434,
+        516,
+        281,
+        2845,
+        281,
+        729,
+        9253,
+        13,
+        51829
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.2528396519747647,
+      "compression_ratio": 1.4429223744292237,
+      "no_speech_prob": 1.8092990647367024e-11,
+      "words": [
+        {
+          "word": " Yeah,",
+          "start": 22.76,
+          "end": 23.2,
+          "probability": 0.9970703125
+        },
+        {
+          "word": " copy",
+          "start": 23.3,
+          "end": 23.54,
+          "probability": 0.9970703125
+        },
+        {
+          "word": " that.",
+          "start": 23.54,
+          "end": 23.74,
+          "probability": 1.0
+        },
+        {
+          "word": " Let",
+          "start": 23.84,
+          "end": 23.98,
+          "probability": 0.99658203125
+        },
+        {
+          "word": " me",
+          "start": 23.98,
+          "end": 24.06,
+          "probability": 1.0
+        },
+        {
+          "word": " give",
+          "start": 24.06,
+          "end": 24.24,
+          "probability": 1.0
+        },
+        {
+          "word": " you",
+          "start": 24.24,
+          "end": 24.34,
+          "probability": 1.0
+        },
+        {
+          "word": " the",
+          "start": 24.34,
+          "end": 24.48,
+          "probability": 1.0
+        },
+        {
+          "word": " addresses",
+          "start": 24.48,
+          "end": 24.9,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " and",
+          "start": 24.9,
+          "end": 25.18,
+          "probability": 0.50146484375
+        },
+        {
+          "word": " then",
+          "start": 25.18,
+          "end": 25.3,
+          "probability": 0.9970703125
+        },
+        {
+          "word": " let",
+          "start": 25.3,
+          "end": 25.48,
+          "probability": 1.0
+        },
+        {
+          "word": " me",
+          "start": 25.48,
+          "end": 25.56,
+          "probability": 1.0
+        },
+        {
+          "word": " know",
+          "start": 25.56,
+          "end": 25.68,
+          "probability": 1.0
+        },
+        {
+          "word": " who",
+          "start": 25.68,
+          "end": 25.84,
+          "probability": 0.99560546875
+        },
+        {
+          "word": " you're",
+          "start": 25.84,
+          "end": 26.0,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " going",
+          "start": 26.0,
+          "end": 26.04,
+          "probability": 0.97314453125
+        },
+        {
+          "word": " to",
+          "start": 26.04,
+          "end": 26.14,
+          "probability": 1.0
+        },
+        {
+          "word": " send",
+          "start": 26.14,
+          "end": 26.34,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " to",
+          "start": 26.34,
+          "end": 26.44,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " those",
+          "start": 26.44,
+          "end": 26.64,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " locations.",
+          "start": 26.64,
+          "end": 27.18,
+          "probability": 0.99853515625
+        }
+      ],
+      "source_segment_id": 23
+    },
+    {
+      "id": 3,
+      "start": 27.96,
+      "end": 39.14,
+      "text": " I've got 131339 Ava Villa-Cortez, 17107 Palisades Drive.",
+      "tokens": [
+        50365,
+        286,
+        600,
+        658,
+        3705,
+        7668,
+        12493,
+        316,
+        2757,
+        40280,
+        12,
+        34,
+        477,
+        4371,
+        11,
+        3282,
+        3279,
+        22,
+        6116,
+        271,
+        2977,
+        15622,
+        13,
+        50928
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.4279063138094815,
+      "compression_ratio": 1.1166666666666667,
+      "no_speech_prob": 2.774762190849156e-11,
+      "words": [
+        {
+          "word": " I've",
+          "start": 27.96,
+          "end": 28.9,
+          "probability": 0.939453125
+        },
+        {
+          "word": " got",
+          "start": 28.9,
+          "end": 29.08,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " 131339",
+          "start": 29.08,
+          "end": 31.72,
+          "probability": 0.7900390625
+        },
+        {
+          "word": " Ava",
+          "start": 31.72,
+          "end": 33.32,
+          "probability": 0.62744140625
+        },
+        {
+          "word": " Villa",
+          "start": 33.32,
+          "end": 33.66,
+          "probability": 0.55517578125
+        },
+        {
+          "word": "-Cortez,",
+          "start": 33.66,
+          "end": 34.68,
+          "probability": 0.8837890625
+        },
+        {
+          "word": " 17107",
+          "start": 34.8,
+          "end": 38.12,
+          "probability": 0.994140625
+        },
+        {
+          "word": " Palisades",
+          "start": 38.12,
+          "end": 38.74,
+          "probability": 0.939453125
+        },
+        {
+          "word": " Drive.",
+          "start": 38.74,
+          "end": 39.14,
+          "probability": 0.974609375
+        }
+      ],
+      "source_segment_id": 24
+    },
+    {
+      "id": 4,
+      "start": 42.44,
+      "end": 44.3,
+      "text": " That's a different community.",
+      "tokens": [
+        51078,
+        663,
+        311,
+        257,
+        819,
+        1768,
+        13,
+        51188
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.4279063138094815,
+      "compression_ratio": 1.1166666666666667,
+      "no_speech_prob": 2.774762190849156e-11,
+      "words": [
+        {
+          "word": " That's",
+          "start": 42.44,
+          "end": 43.36,
+          "probability": 0.736328125
+        },
+        {
+          "word": " a",
+          "start": 43.36,
+          "end": 43.74,
+          "probability": 0.81201171875
+        },
+        {
+          "word": " different",
+          "start": 43.74,
+          "end": 43.98,
+          "probability": 0.79150390625
+        },
+        {
+          "word": " community.",
+          "start": 43.98,
+          "end": 44.3,
+          "probability": 0.70068359375
+        }
+      ],
+      "source_segment_id": 25
+    },
+    {
+      "id": 5,
+      "start": 44.66,
+      "end": 49.1,
+      "text": " We're at, again, 618-750 Palisades Drive.",
+      "tokens": [
+        51201,
+        492,
+        434,
+        412,
+        11,
+        797,
+        11,
+        1386,
+        6494,
+        12,
+        22,
+        2803,
+        6116,
+        271,
+        2977,
+        15622,
+        13,
+        51425
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.4279063138094815,
+      "compression_ratio": 1.1166666666666667,
+      "no_speech_prob": 2.774762190849156e-11,
+      "words": [
+        {
+          "word": " We're",
+          "start": 44.66,
+          "end": 44.86,
+          "probability": 0.9951171875
+        },
+        {
+          "word": " at,",
+          "start": 44.86,
+          "end": 45.08,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " again,",
+          "start": 45.12,
+          "end": 46.1,
+          "probability": 0.9677734375
+        },
+        {
+          "word": " 618",
+          "start": 46.3,
+          "end": 47.04,
+          "probability": 0.8935546875
+        },
+        {
+          "word": "-750",
+          "start": 47.04,
+          "end": 48.18,
+          "probability": 0.66357421875
+        },
+        {
+          "word": " Palisades",
+          "start": 48.18,
+          "end": 48.7,
+          "probability": 0.76904296875
+        },
+        {
+          "word": " Drive.",
+          "start": 48.7,
+          "end": 49.1,
+          "probability": 0.9921875
+        }
+      ],
+      "source_segment_id": 26
+    },
+    {
+      "id": 6,
+      "start": 51.22,
+      "end": 52.14,
+      "text": " Copy.",
+      "tokens": [
+        51525,
+        25653,
+        13,
+        51576
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.4279063138094815,
+      "compression_ratio": 1.1166666666666667,
+      "no_speech_prob": 2.774762190849156e-11,
+      "words": [
+        {
+          "word": " Copy.",
+          "start": 51.22,
+          "end": 52.14,
+          "probability": 0.98828125
+        }
+      ],
+      "source_segment_id": 27
+    },
+    {
+      "id": 7,
+      "start": 58.18,
+      "end": 60.6,
+      "text": " Operations, L.A. County Assistant, 42 on command.",
+      "tokens": [
+        50365,
+        36381,
+        11,
+        441,
+        13,
+        32,
+        13,
+        6658,
+        14890,
+        11,
+        14034,
+        322,
+        5622,
+        13,
+        50499
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.23876927933602962,
+      "compression_ratio": 1.477366255144033,
+      "no_speech_prob": 1.2332552513927286e-11,
+      "words": [
+        {
+          "word": " Operations,",
+          "start": 58.18,
+          "end": 58.62,
+          "probability": 0.775390625
+        },
+        {
+          "word": " L",
+          "start": 58.8,
+          "end": 58.84,
+          "probability": 0.57470703125
+        },
+        {
+          "word": ".A.",
+          "start": 58.84,
+          "end": 58.9,
+          "probability": 0.99267578125
+        },
+        {
+          "word": " County",
+          "start": 59.04,
+          "end": 59.18,
+          "probability": 0.99072265625
+        },
+        {
+          "word": " Assistant,",
+          "start": 59.18,
+          "end": 59.58,
+          "probability": 0.47802734375
+        },
+        {
+          "word": " 42",
+          "start": 59.74,
+          "end": 60.0,
+          "probability": 0.97216796875
+        },
+        {
+          "word": " on",
+          "start": 60.0,
+          "end": 60.28,
+          "probability": 0.947265625
+        },
+        {
+          "word": " command.",
+          "start": 60.28,
+          "end": 60.6,
+          "probability": 0.986328125
+        }
+      ],
+      "source_segment_id": 28
+    },
+    {
+      "id": 8,
+      "start": 63.22,
+      "end": 64.72,
+      "text": " Yeah, L.A. County, go for operations.",
+      "tokens": [
+        50628,
+        865,
+        11,
+        441,
+        13,
+        32,
+        13,
+        6658,
+        11,
+        352,
+        337,
+        7705,
+        13,
+        50705
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.23876927933602962,
+      "compression_ratio": 1.477366255144033,
+      "no_speech_prob": 1.2332552513927286e-11,
+      "words": [
+        {
+          "word": " Yeah,",
+          "start": 63.22,
+          "end": 63.66,
+          "probability": 0.92333984375
+        },
+        {
+          "word": " L",
+          "start": 63.74,
+          "end": 63.82,
+          "probability": 0.99462890625
+        },
+        {
+          "word": ".A.",
+          "start": 63.82,
+          "end": 63.88,
+          "probability": 1.0
+        },
+        {
+          "word": " County,",
+          "start": 63.94,
+          "end": 64.08,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " go",
+          "start": 64.16,
+          "end": 64.24,
+          "probability": 0.9970703125
+        },
+        {
+          "word": " for",
+          "start": 64.24,
+          "end": 64.38,
+          "probability": 0.99755859375
+        },
+        {
+          "word": " operations.",
+          "start": 64.38,
+          "end": 64.72,
+          "probability": 0.370849609375
+        }
+      ],
+      "source_segment_id": 29
+    },
+    {
+      "id": 9,
+      "start": 67.3,
+      "end": 70.52,
+      "text": " Yes, sir, I got three strike teams, two Charleys, one Alpha,",
+      "tokens": [
+        50832,
+        1079,
+        11,
+        4735,
+        11,
+        286,
+        658,
+        1045,
+        9302,
+        5491,
+        11,
+        732,
+        4327,
+        306,
+        749,
+        11,
+        472,
+        20588,
+        11,
+        50994
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.23876927933602962,
+      "compression_ratio": 1.477366255144033,
+      "no_speech_prob": 1.2332552513927286e-11,
+      "words": [
+        {
+          "word": " Yes,",
+          "start": 67.3,
+          "end": 67.74,
+          "probability": 0.7578125
+        },
+        {
+          "word": " sir,",
+          "start": 67.78,
+          "end": 67.92,
+          "probability": 0.9541015625
+        },
+        {
+          "word": " I",
+          "start": 67.96,
+          "end": 68.1,
+          "probability": 0.86669921875
+        },
+        {
+          "word": " got",
+          "start": 68.1,
+          "end": 68.34,
+          "probability": 0.8974609375
+        },
+        {
+          "word": " three",
+          "start": 68.34,
+          "end": 68.86,
+          "probability": 0.97900390625
+        },
+        {
+          "word": " strike",
+          "start": 68.86,
+          "end": 69.18,
+          "probability": 0.982421875
+        },
+        {
+          "word": " teams,",
+          "start": 69.18,
+          "end": 69.42,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " two",
+          "start": 69.52,
+          "end": 69.66,
+          "probability": 0.99609375
+        },
+        {
+          "word": " Charleys,",
+          "start": 69.66,
+          "end": 69.96,
+          "probability": 0.5673828125
+        },
+        {
+          "word": " one",
+          "start": 70.02,
+          "end": 70.18,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " Alpha,",
+          "start": 70.18,
+          "end": 70.52,
+          "probability": 0.919921875
+        }
+      ],
+      "source_segment_id": 30
+    },
+    {
+      "id": 10,
+      "start": 70.54,
+      "end": 73.7,
+      "text": " over in PCH and Coastline Drive in the community,",
+      "tokens": [
+        51005,
+        670,
+        294,
+        430,
+        5462,
+        293,
+        14960,
+        1889,
+        15622,
+        294,
+        264,
+        1768,
+        11,
+        51153
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.23876927933602962,
+      "compression_ratio": 1.477366255144033,
+      "no_speech_prob": 1.2332552513927286e-11,
+      "words": [
+        {
+          "word": " over",
+          "start": 70.54,
+          "end": 71.02,
+          "probability": 0.99755859375
+        },
+        {
+          "word": " in",
+          "start": 71.02,
+          "end": 71.3,
+          "probability": 0.99755859375
+        },
+        {
+          "word": " PCH",
+          "start": 71.3,
+          "end": 71.88,
+          "probability": 0.9892578125
+        },
+        {
+          "word": " and",
+          "start": 71.88,
+          "end": 72.14,
+          "probability": 0.52392578125
+        },
+        {
+          "word": " Coastline",
+          "start": 72.14,
+          "end": 72.62,
+          "probability": 0.9853515625
+        },
+        {
+          "word": " Drive",
+          "start": 72.62,
+          "end": 72.92,
+          "probability": 0.99560546875
+        },
+        {
+          "word": " in",
+          "start": 72.92,
+          "end": 73.12,
+          "probability": 0.9619140625
+        },
+        {
+          "word": " the",
+          "start": 73.12,
+          "end": 73.22,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " community,",
+          "start": 73.22,
+          "end": 73.7,
+          "probability": 0.97900390625
+        }
+      ],
+      "source_segment_id": 31
+    },
+    {
+      "id": 11,
+      "start": 73.92,
+      "end": 76.46,
+      "text": " looking about 10 to 15 minutes before impact.",
+      "tokens": [
+        51166,
+        1237,
+        466,
+        1266,
+        281,
+        2119,
+        2077,
+        949,
+        2712,
+        13,
+        51293
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.23876927933602962,
+      "compression_ratio": 1.477366255144033,
+      "no_speech_prob": 1.2332552513927286e-11,
+      "words": [
+        {
+          "word": " looking",
+          "start": 73.92,
+          "end": 74.24,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " about",
+          "start": 74.24,
+          "end": 74.56,
+          "probability": 0.9443359375
+        },
+        {
+          "word": " 10",
+          "start": 74.56,
+          "end": 75.0,
+          "probability": 0.9892578125
+        },
+        {
+          "word": " to",
+          "start": 75.0,
+          "end": 75.1,
+          "probability": 0.9873046875
+        },
+        {
+          "word": " 15",
+          "start": 75.1,
+          "end": 75.36,
+          "probability": 1.0
+        },
+        {
+          "word": " minutes",
+          "start": 75.36,
+          "end": 75.68,
+          "probability": 1.0
+        },
+        {
+          "word": " before",
+          "start": 75.68,
+          "end": 76.0,
+          "probability": 1.0
+        },
+        {
+          "word": " impact.",
+          "start": 76.0,
+          "end": 76.46,
+          "probability": 0.99560546875
+        }
+      ],
+      "source_segment_id": 32
+    },
+    {
+      "id": 12,
+      "start": 77.12,
+      "end": 80.7,
+      "text": " I'd like to make this Coastline Structured Defense Group,",
+      "tokens": [
+        51324,
+        286,
+        1116,
+        411,
+        281,
+        652,
+        341,
+        14960,
+        1889,
+        745,
+        46847,
+        17410,
+        10500,
+        11,
+        51505
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.23876927933602962,
+      "compression_ratio": 1.477366255144033,
+      "no_speech_prob": 1.2332552513927286e-11,
+      "words": [
+        {
+          "word": " I'd",
+          "start": 77.12,
+          "end": 77.56,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " like",
+          "start": 77.56,
+          "end": 77.68,
+          "probability": 1.0
+        },
+        {
+          "word": " to",
+          "start": 77.68,
+          "end": 77.8,
+          "probability": 1.0
+        },
+        {
+          "word": " make",
+          "start": 77.8,
+          "end": 77.98,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " this",
+          "start": 77.98,
+          "end": 78.34,
+          "probability": 1.0
+        },
+        {
+          "word": " Coastline",
+          "start": 78.34,
+          "end": 79.52,
+          "probability": 0.9873046875
+        },
+        {
+          "word": " Structured",
+          "start": 79.52,
+          "end": 79.98,
+          "probability": 0.9296875
+        },
+        {
+          "word": " Defense",
+          "start": 79.98,
+          "end": 80.3,
+          "probability": 0.970703125
+        },
+        {
+          "word": " Group,",
+          "start": 80.3,
+          "end": 80.7,
+          "probability": 0.95703125
+        }
+      ],
+      "source_segment_id": 33
+    },
+    {
+      "id": 13,
+      "start": 80.7,
+      "end": 83.06,
+      "text": " and if you could let me know what tack I can operate on.",
+      "tokens": [
+        51515,
+        293,
+        498,
+        291,
+        727,
+        718,
+        385,
+        458,
+        437,
+        9426,
+        286,
+        393,
+        9651,
+        322,
+        13,
+        51621
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.23876927933602962,
+      "compression_ratio": 1.477366255144033,
+      "no_speech_prob": 1.2332552513927286e-11,
+      "words": [
+        {
+          "word": " and",
+          "start": 80.7,
+          "end": 81.24,
+          "probability": 1.0
+        },
+        {
+          "word": " if",
+          "start": 81.24,
+          "end": 81.58,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " you",
+          "start": 81.58,
+          "end": 81.62,
+          "probability": 1.0
+        },
+        {
+          "word": " could",
+          "start": 81.62,
+          "end": 81.72,
+          "probability": 0.9892578125
+        },
+        {
+          "word": " let",
+          "start": 81.72,
+          "end": 81.84,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " me",
+          "start": 81.84,
+          "end": 81.92,
+          "probability": 1.0
+        },
+        {
+          "word": " know",
+          "start": 81.92,
+          "end": 82.04,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " what",
+          "start": 82.04,
+          "end": 82.2,
+          "probability": 0.99609375
+        },
+        {
+          "word": " tack",
+          "start": 82.2,
+          "end": 82.38,
+          "probability": 0.7783203125
+        },
+        {
+          "word": " I",
+          "start": 82.38,
+          "end": 82.52,
+          "probability": 1.0
+        },
+        {
+          "word": " can",
+          "start": 82.52,
+          "end": 82.64,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " operate",
+          "start": 82.64,
+          "end": 82.88,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " on.",
+          "start": 82.88,
+          "end": 83.06,
+          "probability": 1.0
+        }
+      ],
+      "source_segment_id": 34
+    },
+    {
+      "id": 14,
+      "start": 89.5,
+      "end": 91.96,
+      "text": " Yeah, copy that, Coastline Structured Defense.",
+      "tokens": [
+        50365,
+        865,
+        11,
+        5055,
+        300,
+        11,
+        14960,
+        1889,
+        745,
+        46847,
+        17410,
+        13,
+        50565
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.24519643890723752,
+      "compression_ratio": 1.5123152709359606,
+      "no_speech_prob": 6.326721698618476e-12,
+      "words": [
+        {
+          "word": " Yeah,",
+          "start": 89.5,
+          "end": 90.06,
+          "probability": 0.8896484375
+        },
+        {
+          "word": " copy",
+          "start": 90.24,
+          "end": 90.42,
+          "probability": 0.82421875
+        },
+        {
+          "word": " that,",
+          "start": 90.42,
+          "end": 90.74,
+          "probability": 0.91455078125
+        },
+        {
+          "word": " Coastline",
+          "start": 90.84,
+          "end": 91.32,
+          "probability": 0.880859375
+        },
+        {
+          "word": " Structured",
+          "start": 91.32,
+          "end": 91.66,
+          "probability": 0.779296875
+        },
+        {
+          "word": " Defense.",
+          "start": 91.66,
+          "end": 91.96,
+          "probability": 0.990234375
+        }
+      ],
+      "source_segment_id": 35
+    },
+    {
+      "id": 15,
+      "start": 92.16,
+      "end": 94.72,
+      "text": " Does that also incorporate the Getty, the Getty via?",
+      "tokens": [
+        50565,
+        4402,
+        300,
+        611,
+        16091,
+        264,
+        3240,
+        874,
+        11,
+        264,
+        3240,
+        874,
+        5766,
+        30,
+        50705
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.24519643890723752,
+      "compression_ratio": 1.5123152709359606,
+      "no_speech_prob": 6.326721698618476e-12,
+      "words": [
+        {
+          "word": " Does",
+          "start": 92.16,
+          "end": 92.28,
+          "probability": 0.98486328125
+        },
+        {
+          "word": " that",
+          "start": 92.28,
+          "end": 92.44,
+          "probability": 1.0
+        },
+        {
+          "word": " also",
+          "start": 92.44,
+          "end": 92.74,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " incorporate",
+          "start": 92.74,
+          "end": 93.24,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " the",
+          "start": 93.24,
+          "end": 93.46,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " Getty,",
+          "start": 93.46,
+          "end": 93.7,
+          "probability": 0.8701171875
+        },
+        {
+          "word": " the",
+          "start": 93.72,
+          "end": 94.36,
+          "probability": 0.9951171875
+        },
+        {
+          "word": " Getty",
+          "start": 94.36,
+          "end": 94.54,
+          "probability": 0.9931640625
+        },
+        {
+          "word": " via?",
+          "start": 94.54,
+          "end": 94.72,
+          "probability": 0.5517578125
+        }
+      ],
+      "source_segment_id": 36
+    },
+    {
+      "id": 16,
+      "start": 97.76,
+      "end": 98.98,
+      "text": " Yeah, I believe so.",
+      "tokens": [
+        50858,
+        865,
+        11,
+        286,
+        1697,
+        370,
+        13,
+        50918
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.24519643890723752,
+      "compression_ratio": 1.5123152709359606,
+      "no_speech_prob": 6.326721698618476e-12,
+      "words": [
+        {
+          "word": " Yeah,",
+          "start": 97.76,
+          "end": 98.32,
+          "probability": 0.99560546875
+        },
+        {
+          "word": " I",
+          "start": 98.36,
+          "end": 98.44,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " believe",
+          "start": 98.44,
+          "end": 98.68,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " so.",
+          "start": 98.68,
+          "end": 98.98,
+          "probability": 0.99951171875
+        }
+      ],
+      "source_segment_id": 37
+    },
+    {
+      "id": 17,
+      "start": 99.08,
+      "end": 101.52,
+      "text": " So we'll start pushing our three resources in here.",
+      "tokens": [
+        50921,
+        407,
+        321,
+        603,
+        722,
+        7380,
+        527,
+        1045,
+        3593,
+        294,
+        510,
+        13,
+        51043
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.24519643890723752,
+      "compression_ratio": 1.5123152709359606,
+      "no_speech_prob": 6.326721698618476e-12,
+      "words": [
+        {
+          "word": " So",
+          "start": 99.08,
+          "end": 99.18,
+          "probability": 0.9951171875
+        },
+        {
+          "word": " we'll",
+          "start": 99.18,
+          "end": 99.32,
+          "probability": 0.9501953125
+        },
+        {
+          "word": " start",
+          "start": 99.32,
+          "end": 99.52,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " pushing",
+          "start": 99.52,
+          "end": 99.88,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " our",
+          "start": 99.88,
+          "end": 100.4,
+          "probability": 0.94775390625
+        },
+        {
+          "word": " three",
+          "start": 100.4,
+          "end": 100.62,
+          "probability": 0.990234375
+        },
+        {
+          "word": " resources",
+          "start": 100.62,
+          "end": 101.02,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " in",
+          "start": 101.02,
+          "end": 101.34,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " here.",
+          "start": 101.34,
+          "end": 101.52,
+          "probability": 0.99853515625
+        }
+      ],
+      "source_segment_id": 38
+    },
+    {
+      "id": 18,
+      "start": 103.28,
+      "end": 104.36,
+      "text": " Yeah, copy that.",
+      "tokens": [
+        51134,
+        865,
+        11,
+        5055,
+        300,
+        13,
+        51187
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.24519643890723752,
+      "compression_ratio": 1.5123152709359606,
+      "no_speech_prob": 6.326721698618476e-12,
+      "words": [
+        {
+          "word": " Yeah,",
+          "start": 103.28,
+          "end": 103.84,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " copy",
+          "start": 103.96,
+          "end": 104.2,
+          "probability": 0.9794921875
+        },
+        {
+          "word": " that.",
+          "start": 104.2,
+          "end": 104.36,
+          "probability": 0.99853515625
+        }
+      ],
+      "source_segment_id": 39
+    },
+    {
+      "id": 19,
+      "start": 104.42,
+      "end": 107.58,
+      "text": " Can you give me those numbers again that are in your Structured Defense group?",
+      "tokens": [
+        51189,
+        1664,
+        291,
+        976,
+        385,
+        729,
+        3547,
+        797,
+        300,
+        366,
+        294,
+        428,
+        745,
+        46847,
+        17410,
+        1594,
+        30,
+        51346
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.24519643890723752,
+      "compression_ratio": 1.5123152709359606,
+      "no_speech_prob": 6.326721698618476e-12,
+      "words": [
+        {
+          "word": " Can",
+          "start": 104.42,
+          "end": 104.52,
+          "probability": 0.9921875
+        },
+        {
+          "word": " you",
+          "start": 104.52,
+          "end": 104.6,
+          "probability": 1.0
+        },
+        {
+          "word": " give",
+          "start": 104.6,
+          "end": 104.72,
+          "probability": 0.98974609375
+        },
+        {
+          "word": " me",
+          "start": 104.72,
+          "end": 104.78,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " those",
+          "start": 104.78,
+          "end": 104.96,
+          "probability": 1.0
+        },
+        {
+          "word": " numbers",
+          "start": 104.96,
+          "end": 105.24,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " again",
+          "start": 105.24,
+          "end": 105.52,
+          "probability": 0.96630859375
+        },
+        {
+          "word": " that",
+          "start": 105.52,
+          "end": 105.8,
+          "probability": 0.990234375
+        },
+        {
+          "word": " are",
+          "start": 105.8,
+          "end": 106.14,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " in",
+          "start": 106.14,
+          "end": 106.46,
+          "probability": 1.0
+        },
+        {
+          "word": " your",
+          "start": 106.46,
+          "end": 106.72,
+          "probability": 1.0
+        },
+        {
+          "word": " Structured",
+          "start": 106.72,
+          "end": 107.06,
+          "probability": 0.97705078125
+        },
+        {
+          "word": " Defense",
+          "start": 107.06,
+          "end": 107.32,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " group?",
+          "start": 107.32,
+          "end": 107.58,
+          "probability": 0.71728515625
+        }
+      ],
+      "source_segment_id": 40
+    },
+    {
+      "id": 20,
+      "start": 111.3,
+      "end": 116.24,
+      "text": " 1870 Charlie, 1151 Charlie, 1103 Alpha.",
+      "tokens": [
+        51534,
+        2443,
+        5867,
+        13754,
+        11,
+        2975,
+        18682,
+        13754,
+        11,
+        2975,
+        11592,
+        20588,
+        13,
+        51780
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.24519643890723752,
+      "compression_ratio": 1.5123152709359606,
+      "no_speech_prob": 6.326721698618476e-12,
+      "words": [
+        {
+          "word": " 1870",
+          "start": 111.3,
+          "end": 111.86,
+          "probability": 0.96875
+        },
+        {
+          "word": " Charlie,",
+          "start": 111.86,
+          "end": 112.22,
+          "probability": 0.751953125
+        },
+        {
+          "word": " 1151",
+          "start": 113.3,
+          "end": 113.92,
+          "probability": 0.994140625
+        },
+        {
+          "word": " Charlie,",
+          "start": 113.92,
+          "end": 114.46,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " 1103",
+          "start": 115.2,
+          "end": 115.7,
+          "probability": 0.9873046875
+        },
+        {
+          "word": " Alpha.",
+          "start": 115.7,
+          "end": 116.24,
+          "probability": 0.994140625
+        }
+      ],
+      "source_segment_id": 41
+    },
+    {
+      "id": 21,
+      "start": 119.94,
+      "end": 120.54,
+      "text": " Copy.",
+      "tokens": [
+        50365,
+        25653,
+        13,
+        50495
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.39666896755412473,
+      "compression_ratio": 1.2647058823529411,
+      "no_speech_prob": 1.2381873304434521e-11,
+      "words": [
+        {
+          "word": " Copy.",
+          "start": 119.94,
+          "end": 120.54,
+          "probability": 0.89404296875
+        }
+      ],
+      "source_segment_id": 42
+    },
+    {
+      "id": 22,
+      "start": 120.84,
+      "end": 123.48,
+      "text": " 70 Charlie 51 Charlie 03 Alpha.",
+      "tokens": [
+        50517,
+        5285,
+        13754,
+        18485,
+        13754,
+        43677,
+        20588,
+        13,
+        50642
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.39666896755412473,
+      "compression_ratio": 1.2647058823529411,
+      "no_speech_prob": 1.2381873304434521e-11,
+      "words": [
+        {
+          "word": " 70",
+          "start": 120.84,
+          "end": 121.38,
+          "probability": 0.853515625
+        },
+        {
+          "word": " Charlie",
+          "start": 121.38,
+          "end": 121.7,
+          "probability": 0.61962890625
+        },
+        {
+          "word": " 51",
+          "start": 121.7,
+          "end": 122.04,
+          "probability": 0.392822265625
+        },
+        {
+          "word": " Charlie",
+          "start": 122.04,
+          "end": 122.68,
+          "probability": 0.91357421875
+        },
+        {
+          "word": " 03",
+          "start": 122.68,
+          "end": 123.1,
+          "probability": 0.65185546875
+        },
+        {
+          "word": " Alpha.",
+          "start": 123.1,
+          "end": 123.48,
+          "probability": 0.8515625
+        }
+      ],
+      "source_segment_id": 43
+    },
+    {
+      "id": 23,
+      "start": 123.96,
+      "end": 125.5,
+      "text": " Coastline Structure Defense Group.",
+      "tokens": [
+        50674,
+        14960,
+        1889,
+        745,
+        2885,
+        17410,
+        10500,
+        13,
+        50742
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.39666896755412473,
+      "compression_ratio": 1.2647058823529411,
+      "no_speech_prob": 1.2381873304434521e-11,
+      "words": [
+        {
+          "word": " Coastline",
+          "start": 123.96,
+          "end": 124.56,
+          "probability": 0.8427734375
+        },
+        {
+          "word": " Structure",
+          "start": 124.56,
+          "end": 124.92,
+          "probability": 0.7919921875
+        },
+        {
+          "word": " Defense",
+          "start": 124.92,
+          "end": 125.2,
+          "probability": 0.9658203125
+        },
+        {
+          "word": " Group.",
+          "start": 125.2,
+          "end": 125.5,
+          "probability": 0.9853515625
+        }
+      ],
+      "source_segment_id": 44
+    },
+    {
+      "id": 24,
+      "start": 128.6,
+      "end": 130.42,
+      "text": " And what tack can I operate on?",
+      "tokens": [
+        50900,
+        400,
+        437,
+        9426,
+        393,
+        286,
+        9651,
+        322,
+        30,
+        50988
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.39666896755412473,
+      "compression_ratio": 1.2647058823529411,
+      "no_speech_prob": 1.2381873304434521e-11,
+      "words": [
+        {
+          "word": " And",
+          "start": 128.6,
+          "end": 129.2,
+          "probability": 0.9697265625
+        },
+        {
+          "word": " what",
+          "start": 129.2,
+          "end": 129.54,
+          "probability": 0.96337890625
+        },
+        {
+          "word": " tack",
+          "start": 129.54,
+          "end": 129.76,
+          "probability": 0.5537109375
+        },
+        {
+          "word": " can",
+          "start": 129.76,
+          "end": 129.94,
+          "probability": 0.99755859375
+        },
+        {
+          "word": " I",
+          "start": 129.94,
+          "end": 130.02,
+          "probability": 0.9970703125
+        },
+        {
+          "word": " operate",
+          "start": 130.02,
+          "end": 130.24,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " on?",
+          "start": 130.24,
+          "end": 130.42,
+          "probability": 0.99951171875
+        }
+      ],
+      "source_segment_id": 45
+    },
+    {
+      "id": 25,
+      "start": 133.26,
+      "end": 135.76,
+      "text": " We'll give you V-Fire 25 for your tack.",
+      "tokens": [
+        51135,
+        492,
+        603,
+        976,
+        291,
+        691,
+        12,
+        45651,
+        3552,
+        337,
+        428,
+        9426,
+        13,
+        51256
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.39666896755412473,
+      "compression_ratio": 1.2647058823529411,
+      "no_speech_prob": 1.2381873304434521e-11,
+      "words": [
+        {
+          "word": " We'll",
+          "start": 133.26,
+          "end": 133.86,
+          "probability": 0.970703125
+        },
+        {
+          "word": " give",
+          "start": 133.86,
+          "end": 133.98,
+          "probability": 0.9931640625
+        },
+        {
+          "word": " you",
+          "start": 133.98,
+          "end": 134.08,
+          "probability": 0.9970703125
+        },
+        {
+          "word": " V",
+          "start": 134.08,
+          "end": 134.28,
+          "probability": 0.9384765625
+        },
+        {
+          "word": "-Fire",
+          "start": 134.28,
+          "end": 134.5,
+          "probability": 0.734375
+        },
+        {
+          "word": " 25",
+          "start": 134.5,
+          "end": 134.84,
+          "probability": 0.95556640625
+        },
+        {
+          "word": " for",
+          "start": 134.84,
+          "end": 135.34,
+          "probability": 0.99609375
+        },
+        {
+          "word": " your",
+          "start": 135.34,
+          "end": 135.48,
+          "probability": 0.99755859375
+        },
+        {
+          "word": " tack.",
+          "start": 135.48,
+          "end": 135.76,
+          "probability": 0.9609375
+        }
+      ],
+      "source_segment_id": 46
+    },
+    {
+      "id": 26,
+      "start": 138.7,
+      "end": 140.26,
+      "text": " Copy. V-Fire 25, thank you.",
+      "tokens": [
+        51406,
+        25653,
+        13,
+        691,
+        12,
+        45651,
+        3552,
+        11,
+        1309,
+        291,
+        13,
+        51481
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.39666896755412473,
+      "compression_ratio": 1.2647058823529411,
+      "no_speech_prob": 1.2381873304434521e-11,
+      "words": [
+        {
+          "word": " Copy.",
+          "start": 138.7,
+          "end": 139.3,
+          "probability": 0.99755859375
+        },
+        {
+          "word": " V",
+          "start": 139.42,
+          "end": 139.46,
+          "probability": 0.99609375
+        },
+        {
+          "word": "-Fire",
+          "start": 139.46,
+          "end": 139.6,
+          "probability": 0.9970703125
+        },
+        {
+          "word": " 25,",
+          "start": 139.6,
+          "end": 139.92,
+          "probability": 0.99755859375
+        },
+        {
+          "word": " thank",
+          "start": 140.06,
+          "end": 140.16,
+          "probability": 0.99560546875
+        },
+        {
+          "word": " you.",
+          "start": 140.16,
+          "end": 140.26,
+          "probability": 0.99951171875
+        }
+      ],
+      "source_segment_id": 47
+    },
+    {
+      "id": 27,
+      "start": 147.96,
+      "end": 148.84,
+      "text": " Let them know that we're here.",
+      "tokens": [
+        50365,
+        961,
+        552,
+        458,
+        300,
+        321,
+        434,
+        510,
+        13,
+        50409
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3259139060974121,
+      "compression_ratio": 1.5953488372093023,
+      "no_speech_prob": 1.1600727323202165e-11,
+      "words": [
+        {
+          "word": " Let",
+          "start": 147.96,
+          "end": 148.18,
+          "probability": 0.2471923828125
+        },
+        {
+          "word": " them",
+          "start": 148.18,
+          "end": 148.28,
+          "probability": 0.701171875
+        },
+        {
+          "word": " know",
+          "start": 148.28,
+          "end": 148.42,
+          "probability": 0.99560546875
+        },
+        {
+          "word": " that",
+          "start": 148.42,
+          "end": 148.5,
+          "probability": 0.9111328125
+        },
+        {
+          "word": " we're",
+          "start": 148.5,
+          "end": 148.64,
+          "probability": 0.95703125
+        },
+        {
+          "word": " here.",
+          "start": 148.64,
+          "end": 148.84,
+          "probability": 0.9951171875
+        }
+      ],
+      "source_segment_id": 48
+    },
+    {
+      "id": 28,
+      "start": 148.98,
+      "end": 152.0,
+      "text": " Coastline Structured Defense from 1151 Charlie.",
+      "tokens": [
+        50419,
+        14960,
+        1889,
+        745,
+        46847,
+        17410,
+        490,
+        2975,
+        18682,
+        13754,
+        13,
+        50569
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3259139060974121,
+      "compression_ratio": 1.5953488372093023,
+      "no_speech_prob": 1.1600727323202165e-11,
+      "words": [
+        {
+          "word": " Coastline",
+          "start": 148.98,
+          "end": 149.42,
+          "probability": 0.94873046875
+        },
+        {
+          "word": " Structured",
+          "start": 149.42,
+          "end": 149.74,
+          "probability": 0.7275390625
+        },
+        {
+          "word": " Defense",
+          "start": 149.74,
+          "end": 150.06,
+          "probability": 0.982421875
+        },
+        {
+          "word": " from",
+          "start": 150.06,
+          "end": 150.58,
+          "probability": 0.744140625
+        },
+        {
+          "word": " 1151",
+          "start": 150.58,
+          "end": 151.64,
+          "probability": 0.9580078125
+        },
+        {
+          "word": " Charlie.",
+          "start": 151.64,
+          "end": 152.0,
+          "probability": 0.56494140625
+        }
+      ],
+      "source_segment_id": 49
+    },
+    {
+      "id": 29,
+      "start": 152.26,
+      "end": 153.28,
+      "text": " You up on command?",
+      "tokens": [
+        50577,
+        509,
+        493,
+        322,
+        5622,
+        30,
+        50632
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3259139060974121,
+      "compression_ratio": 1.5953488372093023,
+      "no_speech_prob": 1.1600727323202165e-11,
+      "words": [
+        {
+          "word": " You",
+          "start": 152.26,
+          "end": 152.32,
+          "probability": 0.93994140625
+        },
+        {
+          "word": " up",
+          "start": 152.32,
+          "end": 152.5,
+          "probability": 0.99609375
+        },
+        {
+          "word": " on",
+          "start": 152.5,
+          "end": 152.72,
+          "probability": 0.99755859375
+        },
+        {
+          "word": " command?",
+          "start": 152.72,
+          "end": 153.28,
+          "probability": 0.86572265625
+        }
+      ],
+      "source_segment_id": 50
+    },
+    {
+      "id": 30,
+      "start": 157.44,
+      "end": 158.78,
+      "text": " Yeah, 1151 Charlie.",
+      "tokens": [
+        50830,
+        865,
+        11,
+        2975,
+        18682,
+        13754,
+        13,
+        50906
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3259139060974121,
+      "compression_ratio": 1.5953488372093023,
+      "no_speech_prob": 1.1600727323202165e-11,
+      "words": [
+        {
+          "word": " Yeah,",
+          "start": 157.44,
+          "end": 157.88,
+          "probability": 0.919921875
+        },
+        {
+          "word": " 1151",
+          "start": 157.88,
+          "end": 158.32,
+          "probability": 0.974609375
+        },
+        {
+          "word": " Charlie.",
+          "start": 158.32,
+          "end": 158.78,
+          "probability": 0.98583984375
+        }
+      ],
+      "source_segment_id": 51
+    },
+    {
+      "id": 31,
+      "start": 158.88,
+      "end": 161.34,
+      "text": " Stage your resources at Coastline and PCH.",
+      "tokens": [
+        50912,
+        25907,
+        428,
+        3593,
+        412,
+        14960,
+        1889,
+        293,
+        430,
+        5462,
+        13,
+        51033
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3259139060974121,
+      "compression_ratio": 1.5953488372093023,
+      "no_speech_prob": 1.1600727323202165e-11,
+      "words": [
+        {
+          "word": " Stage",
+          "start": 158.88,
+          "end": 159.02,
+          "probability": 0.71435546875
+        },
+        {
+          "word": " your",
+          "start": 159.02,
+          "end": 159.2,
+          "probability": 0.9912109375
+        },
+        {
+          "word": " resources",
+          "start": 159.2,
+          "end": 159.58,
+          "probability": 0.998046875
+        },
+        {
+          "word": " at",
+          "start": 159.58,
+          "end": 159.84,
+          "probability": 0.98876953125
+        },
+        {
+          "word": " Coastline",
+          "start": 159.84,
+          "end": 160.44,
+          "probability": 0.9853515625
+        },
+        {
+          "word": " and",
+          "start": 160.44,
+          "end": 160.7,
+          "probability": 0.96435546875
+        },
+        {
+          "word": " PCH.",
+          "start": 160.7,
+          "end": 161.34,
+          "probability": 0.884765625
+        }
+      ],
+      "source_segment_id": 52
+    },
+    {
+      "id": 32,
+      "start": 161.5,
+      "end": 162.44,
+      "text": " You can continue up.",
+      "tokens": [
+        51041,
+        509,
+        393,
+        2354,
+        493,
+        13,
+        51090
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3259139060974121,
+      "compression_ratio": 1.5953488372093023,
+      "no_speech_prob": 1.1600727323202165e-11,
+      "words": [
+        {
+          "word": " You",
+          "start": 161.5,
+          "end": 161.54,
+          "probability": 0.356201171875
+        },
+        {
+          "word": " can",
+          "start": 161.54,
+          "end": 161.62,
+          "probability": 0.9404296875
+        },
+        {
+          "word": " continue",
+          "start": 161.62,
+          "end": 162.18,
+          "probability": 0.9931640625
+        },
+        {
+          "word": " up.",
+          "start": 162.18,
+          "end": 162.44,
+          "probability": 0.970703125
+        }
+      ],
+      "source_segment_id": 53
+    },
+    {
+      "id": 33,
+      "start": 162.5,
+      "end": 163.32,
+      "text": " Hang a right on Surf View.",
+      "tokens": [
+        51093,
+        14070,
+        257,
+        558,
+        322,
+        43124,
+        13909,
+        13,
+        51134
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3259139060974121,
+      "compression_ratio": 1.5953488372093023,
+      "no_speech_prob": 1.1600727323202165e-11,
+      "words": [
+        {
+          "word": " Hang",
+          "start": 162.5,
+          "end": 162.58,
+          "probability": 0.8037109375
+        },
+        {
+          "word": " a",
+          "start": 162.58,
+          "end": 162.66,
+          "probability": 0.4609375
+        },
+        {
+          "word": " right",
+          "start": 162.66,
+          "end": 162.78,
+          "probability": 0.63427734375
+        },
+        {
+          "word": " on",
+          "start": 162.78,
+          "end": 162.96,
+          "probability": 0.998046875
+        },
+        {
+          "word": " Surf",
+          "start": 162.96,
+          "end": 163.2,
+          "probability": 0.59912109375
+        },
+        {
+          "word": " View.",
+          "start": 163.2,
+          "end": 163.32,
+          "probability": 0.63623046875
+        }
+      ],
+      "source_segment_id": 54
+    },
+    {
+      "id": 34,
+      "start": 163.44,
+      "end": 164.02,
+      "text": " You'll meet me at the top.",
+      "tokens": [
+        51139,
+        509,
+        603,
+        1677,
+        385,
+        412,
+        264,
+        1192,
+        13,
+        51169
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3259139060974121,
+      "compression_ratio": 1.5953488372093023,
+      "no_speech_prob": 1.1600727323202165e-11,
+      "words": [
+        {
+          "word": " You'll",
+          "start": 163.44,
+          "end": 163.52,
+          "probability": 0.63818359375
+        },
+        {
+          "word": " meet",
+          "start": 163.52,
+          "end": 163.58,
+          "probability": 0.580078125
+        },
+        {
+          "word": " me",
+          "start": 163.58,
+          "end": 163.68,
+          "probability": 0.97021484375
+        },
+        {
+          "word": " at",
+          "start": 163.68,
+          "end": 163.78,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " the",
+          "start": 163.78,
+          "end": 163.84,
+          "probability": 1.0
+        },
+        {
+          "word": " top.",
+          "start": 163.84,
+          "end": 164.02,
+          "probability": 0.98193359375
+        }
+      ],
+      "source_segment_id": 55
+    },
+    {
+      "id": 35,
+      "start": 167.18,
+      "end": 168.44,
+      "text": " Coastline Structured Defense Group.",
+      "tokens": [
+        51328,
+        14960,
+        1889,
+        745,
+        46847,
+        17410,
+        10500,
+        13,
+        51389
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3259139060974121,
+      "compression_ratio": 1.5953488372093023,
+      "no_speech_prob": 1.1600727323202165e-11,
+      "words": [
+        {
+          "word": " Coastline",
+          "start": 167.18,
+          "end": 167.62,
+          "probability": 0.9912109375
+        },
+        {
+          "word": " Structured",
+          "start": 167.62,
+          "end": 167.88,
+          "probability": 0.99462890625
+        },
+        {
+          "word": " Defense",
+          "start": 167.88,
+          "end": 168.16,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " Group.",
+          "start": 168.16,
+          "end": 168.44,
+          "probability": 0.75390625
+        }
+      ],
+      "source_segment_id": 56
+    },
+    {
+      "id": 36,
+      "start": 169.12,
+      "end": 173.86,
+      "text": " We've already lined out our resources off of Surf View along with 1870.",
+      "tokens": [
+        51425,
+        492,
+        600,
+        1217,
+        17189,
+        484,
+        527,
+        3593,
+        766,
+        295,
+        43124,
+        13909,
+        2051,
+        365,
+        2443,
+        5867,
+        13,
+        51661
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3259139060974121,
+      "compression_ratio": 1.5953488372093023,
+      "no_speech_prob": 1.1600727323202165e-11,
+      "words": [
+        {
+          "word": " We've",
+          "start": 169.12,
+          "end": 169.56,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " already",
+          "start": 169.56,
+          "end": 169.76,
+          "probability": 1.0
+        },
+        {
+          "word": " lined",
+          "start": 169.76,
+          "end": 170.0,
+          "probability": 0.9970703125
+        },
+        {
+          "word": " out",
+          "start": 170.0,
+          "end": 170.12,
+          "probability": 0.990234375
+        },
+        {
+          "word": " our",
+          "start": 170.12,
+          "end": 170.26,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " resources",
+          "start": 170.26,
+          "end": 170.68,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " off",
+          "start": 170.68,
+          "end": 170.92,
+          "probability": 0.9951171875
+        },
+        {
+          "word": " of",
+          "start": 170.92,
+          "end": 171.04,
+          "probability": 0.955078125
+        },
+        {
+          "word": " Surf",
+          "start": 171.04,
+          "end": 171.24,
+          "probability": 0.99755859375
+        },
+        {
+          "word": " View",
+          "start": 171.24,
+          "end": 171.44,
+          "probability": 0.99462890625
+        },
+        {
+          "word": " along",
+          "start": 171.44,
+          "end": 172.88,
+          "probability": 0.546875
+        },
+        {
+          "word": " with",
+          "start": 172.88,
+          "end": 173.12,
+          "probability": 1.0
+        },
+        {
+          "word": " 1870.",
+          "start": 173.12,
+          "end": 173.86,
+          "probability": 0.9912109375
+        }
+      ],
+      "source_segment_id": 57
+    },
+    {
+      "id": 37,
+      "start": 174.46,
+      "end": 181.36,
+      "text": " I also want to let you know that Getty Villa is being impacted at the end on the north side of that.",
+      "tokens": [
+        50365,
+        286,
+        611,
+        528,
+        281,
+        718,
+        291,
+        458,
+        300,
+        3240,
+        874,
+        40280,
+        307,
+        885,
+        15653,
+        412,
+        264,
+        917,
+        322,
+        264,
+        6830,
+        1252,
+        295,
+        300,
+        13,
+        50743
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.23169740763577548,
+      "compression_ratio": 1.4791666666666667,
+      "no_speech_prob": 1.6385727410334061e-12,
+      "words": [
+        {
+          "word": " I",
+          "start": 174.46,
+          "end": 174.96,
+          "probability": 0.199951171875
+        },
+        {
+          "word": " also",
+          "start": 174.96,
+          "end": 175.08,
+          "probability": 0.984375
+        },
+        {
+          "word": " want",
+          "start": 175.08,
+          "end": 175.3,
+          "probability": 0.99755859375
+        },
+        {
+          "word": " to",
+          "start": 175.3,
+          "end": 175.38,
+          "probability": 1.0
+        },
+        {
+          "word": " let",
+          "start": 175.38,
+          "end": 175.52,
+          "probability": 1.0
+        },
+        {
+          "word": " you",
+          "start": 175.52,
+          "end": 175.66,
+          "probability": 1.0
+        },
+        {
+          "word": " know",
+          "start": 175.66,
+          "end": 175.82,
+          "probability": 1.0
+        },
+        {
+          "word": " that",
+          "start": 175.82,
+          "end": 176.12,
+          "probability": 1.0
+        },
+        {
+          "word": " Getty",
+          "start": 176.12,
+          "end": 176.98,
+          "probability": 0.912109375
+        },
+        {
+          "word": " Villa",
+          "start": 176.98,
+          "end": 177.26,
+          "probability": 0.9951171875
+        },
+        {
+          "word": " is",
+          "start": 177.26,
+          "end": 178.06,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " being",
+          "start": 178.06,
+          "end": 178.34,
+          "probability": 1.0
+        },
+        {
+          "word": " impacted",
+          "start": 178.34,
+          "end": 178.92,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " at",
+          "start": 178.92,
+          "end": 179.82,
+          "probability": 0.98974609375
+        },
+        {
+          "word": " the",
+          "start": 179.82,
+          "end": 179.96,
+          "probability": 1.0
+        },
+        {
+          "word": " end",
+          "start": 179.96,
+          "end": 180.3,
+          "probability": 1.0
+        },
+        {
+          "word": " on",
+          "start": 180.3,
+          "end": 180.52,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " the",
+          "start": 180.52,
+          "end": 180.66,
+          "probability": 1.0
+        },
+        {
+          "word": " north",
+          "start": 180.66,
+          "end": 180.86,
+          "probability": 0.99267578125
+        },
+        {
+          "word": " side",
+          "start": 180.86,
+          "end": 181.08,
+          "probability": 1.0
+        },
+        {
+          "word": " of",
+          "start": 181.08,
+          "end": 181.18,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " that.",
+          "start": 181.18,
+          "end": 181.36,
+          "probability": 0.99951171875
+        }
+      ],
+      "source_segment_id": 58
+    },
+    {
+      "id": 38,
+      "start": 184.02,
+      "end": 185.12,
+      "text": " Okay, copy that.",
+      "tokens": [
+        50871,
+        1033,
+        11,
+        5055,
+        300,
+        13,
+        50932
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.23169740763577548,
+      "compression_ratio": 1.4791666666666667,
+      "no_speech_prob": 1.6385727410334061e-12,
+      "words": [
+        {
+          "word": " Okay,",
+          "start": 184.02,
+          "end": 184.52,
+          "probability": 0.96240234375
+        },
+        {
+          "word": " copy",
+          "start": 184.62,
+          "end": 184.86,
+          "probability": 0.99755859375
+        },
+        {
+          "word": " that.",
+          "start": 184.86,
+          "end": 185.12,
+          "probability": 0.99853515625
+        }
+      ],
+      "source_segment_id": 59
+    },
+    {
+      "id": 39,
+      "start": 185.34,
+      "end": 190.26,
+      "text": " We can start engaging our crews there, and we're going to be on V-Fire 25, V-Fire 25.",
+      "tokens": [
+        50942,
+        492,
+        393,
+        722,
+        11268,
+        527,
+        31477,
+        456,
+        11,
+        293,
+        321,
+        434,
+        516,
+        281,
+        312,
+        322,
+        691,
+        12,
+        45651,
+        3552,
+        11,
+        691,
+        12,
+        45651,
+        3552,
+        13,
+        51185
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.23169740763577548,
+      "compression_ratio": 1.4791666666666667,
+      "no_speech_prob": 1.6385727410334061e-12,
+      "words": [
+        {
+          "word": " We",
+          "start": 185.34,
+          "end": 185.78,
+          "probability": 0.91748046875
+        },
+        {
+          "word": " can",
+          "start": 185.78,
+          "end": 185.92,
+          "probability": 1.0
+        },
+        {
+          "word": " start",
+          "start": 185.92,
+          "end": 186.14,
+          "probability": 1.0
+        },
+        {
+          "word": " engaging",
+          "start": 186.14,
+          "end": 186.5,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " our",
+          "start": 186.5,
+          "end": 186.8,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " crews",
+          "start": 186.8,
+          "end": 187.08,
+          "probability": 0.9755859375
+        },
+        {
+          "word": " there,",
+          "start": 187.08,
+          "end": 187.38,
+          "probability": 1.0
+        },
+        {
+          "word": " and",
+          "start": 187.44,
+          "end": 187.58,
+          "probability": 1.0
+        },
+        {
+          "word": " we're",
+          "start": 187.58,
+          "end": 187.74,
+          "probability": 1.0
+        },
+        {
+          "word": " going",
+          "start": 187.74,
+          "end": 187.8,
+          "probability": 0.9931640625
+        },
+        {
+          "word": " to",
+          "start": 187.8,
+          "end": 187.86,
+          "probability": 1.0
+        },
+        {
+          "word": " be",
+          "start": 187.86,
+          "end": 187.94,
+          "probability": 1.0
+        },
+        {
+          "word": " on",
+          "start": 187.94,
+          "end": 188.14,
+          "probability": 1.0
+        },
+        {
+          "word": " V",
+          "start": 188.14,
+          "end": 188.44,
+          "probability": 0.9873046875
+        },
+        {
+          "word": "-Fire",
+          "start": 188.44,
+          "end": 188.76,
+          "probability": 0.76171875
+        },
+        {
+          "word": " 25,",
+          "start": 188.76,
+          "end": 189.34,
+          "probability": 0.95703125
+        },
+        {
+          "word": " V",
+          "start": 189.52,
+          "end": 189.7,
+          "probability": 1.0
+        },
+        {
+          "word": "-Fire",
+          "start": 189.7,
+          "end": 189.9,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " 25.",
+          "start": 189.9,
+          "end": 190.26,
+          "probability": 0.70458984375
+        }
+      ],
+      "source_segment_id": 60
+    },
+    {
+      "id": 40,
+      "start": 194.68,
+      "end": 201.2,
+      "text": " Okay, Coastline Structure Defense, 1151 Charlie.",
+      "tokens": [
+        51356,
+        1033,
+        11,
+        14960,
+        1889,
+        745,
+        2885,
+        17410,
+        11,
+        2975,
+        18682,
+        13754,
+        13,
+        51734
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.23169740763577548,
+      "compression_ratio": 1.4791666666666667,
+      "no_speech_prob": 1.6385727410334061e-12,
+      "words": [
+        {
+          "word": " Okay,",
+          "start": 194.68,
+          "end": 195.18,
+          "probability": 0.994140625
+        },
+        {
+          "word": " Coastline",
+          "start": 195.18,
+          "end": 195.68,
+          "probability": 0.857421875
+        },
+        {
+          "word": " Structure",
+          "start": 195.68,
+          "end": 196.1,
+          "probability": 0.861328125
+        },
+        {
+          "word": " Defense,",
+          "start": 196.1,
+          "end": 196.64,
+          "probability": 0.74169921875
+        },
+        {
+          "word": " 1151",
+          "start": 200.04,
+          "end": 200.78,
+          "probability": 0.97705078125
+        },
+        {
+          "word": " Charlie.",
+          "start": 200.78,
+          "end": 201.2,
+          "probability": 0.82421875
+        }
+      ],
+      "source_segment_id": 61
+    },
+    {
+      "id": 41,
+      "start": 201.44,
+      "end": 203.3,
+      "text": " We're going to go to V-Fire 25.",
+      "tokens": [
+        51734,
+        492,
+        434,
+        516,
+        281,
+        352,
+        281,
+        691,
+        12,
+        45651,
+        3552,
+        13,
+        51834
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.23169740763577548,
+      "compression_ratio": 1.4791666666666667,
+      "no_speech_prob": 1.6385727410334061e-12,
+      "words": [
+        {
+          "word": " We're",
+          "start": 201.44,
+          "end": 201.9,
+          "probability": 0.99951171875
+        },
+        {
+          "word": " going",
+          "start": 201.9,
+          "end": 201.96,
+          "probability": 1.0
+        },
+        {
+          "word": " to",
+          "start": 201.96,
+          "end": 202.02,
+          "probability": 1.0
+        },
+        {
+          "word": " go",
+          "start": 202.02,
+          "end": 202.12,
+          "probability": 1.0
+        },
+        {
+          "word": " to",
+          "start": 202.12,
+          "end": 202.22,
+          "probability": 1.0
+        },
+        {
+          "word": " V",
+          "start": 202.22,
+          "end": 202.42,
+          "probability": 1.0
+        },
+        {
+          "word": "-Fire",
+          "start": 202.42,
+          "end": 202.72,
+          "probability": 0.998046875
+        },
+        {
+          "word": " 25.",
+          "start": 202.72,
+          "end": 203.3,
+          "probability": 0.99951171875
+        }
+      ],
+      "source_segment_id": 62
+    },
+    {
+      "id": 42,
+      "start": 203.86,
+      "end": 205.7,
+      "text": " And bring our resources in here.",
+      "tokens": [
+        50365,
+        400,
+        1565,
+        527,
+        3593,
+        294,
+        510,
+        13,
+        50457
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.38960858608814,
+      "compression_ratio": 1.2627737226277371,
+      "no_speech_prob": 5.920272952431027e-12,
+      "words": [
+        {
+          "word": " And",
+          "start": 203.86,
+          "end": 204.38,
+          "probability": 0.5478515625
+        },
+        {
+          "word": " bring",
+          "start": 204.38,
+          "end": 204.72,
+          "probability": 0.89013671875
+        },
+        {
+          "word": " our",
+          "start": 204.72,
+          "end": 204.86,
+          "probability": 0.9970703125
+        },
+        {
+          "word": " resources",
+          "start": 204.86,
+          "end": 205.22,
+          "probability": 0.99853515625
+        },
+        {
+          "word": " in",
+          "start": 205.22,
+          "end": 205.48,
+          "probability": 0.9990234375
+        },
+        {
+          "word": " here.",
+          "start": 205.48,
+          "end": 205.7,
+          "probability": 0.9990234375
+        }
+      ],
+      "source_segment_id": 63
+    }
+  ],
+  "machine_generated": true,
+  "human_verified": false,
+  "transformation": "Subset of full ASR, unchanged words, timestamps shifted by -292 seconds; not a new ASR run",
+  "full_recording_offset_seconds": 292,
+  "duration_seconds": 206
+}
