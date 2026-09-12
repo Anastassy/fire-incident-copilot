@@ -1,0 +1,43 @@
+# Реальное решение и границы готовности
+
+Срез Git main `af21c5e`, получен git pull 12 сентября 2026. Ниже различаются чтение кода, прежняя приёмка и ещё не проверенные связи. Это не утверждение о доступности продакшена сейчас.
+
+## Фактическая архитектура
+
+```text
+State API ── snapshot/SSE/media ──> dashboard/live (Firewatch)
+    │
+    └── bridge ──> Data Platform ── polling/MCP ──> agent-service
+                                                    │
+                              questions/cards/evidence/SSE
+                                                    ↓
+                                             dashboard/live
+```
+
+В текущем live режиме сырые потоки идут в UI непосредственно из State, а ответы — из агента. Это два пути, пока требующих проверки общего контекста. Data Platform не является обязательным посредником уже проверенного воспроизведения камер.
+
+| Компонент | Есть в коде | Доказательство и предел |
+|---|---|---|
+| Firewatch dashboard/live | Камеры, радио, метрики, доступность, журнал/поиск, raw provenance, controls, agent API | [README](live/README.md), [VALIDATION](live/VALIDATION.md). Там описаны проверки реального State API; сейчас заново не запускались |
+| State simulator | Snapshot/SSE и fMP4, общий run/generation, Base2 replay по документации UI | Код State отдельно в origin/feat/state-machine-api; не автоматически объединён с main |
+| platform | Ingestion, REST/SSE, MCP, bridge; исправление passthrough run ID | [README](../platform/README.md), app/adapter/bridge.py и mapper.py. Продакшен-домен описан, но доступность не проверялась аудитом |
+| agent-service | Durable questions, cards, evidence, channel correlation, platform polling, SDK engine configuration | [README](../agent-service/README.md), channels.py, platform_sync.py, ui_service.py |
+| Fixture agent в launcher | Настоящий HTTP API с детерминированным обработчиком | Отдельная synthetic session dashboard-channel-demo-en; не анализирует поток State |
+| Мультиисточниковая семантика | Общая архитектура позволяет передавать разные данные | Фоновая проверка Base2, понимание кадров и полный сценарий не подтверждены текущей приёмкой |
+| Media evidence агента | DTO и honest pending/missing | Trusted resolver ещё нужен. UI-повтор радио из State не равен resolver агента |
+
+## Данные
+
+Base2: три температурных и три дымовых источника по labels.js, питание/связь, доступ, две камеры; радио Palisades и машинная транскрипция. Occupancy может быть null; отсутствие источника не является отсутствием людей. Количество типов и устройств определяется snapshot, не фиксируется скрытой «истиной» UI.
+
+По live/VALIDATION полный run дал 811 наблюдений/43 реплики на двух скоростях; source suppression отделено от dropped SSE. Это заявленная предыдущая приёмка одного сценария. Аудит проверяет соответствие текстов коду, не пересчитывает live поток и не проверяет модель заново.
+
+## Приоритет интеграции
+
+1. Один run/generation и согласованные device scope/subject у потоков, платформы и агента.
+2. Реальные platform IDs, опубликованные интервалы и корректные шкалы времени.
+3. Многоканальная проверка с фактическими queries/claims/unknowns, не только channel reducer.
+4. Доступ к источникам и media; явное missing вместо подмены.
+5. Репетиция целевого [сценария](MVP_SCENARIO.md) и cue sheet с evidence IDs.
+
+Не менять код поставщиков или API-контракты ради соответствия сценарию на бумаге. Документы описывают разрыв; успешный запуск всех отдельных сервисов не закрывает сквозную проверку.

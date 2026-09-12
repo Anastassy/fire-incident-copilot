@@ -1,3 +1,5 @@
+> **Статус после аудита 12.09.2026:** Ниже сохранены исследование и решения своей версии. Их применение к прежнему радио-сценарию не определяет текущий многоканальный MVP. Актуальная основа: [контекст продукта](../../dashboard/PROJECT_CONTEXT.md).
+
 # Fire Incident Copilot — 25-second opening
 
 This opening was drawn graphically in Python/Pillow. It is an illustrative prototype, not a recording of a running agent or an integrated application. No application, contracts, original radio files or MVP scope were modified. No paid services, APIs or external publishing were used.

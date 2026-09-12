@@ -1,66 +1,29 @@
-# Fire Incident Copilot
+# Firewatch · Fire Incident Copilot
 
-Helping fire incident operators trace answers back to the evidence.
+An incident-support workspace for camera feeds, sensor readings, access events and radio traffic. The operator needs to understand what changed, which information is current and what remains unverified before briefing command.
 
-Built for the Valencia hackathon on September 12, 2026.
+## Current MVP
 
-## The problem
+The MVP includes all available source types. It uses the Base2 × Palisades replay: synthetic Base2 cameras/building observations plus a separate historical Palisades radio recording. Sharing a replay clock does not make these recordings evidence of the same real incident.
 
-Radio traffic arrives as a sequence of messages. An operator supporting incident command needs to connect those messages: what was requested, what was assigned, and whether an acknowledgement followed. Finding an answer also means finding the original evidence and understanding what it does—and does not—establish.
+The target workflow links changes in measurements and source availability, lets the operator inspect evidence, and checks whether available records establish presence in a room. Access permission is not occupancy; missing data is not safety. The earlier radio-channel-only demonstration is retained as a component test.
 
-## Our approach
+## Run the current interface
 
-Fire Incident Copilot combines an operator dashboard with an assistant that checks incoming information and answers questions with links to the source.
+Use [dashboard/live/README.md](dashboard/live/README.md) for the Firewatch launcher, private State configuration and agent settings. State credentials remain server-side. The static HTML files in dashboard/docs/design are historical mockups.
 
-- **Follow the exchange:** a background check updates the same card as new evidence becomes available.
-- **Ask a question:** get a concise answer with evidence beside each claim.
-- **Verify the answer:** open the original radio interval and inspect its timestamp and machine transcript.
+## What works and what remains
 
-The Data Platform is the source of truth. Agent interpretations remain separate from source observations. Operators retain access to the complete available log through explicit filters. The assistant provides information support; it does not issue tactical instructions or transmit radio messages.
+The live dashboard implements State streams, two CCTV views, radio playback/transcripts, metrics, published history, replay controls and the agent API. The repository also contains the telemetry platform, bridge and agent service. The default fixture agent is a deterministic test handler in a separate synthetic session; it does not analyze the displayed State run. Full multi-source inference and a shared end-to-end evidence context still require validation. See [implementation status](dashboard/IMPLEMENTATION_STATUS.md) and [recorded UI validation](dashboard/live/VALIDATION.md).
 
-## Demo: Palisades radio replay
+## Product and demo documents
 
-The MVP follows a 206-second excerpt of historical Palisades radio from January 7, 2025. The operator investigates a channel assignment to V-Fire 25:
+- [Current project context](dashboard/PROJECT_CONTEXT.md)
+- [Problem, business case and preserved calculations](dashboard/BUSINESS_CASE.md)
+- [Evidence Bank](dashboard/EVIDENCE_BANK.md)
+- [Multi-source MVP scenario and acceptance](dashboard/MVP_SCENARIO.md)
+- [Document audit and preserved originals](dashboard/DOCS_AUDIT.md)
 
-1. A channel request is present in the available history.
-2. Replay introduces the assignment and a separate acknowledging reply.
-3. The operator asks, “Was the channel assignment acknowledged?”
-4. Each part of the answer links to its original audio interval.
-5. A follow-up asks whether the whole group switched channels. The recording alone does not establish that.
+## Provenance
 
-This is recorded replay with a prerecorded machine transcript, not live speech recognition. The operator interaction is a demonstration scenario. Transcript accuracy and the selected intervals still require human verification.
-
-## Try the prototype
-
-Clone this repository and open [dashboard/docs/design/palisades-console.html](dashboard/docs/design/palisades-console.html) in a desktop browser. Keep the repository's folder structure intact so the local audio links resolve. The interface is in English.
-
-Alternatively, serve the repository with any static HTTP server. For example, if Python 3 is installed:
-
-```sh
-python3 -m http.server 8080 --bind 127.0.0.1
-```
-
-Then open [the local prototype](http://localhost:8080/dashboard/docs/design/palisades-console.html). No API keys or build step are needed for this mockup.
-
-## Project status
-
-The repository currently contains an interactive HTML mockup with prepared states, local radio recordings and machine transcripts, the MVP specification, and service contracts. The dashboard is not yet connected to the Data Platform or a working agent. The mockup demonstrates the intended interaction, not measured model performance or a completed integration.
-
-The next implementation milestone is the complete replay → platform → background check/question → source-audio flow, including a control replay with the acknowledgement omitted.
-
-## Learn more
-
-The operator interface and its design/MVP materials are in `dashboard/`. The agent backend is in `agent-service/`; shared data and the Agent → UI contract stay at the repository root.
-
-- [MVP scope and acceptance criteria](dashboard/team-handoff/mvp-scope/README.md)
-- [Interface specification](dashboard/team-handoff/mvp-scope/02_INTERFACE.md)
-- [Proposed Agent → UI contract and fixtures](agent-ui-contract-v0.1/README.md)
-- [Data, provenance and transcripts](data/demo/palisades-radio-demo/README.md)
-- [Integration responsibilities and acceptance](dashboard/team-handoff/mvp-scope/03_DELIVERY.md)
-- [Problem statement: the first 25 seconds](dashboard/DEMO_OPENING_25S.md)
-
-## Data attribution
-
-**Audio Provided by Broadcastify.** The source recording is from [Broadcastify's Los Angeles fires archive](https://www.broadcastify.com/events/2025-01-lafire/). The included data package records the [CC BY 3.0 US license](https://creativecommons.org/licenses/by/3.0/us/), source metadata and transformations, including excerpting, transcoding and machine transcription. See the [data README](data/demo/palisades-radio-demo/README.md) for details.
-
-The audio license does not apply automatically to the project's own code. A code license has not yet been selected.
+Audio Provided by Broadcastify. [Palisades source package](data/demo/palisades-radio-demo/README.md) records the original audio, machine transcript and CC BY 3.0 US attribution. Synthetic Base2 data is not a reconstruction of Palisades. A validated reduction in response time or loss of life is not claimed. The source-audio license does not automatically license project code.

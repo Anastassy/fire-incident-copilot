@@ -1,0 +1,222 @@
+[
+  {
+    "source": "original workspace/BUSINESS_CASE_RESEARCH.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/BUSINESS_CASE_RESEARCH.md",
+    "sha256": "11235079047666c8b051d4365bb154c0916ab0ecee4817fd89ced83d05fe1a7d"
+  },
+  {
+    "source": "original workspace/INDUSTRIAL_FIRE_MVP_RESEARCH.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/INDUSTRIAL_FIRE_MVP_RESEARCH.md",
+    "sha256": "ee6936cb9f2a74e8a62550a0068d0bc000636c138d63f5c733d69132eb4b15e3"
+  },
+  {
+    "source": "original workspace/DEMO_EVIDENCE_BANK.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/DEMO_EVIDENCE_BANK.md",
+    "sha256": "aac66dff78380a92c354f298183fd7c1d9d164ec2f5b31a5e29304856110569e"
+  },
+  {
+    "source": "original workspace/MVP_INTERFACE_DECISION.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/MVP_INTERFACE_DECISION.md",
+    "sha256": "2a3ed3de22a8a3e3745d989197e719e40d8431e8052023047c4072a04a43fbd9"
+  },
+  {
+    "source": "original workspace/MVP_EVIDENCE_REASSESSMENT.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/MVP_EVIDENCE_REASSESSMENT.md",
+    "sha256": "23e31a2c47a87b0979325d8256cfee2008e48772e15ec6105f6daec14066f593"
+  },
+  {
+    "source": "original workspace/PROJECT_CONTEXT.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/PROJECT_CONTEXT.md",
+    "sha256": "e8d95a63cbc28d2198cc1e6f8fb8a65b4cea6a5211fcf08944c1ccefbe9c3f44"
+  },
+  {
+    "source": "original workspace/PALISADES_INTERFACE_SPEC.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/PALISADES_INTERFACE_SPEC.md",
+    "sha256": "39be5c49d34f68ef9d966fad5962672650c75da9b3843a359164f60bedce490e"
+  },
+  {
+    "source": "original workspace/DEMO_OPENING_25S.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/DEMO_OPENING_25S.md",
+    "sha256": "8dd1cd0a748ae570232b3c3a44c686dba84145fd79f38835b182edbe9d421569"
+  },
+  {
+    "source": "original workspace/CREATE_DEMO_VIDEO_CODEX_PROMPT.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/CREATE_DEMO_VIDEO_CODEX_PROMPT.md",
+    "sha256": "5a0e6fae0bacdd18a7846d465338f46f86fb522da753bd3555a124f9ab445419"
+  },
+  {
+    "source": "original workspace/RUN_DEMO_VIDEO.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/RUN_DEMO_VIDEO.md",
+    "sha256": "8da129bc908f1a0a96a4c25d5ec23d9247f15b2b00f417e56ab78a5a13698c63"
+  },
+  {
+    "source": "git af21c5e/README.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/README.md",
+    "sha256": "9d47cbc1e3a2b708f6c07f4895e9e9e4924d59453ff790fbcb3ceebffcbc53c9"
+  },
+  {
+    "source": "git af21c5e/dashboard/PROJECT_CONTEXT.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/PROJECT_CONTEXT.md",
+    "sha256": "9c621e6318f2621935ac3ff3d6a0ae3ef0c56e4e26573d095772c4fc14391a67"
+  },
+  {
+    "source": "git af21c5e/dashboard/PALISADES_INTERFACE_SPEC.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/PALISADES_INTERFACE_SPEC.md",
+    "sha256": "700557145cc71bf14407a31312be8421b49bf94523dacbe27a375740c27a1c5c"
+  },
+  {
+    "source": "git af21c5e/dashboard/DEMO_OPENING_25S.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/DEMO_OPENING_25S.md",
+    "sha256": "1f361ce0450d522f9ed318b55ff770a4a8362f61dd71f51fc0776ef42d84caa4"
+  },
+  {
+    "source": "git af21c5e/dashboard/team-handoff/mvp-scope/03_DELIVERY.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/team-handoff/mvp-scope/03_DELIVERY.md",
+    "sha256": "3b11e2bad122d70c9c449b66f66cc759849502a4704c1745f451513411b5ccbb"
+  },
+  {
+    "source": "git af21c5e/dashboard/team-handoff/mvp-scope/04_VIDEO_TIMING.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/team-handoff/mvp-scope/04_VIDEO_TIMING.md",
+    "sha256": "752194d033d370c7c652856417f861df6e643e262b793381242212aee5011f18"
+  },
+  {
+    "source": "git af21c5e/dashboard/team-handoff/mvp-scope/README.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/team-handoff/mvp-scope/README.md",
+    "sha256": "6c33421bbbee1e3c0e7f294218c80f21b43e18e9c7cef595cecda8f7aa7d4104"
+  },
+  {
+    "source": "git af21c5e/dashboard/team-handoff/mvp-scope/01_SCOPE.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/team-handoff/mvp-scope/01_SCOPE.md",
+    "sha256": "266a848087af97c095b4d3d69644eba8fe612981ceae2abf12da1774c2f3baa5"
+  },
+  {
+    "source": "git af21c5e/dashboard/team-handoff/mvp-scope/02_INTERFACE.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/team-handoff/mvp-scope/02_INTERFACE.md",
+    "sha256": "e6a8636427592542f4fea945d53db798db074b7ccaaf34f1d8aa6118cd134e2f"
+  },
+  {
+    "source": "multisource-docs/dashboard/docs/design/palisades/BACKEND_COMPATIBILITY.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/docs/design/palisades/BACKEND_COMPATIBILITY.md",
+    "sha256": "b2e4fdff50b1f4b830f7afe886da8c45b2fb729ba8cd64e8f3d4acd955879e66"
+  },
+  {
+    "source": "multisource-docs/dashboard/docs/design/palisades/V4_DESIGN_DECISION.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/docs/design/palisades/V4_DESIGN_DECISION.md",
+    "sha256": "f90b60d4cd187cf27756e82d161065c3fce518ad0f10c111c41029eed2892fda"
+  },
+  {
+    "source": "multisource-docs/dashboard/docs/design/palisades/V4_VERIFICATION.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/docs/design/palisades/V4_VERIFICATION.md",
+    "sha256": "7e6ad1809cb6f59a17d127a3d0d18d6473c3773e76895c62edb410742a16d53c"
+  },
+  {
+    "source": "multisource-docs/dashboard/docs/design/palisades/README.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/docs/design/palisades/README.md",
+    "sha256": "77db0e6e5b05257b21a9a0d5c25931ba035e61d0248225347895d915a38c8d69"
+  },
+  {
+    "source": "multisource-docs/dashboard/docs/research/HACKATHON_CRITERIA_RESEARCH.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/docs/research/HACKATHON_CRITERIA_RESEARCH.md",
+    "sha256": "48111ea751785d0a1211002893fdad40177717778b6e304cafb11441cbbf55fd"
+  },
+  {
+    "source": "multisource-docs/dashboard/docs/research/HACKATHON_DEMO_REASSESSMENT_V4.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/docs/research/HACKATHON_DEMO_REASSESSMENT_V4.md",
+    "sha256": "053f1eaea37102294c6550e482da50ec8e0c315855c2eaaa2c391031d218e38f"
+  },
+  {
+    "source": "multisource-docs/dashboard/docs/research/CRITICAL_INTERFACE_RESEARCH.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/docs/research/CRITICAL_INTERFACE_RESEARCH.md",
+    "sha256": "2fac5c8dacb1216696f6b457bd9759f4dfd5158f1c17970e9102857f79c83273"
+  },
+  {
+    "source": "multisource-docs/dashboard/docs/research/LIVE_COMMAND_RESEARCH.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/docs/research/LIVE_COMMAND_RESEARCH.md",
+    "sha256": "8526b4038d9d6bff818648036d36eaa7588256d5ee3930b22af490f86c335cee"
+  },
+  {
+    "source": "multisource-docs/dashboard/docs/research/OPERATOR_WORKFLOW_REASSESSMENT_V4.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/docs/research/OPERATOR_WORKFLOW_REASSESSMENT_V4.md",
+    "sha256": "10602b568794ede0410f45ba9e0bb31f3280808fd6d8c41a9edc945647a6869b"
+  },
+  {
+    "source": "multisource-docs/output/video/README.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/output/video/README.md",
+    "sha256": "ffe9a2b011399cdbbd7c1cea7704a5c74a547bd54111cf42c2e72ad3d048723f"
+  },
+  {
+    "source": "multisource-docs/dashboard/live/README.md",
+    "archive": "dashboard/docs/archive/pre-multisource/git-af21c5e/dashboard/live/README.md",
+    "sha256": "df1c94da670590540772f9bbdf3ecb71d7f7f605b3a98e34a8bb5e3e66e41db4"
+  },
+  {
+    "source": "README.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/README.md",
+    "sha256": "d14a147dd2ed60f0e3657758f813344d5c46cda202704ed4d076e723d8340c0d"
+  },
+  {
+    "source": "VIDEO_SCRIPT.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/VIDEO_SCRIPT.md",
+    "sha256": "71033b78928b11c351bcabb462ec7c04e1351b7fc0dc6a181f97b2c0dea5d732"
+  },
+  {
+    "source": "VIDEO_STATUS.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/VIDEO_STATUS.md",
+    "sha256": "1e12bedf0be0348df498bfcf5ae111ecf99cd3b4b9cd2c92924b02b91d4eeeb5"
+  },
+  {
+    "source": "docs/contracts/README.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/docs/contracts/README.md",
+    "sha256": "037edc542b02f85dd1cb5b20ed413b39dd469c36dfde2c80fcc257a9fe583a19"
+  },
+  {
+    "source": "docs/team/PACKAGE.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/docs/team/PACKAGE.md",
+    "sha256": "ae748a4206d61b1aabacb71f4a45fba53b7ca3d5217a89539e13361db6bda58d"
+  },
+  {
+    "source": "docs/team/INTEGRATION.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/docs/team/INTEGRATION.md",
+    "sha256": "3a3261b54726cd9a01b483977a6eb32362a86557e9282662191e9bff5b004e7c"
+  },
+  {
+    "source": "team-handoff/mvp-scope/03_DELIVERY.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/team-handoff/mvp-scope/03_DELIVERY.md",
+    "sha256": "a19163066c2b8aa0cbfb6a46f741ad5cfa974379458c955bce51c8989aae71d6"
+  },
+  {
+    "source": "team-handoff/mvp-scope/04_VIDEO_TIMING.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/team-handoff/mvp-scope/04_VIDEO_TIMING.md",
+    "sha256": "0719b0cc81775ec1b8f54f357d7612ffae0b96a69acdd33f4ab0862873a5c7bd"
+  },
+  {
+    "source": "team-handoff/mvp-scope/README.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/team-handoff/mvp-scope/README.md",
+    "sha256": "d1b24b6b0ac68e440ccb1fc532ca01e9397baf8e075df9daa73d62231e489ee5"
+  },
+  {
+    "source": "team-handoff/mvp-scope/01_SCOPE.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/team-handoff/mvp-scope/01_SCOPE.md",
+    "sha256": "266a848087af97c095b4d3d69644eba8fe612981ceae2abf12da1774c2f3baa5"
+  },
+  {
+    "source": "team-handoff/mvp-scope/02_INTERFACE.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/team-handoff/mvp-scope/02_INTERFACE.md",
+    "sha256": "e19e815cca1f0e3dae73eef3aac6eaeaeb720388bb53ce8267f049732543f693"
+  },
+  {
+    "source": "docs/research/HACKATHON_CRITERIA_RESEARCH.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/docs/research/HACKATHON_CRITERIA_RESEARCH.md",
+    "sha256": "48111ea751785d0a1211002893fdad40177717778b6e304cafb11441cbbf55fd"
+  },
+  {
+    "source": "docs/research/CRITICAL_INTERFACE_RESEARCH.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/docs/research/CRITICAL_INTERFACE_RESEARCH.md",
+    "sha256": "2fac5c8dacb1216696f6b457bd9759f4dfd5158f1c17970e9102857f79c83273"
+  },
+  {
+    "source": "docs/design/palisades/README.md",
+    "archive": "dashboard/docs/archive/pre-multisource/original-research/docs/design/palisades/README.md",
+    "sha256": "fcf01575bcd621097586b39fcd391734b87d2f5e1a1541609dff7941350d2000"
+  }
+]
