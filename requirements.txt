@@ -8,5 +8,6 @@ pydantic-settings
 redis
 mcp
 httpx
+httpx-sse
 pytest
 pytest-asyncio

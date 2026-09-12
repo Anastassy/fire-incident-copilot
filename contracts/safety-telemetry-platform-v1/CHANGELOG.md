@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.0.4 · 2026-09-12 · Fixed openapi.json version sync
+
+**Fix**: OpenAPI schema version (`openapi.json` info.version) now matches the contract package
+version (was stuck at FastAPI's default 0.1.0). Both are now synchronized at 1.0.4 via
+`app/main.py`'s FastAPI constructor `version=` parameter.
+
+**Maintenance note**: Going forward, keep this in sync manually — each time the contract version
+bumps, also update the `version=` string in `app/main.py`'s FastAPI constructor and re-export
+openapi.json by running:
+```bash
+.venv/bin/python -c "import json; from app.main import app; print(json.dumps(app.openapi()))" \
+  > contracts/safety-telemetry-platform-v1/openapi.json
+```
+
+## 1.0.3 · 2026-09-12 · Documented rich radio_transcript payload convention
+
+**Documentation**: Added convention for populating `provenance` and `payload` fields on rich
+radio transcript events. No schema change — `payload` and `provenance` were already generic dicts;
+this formalizes the convention for what should go inside them when sending machine-transcribed
+radio traffic with word-level timing, confidence scores, and origin/trust metadata.
+
+See [examples/radio-transcript-rich-response.json](examples/radio-transcript-rich-response.json)
+and root `README.md` "Для команды симулятора" section for the complete mapping and examples.
+Updated [CLIENT_FLOW.md](CLIENT_FLOW.md) to reference the convention.
+
 ## 1.0.2 · 2026-09-12 · Radio/comms transcription support
 
 **Feature**: Added radio/comms transcription support. `DeviceType` now includes `"radio"`; simulators

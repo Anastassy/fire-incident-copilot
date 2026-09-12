@@ -54,7 +54,9 @@ curl -X POST http://localhost:8000/ingest/telemetry \
 Пример для радио-канала (`type: "radio"`) — расшифрованное сообщение переговоров. Одна
 `TelemetryReading`-запись на одно транскрибированное сообщение/реплику (не непрерывный поток),
 `ts`/`end_ts` — начало/конец реплики. Аудио-вложение (`audio_url`, `audio_duration_ms`) пока не
-передаётся симулятором и ожидается позже — сейчас достаточно `transcript`:
+передаётся симулятором и ожидается позже.
+
+Минимальный пример:
 
 ```bash
 curl -X POST http://localhost:8000/ingest/telemetry \
@@ -71,6 +73,52 @@ curl -X POST http://localhost:8000/ingest/telemetry \
     "end_ts": "2026-09-12T10:05:12Z",
     "transcript": "Command, this is Engine 12, heavy smoke on the third floor.",
     "payload": {"speaker": "unit-12", "confidence": 0.94}
+  }'
+```
+
+Расширенный пример с полной провенанцей (происхождением/доверием к данным):
+
+```bash
+curl -X POST http://localhost:8000/ingest/telemetry \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: dev-secret-change-me" \
+  -d '{
+    "device": {
+      "external_id": "RADIO-A",
+      "type": "radio",
+      "name": "Radio Channel A (Main)"
+    },
+    "metric_type": "radio_audio",
+    "ts": "2026-09-12T10:05:30Z",
+    "end_ts": "2026-09-12T10:05:42Z",
+    "transcript": "Engine 12 to command, we have heavy smoke on the third floor, east wing. Visibility is very low.",
+    "external_event_id": "ev-radio-text-001",
+    "quality": "valid",
+    "availability": "fresh",
+    "provenance": {
+      "origin": "recorded",
+      "model": "mlx-community/whisper-large-v3-turbo-q4",
+      "delivery": "prerecorded",
+      "machine_generated": true,
+      "human_verified": false,
+      "audio_source_file": "archive/2026-09-12-radio-a.wav",
+      "audio_source_sha256": "a1b2c3d4e5f6...",
+      "source_id": "broadcastify-archive-import",
+      "acquisition_id": "session-2026-09-12-001"
+    },
+    "payload": {
+      "language": "en",
+      "channel_id": "RADIO-A",
+      "stream_id": "RADIO-A-primary",
+      "speaker": "engine-12",
+      "confidence": 0.94,
+      "words": [
+        {"word": "Engine", "start_ms": 0, "end_ms": 250, "confidence": 0.99},
+        {"word": "12", "start_ms": 280, "end_ms": 450, "confidence": 0.98},
+        {"word": "command", "start_ms": 500, "end_ms": 750, "confidence": 0.97}
+      ],
+      "timing_notes": ["Early word detected 340ms before segment boundary"]
+    }
   }'
 ```
 
@@ -652,3 +700,77 @@ uvicorn app.main:app --reload
 Примечание: хост-порт Postgres в `docker-compose.yml` — `5433` (внутри docker-сети всё ещё `db:5432`),
 т.к. `5432` на машине уже занят другим локальным проектом. `.env` для локальной разработки уже
 настроен на `localhost:5433`.
+
+---
+
+## Мост к живому State Machine (адаптер)
+
+`app/adapter/` — отдельный, независимый от FastAPI процесс: подключается по SSE к
+реальному, уже развёрнутому "State Machine API" команды симулятора
+(`https://api.aitinkerers.space/api/v1`, контракт — пакет
+`raw-source/fire-safety-state-api-v0.2.2/` в корне репозитория) и перекладывает события
+в НАШ ЖЕ `POST /ingest/telemetry` — так же, как это делает curl или любой другой клиент
+ingestion API. Остальная платформа (REST/SSE, MCP, все три потребляющие команды) не
+меняется и не знает, что данные теперь настоящие, а не curl-симулированные.
+
+Что делает мост:
+
+1. Один раз создаёт (или переиспользует после рестарта — см. ниже) один State Machine
+   `run` для выбранного `scenario_id` и открывает его SSE-поток.
+2. Отправляет команду `play`.
+3. На каждое релевантное SSE-событие строит `TelemetryIn`-совместимый JSON и постит его
+   в `{OUR_API_BASE_URL}/ingest/telemetry` с нашим же `X-API-Key`.
+4. Переподключается при обрыве (`Last-Event-ID`), обрабатывает `stream.reset` (новое
+   поколение — переподключение без курсора, свежий snapshot) и `410 CURSOR_EXPIRED`
+   (тоже без курсора), делает backoff 1/2/4/8/15 сек + jitter на прочих ошибках,
+   не пытается бесконечно повторять при `401`/`403`.
+5. Хранит `run_id`/`generation`/`cursor` в локальном JSON-файле
+   `.state_machine_bridge_state.json` (в `.gitignore`) — рестарт процесса продолжает тот
+   же run с той же позиции, а не создаёт новый run каждый раз.
+
+### Что смаппено, что пропущено
+
+| Kind (SSE `event.kind` / `Observation.kind`) | Что делаем |
+|---|---|
+| `observation.created` → `measurement` | → `TelemetryIn` (metric_type по таблице: temperature/obscuration/co/eco2 как есть, smoke_detected → `smoke`, прочее → `other`) |
+| `observation.created` → `camera` | → `TelemetryIn` metric_type=`video_event`, метаданные клипа в `payload` (само видео не скачивается) |
+| `observation.created` → `access` | → `TelemetryIn` metric_type=`access` |
+| `observation.created` → `people_count` | → `TelemetryIn` metric_type=`occupancy` |
+| `observation.created` → `connectivity` | → `TelemetryIn` metric_type=`system`, `availability=fresh/disconnected` |
+| `observation.created` → `radio_transcript` | → `TelemetryIn` metric_type=`radio_audio`, `transcript` заполнен, `audio_url=null` (см. ниже) |
+| `observation.created` → `radio_audio` | **Пропускается** — это метаданные сырого аудиочанка (media_id/timing) без текста; без скачивания аудио сохранять нечего сверх того, что уже несёт `radio_transcript` |
+| `device.updated` | **Не форвардится** как отдельная запись (это производная сводка уже отправленных показаний — повторная отправка задублировала бы `TelemetryReading`); используется только для обогащения `DeviceIn` (тип/имя/комната) следующих показаний этого устройства |
+| `run.updated`, `room.updated`, `camera.updated`, `access.updated`, `occupancy.updated`, `radio.channel.updated`, `system.updated`, `stream.reset` | Пропускаются как sessions-уровневое состояние, не сырое наблюдение (`stream.reset` мост обрабатывает отдельно — как барьер поколения) |
+
+Устройства из этого источника получают `external_id` с префиксом `sm-` (например,
+`RADIO-A` → `sm-RADIO-A`), чтобы не пересекаться с curl/MCP-симулированными устройствами.
+
+**Непрерывное аудио/видео (`/media-streams`) в этой версии не реализовано** — это
+осознанно отложено. `audio_url` остаётся `null` даже для радио-расшифровок; заполнен
+только `transcript` (и `audio_duration_ms`, вычисленная из длительности реплики).
+
+### Настройка
+
+В `.env` (см. `app/core/config.py` для актуальных полей и значений по умолчанию):
+
+```env
+STATE_MACHINE_BASE_URL=https://api.aitinkerers.space/api/v1
+STATE_MACHINE_BEARER_TOKEN=<из 1Password, vault aitinkerers-hack, item "State Machine API">
+STATE_MACHINE_SCENARIO_ID=degraded
+# или palisades-focus / palisades-full — для демо с радио-расшифровкой (см. PALISADES.md)
+OUR_API_BASE_URL=http://localhost:8000
+```
+
+Токен **никогда** не хардкодится и не появляется в коде/логах/коммитах — только через
+переменную окружения; реальное значение берётся из 1Password самостоятельно.
+
+### Запуск
+
+Наш API должен быть поднят (`uvicorn app.main:app`), затем в отдельном терминале:
+
+```bash
+python -m app.adapter.bridge
+```
+
+Это долгоживущий процесс (не часть FastAPI/request lifecycle) — держите его запущенным,
+пока нужен поток живых данных.

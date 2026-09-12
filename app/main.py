@@ -21,7 +21,7 @@ async def lifespan(app: FastAPI):
         yield
 
 
-app = FastAPI(title="Safety Telemetry Platform", lifespan=lifespan)
+app = FastAPI(title="Safety Telemetry Platform", version="1.0.4", lifespan=lifespan)
 app.add_middleware(ApiKeyMiddleware)
 
 app.include_router(ingestion_http_router)

@@ -52,3 +52,16 @@ consumer role, including the one known limitation dashboard consumers should pla
 | [mcp-tools.json](mcp-tools.json) | All 13 MCP tools: name, description, input schema, return shape |
 | [CHANGELOG.md](CHANGELOG.md) | Version history |
 | [examples/](examples/) | Realistic, schema-valid request/response/SSE fixtures |
+
+## Maintenance: Keeping openapi.json in sync
+
+The `openapi.json` file is exported from `app/main.py`'s FastAPI version parameter. When you bump
+the version in `CHANGELOG.md`, also update `version=` in `app/main.py`'s FastAPI constructor and
+re-export openapi.json:
+
+```bash
+.venv/bin/python -c "import json; from app.main import app; print(json.dumps(app.openapi()))" \
+  > contracts/safety-telemetry-platform-v1/openapi.json
+```
+
+This keeps the machine-readable spec's version number synchronized with the contract package version.

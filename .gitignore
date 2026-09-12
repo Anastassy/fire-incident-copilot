@@ -8,3 +8,4 @@ venv/
 raw-source/
 dist/
 .claude/
+.state_machine_bridge_state.json

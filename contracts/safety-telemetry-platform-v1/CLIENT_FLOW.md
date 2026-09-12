@@ -68,7 +68,11 @@ sequenceDiagram
   Use `ts`/`end_ts` for the utterance's time span. Include the optional `transcript` field
   (speech-to-text string). The fields `audio_url` (clip reference) and `audio_duration_ms`
   (duration in milliseconds) are reserved for future use — you may send `null` or omit them
-  for now (audio attachment is a planned future addition).
+  for now (audio attachment is a planned future addition). For rich transcripts with provenance
+  and word-level timing, see [examples/radio-transcript-rich-response.json](examples/radio-transcript-rich-response.json)
+  for the convention: populate `provenance` with origin/trust metadata (origin, model, delivery,
+  machine_generated, human_verified, audio_source_*) and `payload` with content extras
+  (language, channel_id, stream_id, speaker, words array with timing, timing_notes).
 - `provenance` is a free-form dict — put source dataset id, original recorded time, or
   origin type (`recorded`/`synthetic`/`derived`/`human_report`) in it; the platform does not
   interpret it, just stores and forwards it.
