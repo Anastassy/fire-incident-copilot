@@ -1,0 +1,15 @@
+{
+  "id": 42,
+  "device_id": "550e8400-e29b-41d4-a716-446655440000",
+  "ts": "2026-09-12T10:00:00Z",
+  "end_ts": null,
+  "metric_type": "video_event",
+  "value": null,
+  "unit": null,
+  "payload": {"event": "smoke_detected", "confidence": 0.87},
+  "quality": "valid",
+  "availability": "fresh",
+  "provenance": {"source_id": "sim-dataset-7", "origin": "synthetic"},
+  "external_event_id": "evt-abc-123",
+  "ingested_at": "2026-09-12T10:00:05Z"
+}
