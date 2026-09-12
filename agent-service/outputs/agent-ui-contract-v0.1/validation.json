@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "examples_validated": 12,
+  "component_schemas_checked": 12,
+  "checks": [
+    "JSON Schema validation of all manifest examples",
+    "response codes and operation response presence"
+  ],
+  "not_checked": [
+    "live API",
+    "audio availability",
+    "full OpenAPI specification validation",
+    "semantic correctness of radio contents"
+  ]
+}

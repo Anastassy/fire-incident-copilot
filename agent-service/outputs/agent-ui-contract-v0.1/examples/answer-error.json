@@ -1,0 +1,33 @@
+{
+  "request_id": "request-001",
+  "context": {
+    "demo_context_id": "demo-fixture-001",
+    "generation": 0,
+    "subject_id": "radio-topic-001"
+  },
+  "revision": 1,
+  "status": "error",
+  "question": "Which channel was assigned, and was there an acknowledgement?",
+  "language": "en",
+  "claims": [],
+  "unknowns": [],
+  "coverage": {
+    "as_of_ms": 140500,
+    "checked_from_ms": 0,
+    "checked_until_ms": 140500,
+    "completeness": "partial",
+    "limitations": [
+      "Fixture only; full source coverage is not established."
+    ]
+  },
+  "queries": [],
+  "evidence_ids": [],
+  "created_at": "2026-09-12T12:00:00Z",
+  "completed_at": "2026-09-12T12:00:01Z",
+  "error": {
+    "code": "UPSTREAM_UNAVAILABLE",
+    "message": "Source query failed.",
+    "retryable": true,
+    "request_id": "request-001"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "question-create.json": "QuestionCreate",
+  "answer-ready.json": "Answer",
+  "card-supported.json": "Card",
+  "evidence-missing-audio.json": "Evidence",
+  "answer-queued.json": "Answer",
+  "answer-error.json": "Answer",
+  "card-checking.json": "Card",
+  "answer-without-confirmation.json": "Answer",
+  "answer-group-unknown.json": "Answer",
+  "evidence-second.json": "Evidence",
+  "state.json": "Snapshot",
+  "card-changed.json": "Changed"
+}

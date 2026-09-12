@@ -1,0 +1,10 @@
+{
+  "context": {
+    "demo_context_id": "demo-fixture-001",
+    "generation": 0,
+    "subject_id": "radio-topic-001"
+  },
+  "client_request_id": "client-001",
+  "question": "Which channel was assigned, and was there an acknowledgement?",
+  "language": "en"
+}

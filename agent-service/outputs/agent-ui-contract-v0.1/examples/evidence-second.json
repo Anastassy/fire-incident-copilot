@@ -1,0 +1,33 @@
+{
+  "evidence_id": "ev-43",
+  "context": {
+    "demo_context_id": "demo-fixture-001",
+    "generation": 0,
+    "subject_id": "radio-topic-001"
+  },
+  "reading_id": 43,
+  "device_id": "550e8400-e29b-41d4-a716-446655440000",
+  "event_from_ms": 138700,
+  "event_until_ms": 140260,
+  "source_label": "Synthetic contract fixture — not verified audio",
+  "text": "Illustrative description of a repeated channel designation.",
+  "text_kind": "description",
+  "verification": "not_human_verified",
+  "origin": "synthetic",
+  "audio": {
+    "media_id": "media-fixture-43",
+    "availability": "missing",
+    "playback_url": null,
+    "expires_at": null,
+    "start_ms": 0,
+    "end_ms": 1560,
+    "time_basis": "returned_media",
+    "mime_type": null
+  },
+  "raw_reading": {
+    "id": 43,
+    "payload": {
+      "fixture": true
+    }
+  }
+}

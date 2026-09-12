@@ -1,0 +1,143 @@
+{
+  "context": {
+    "demo_context_id": "demo-fixture-001",
+    "generation": 0,
+    "subject_id": "radio-topic-001"
+  },
+  "snapshot_revision": 3,
+  "answers": [
+    {
+      "request_id": "request-001",
+      "context": {
+        "demo_context_id": "demo-fixture-001",
+        "generation": 0,
+        "subject_id": "radio-topic-001"
+      },
+      "revision": 2,
+      "status": "ready",
+      "question": "Which channel was assigned, and was there an acknowledgement?",
+      "language": "en",
+      "claims": [
+        {
+          "claim_id": "claim-1",
+          "text": "The supplied machine transcript reports assignment of V-Fire 25.",
+          "kind": "source_report",
+          "evidence_ids": [
+            "ev-42"
+          ]
+        },
+        {
+          "claim_id": "claim-2",
+          "text": "A later supplied transcript repeats the channel designation.",
+          "kind": "source_report",
+          "evidence_ids": [
+            "ev-43"
+          ]
+        }
+      ],
+      "unknowns": [
+        "This does not establish that the entire group changed channels."
+      ],
+      "coverage": {
+        "as_of_ms": 140500,
+        "checked_from_ms": 0,
+        "checked_until_ms": 140500,
+        "completeness": "partial",
+        "limitations": [
+          "Fixture only; full source coverage is not established."
+        ]
+      },
+      "queries": [
+        {
+          "query_id": "q-001",
+          "tool": "query_telemetry",
+          "filters": {
+            "device_id": "550e8400-e29b-41d4-a716-446655440000",
+            "limit": 100
+          },
+          "started_at": "2026-09-12T12:00:00Z",
+          "completed_at": "2026-09-12T12:00:01Z",
+          "status": "succeeded",
+          "completeness": "partial",
+          "error_code": null
+        }
+      ],
+      "evidence_ids": [
+        "ev-42",
+        "ev-43"
+      ],
+      "created_at": "2026-09-12T12:00:00Z",
+      "completed_at": "2026-09-12T12:00:01Z",
+      "error": null
+    }
+  ],
+  "cards": [
+    {
+      "hypothesis_id": "hyp-001",
+      "platform_incident_id": "incident-fixture-001",
+      "context": {
+        "demo_context_id": "demo-fixture-001",
+        "generation": 0,
+        "subject_id": "radio-topic-001"
+      },
+      "revision": 2,
+      "statement": "Check whether a channel assignment has an acknowledging reply.",
+      "assessment": "supported",
+      "lifecycle": "active",
+      "platform_status": "open",
+      "publication_status": "synced",
+      "claims": [
+        {
+          "claim_id": "claim-1",
+          "text": "The supplied machine transcript reports assignment of V-Fire 25.",
+          "kind": "source_report",
+          "evidence_ids": [
+            "ev-42"
+          ]
+        },
+        {
+          "claim_id": "claim-2",
+          "text": "A later supplied transcript repeats the channel designation.",
+          "kind": "source_report",
+          "evidence_ids": [
+            "ev-43"
+          ]
+        }
+      ],
+      "unknowns": [
+        "This does not establish that the entire group changed channels."
+      ],
+      "coverage": {
+        "as_of_ms": 140500,
+        "checked_from_ms": 0,
+        "checked_until_ms": 140500,
+        "completeness": "partial",
+        "limitations": [
+          "Fixture only; full source coverage is not established."
+        ]
+      },
+      "queries": [
+        {
+          "query_id": "q-001",
+          "tool": "query_telemetry",
+          "filters": {
+            "device_id": "550e8400-e29b-41d4-a716-446655440000",
+            "limit": 100
+          },
+          "started_at": "2026-09-12T12:00:00Z",
+          "completed_at": "2026-09-12T12:00:01Z",
+          "status": "succeeded",
+          "completeness": "partial",
+          "error_code": null
+        }
+      ],
+      "evidence_ids": [
+        "ev-42",
+        "ev-43"
+      ],
+      "checked_at": "2026-09-12T12:00:01Z",
+      "closure_reason": null
+    }
+  ],
+  "updated_at": "2026-09-12T12:00:01Z"
+}

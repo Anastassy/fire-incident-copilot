@@ -1,0 +1,5 @@
+: keepalive
+
+event: card.changed
+data: {"type": "card.changed", "context": {"demo_context_id": "demo-fixture-001", "generation": 0, "subject_id": "radio-topic-001"}, "entity_id": "hyp-001", "revision": 2}
+
