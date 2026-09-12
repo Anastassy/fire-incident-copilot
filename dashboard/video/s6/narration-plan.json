@@ -1,0 +1,247 @@
+{
+  "version": "S6-narration-v1",
+  "duration_seconds": 120,
+  "source_script": "dashboard/VIDEO_SCRIPT.md",
+  "provider": "ElevenLabs",
+  "model_id": "eleven_multilingual_v2",
+  "voice_id": "onwK4e9ZLuTAKqWW03F9",
+  "voice_name": "Daniel - Steady Broadcaster",
+  "voice_type": "premade",
+  "language": "English",
+  "voice_settings": {
+    "stability": 0.65,
+    "similarity_boost": 0.75,
+    "style": 0.0,
+    "use_speaker_boost": true,
+    "speed": 1.0
+  },
+  "notes": [
+    "Paid stock-voice TTS generation; no voice cloning.",
+    "Shortened narration preserves S6 meaning while fitting fixed speech windows.",
+    "D04 describes automatic assessment, not autonomous tool or source selection.",
+    "T01 describes deterministic retrieved evidence. T02 describes design goals.",
+    "D08 and D13 are authored training operator lines, not archival radio.",
+    "D11 has no narrator; original archival radio belongs at 74.5–77.5 seconds.",
+    "No speed change, time stretching or word truncation is permitted."
+  ],
+  "beats": [
+    {
+      "id": "B01",
+      "start": 0,
+      "end": 5,
+      "speech_start": 0.1,
+      "speech_end": 4.8,
+      "role": "narrator",
+      "text": "Command support teams piece together information from many sources."
+    },
+    {
+      "id": "B02",
+      "start": 5,
+      "end": 11,
+      "speech_start": 5.1,
+      "speech_end": 10.9,
+      "role": "narrator",
+      "text": "The pipe: thought near one thirty Fahrenheit, actually six forty."
+    },
+    {
+      "id": "B03",
+      "start": 11,
+      "end": 15,
+      "speech_start": 11.2,
+      "speech_end": 13.9,
+      "role": "narrator",
+      "text": "Which information still reflects reality?"
+    },
+    {
+      "id": "B04",
+      "start": 15,
+      "end": 22,
+      "speech_start": 15.1,
+      "speech_end": 21.7,
+      "role": "narrator",
+      "text": "Our copilot connects evidence, showing what's confirmed and what we still don't know."
+    },
+    {
+      "id": "B05",
+      "start": 22,
+      "end": 25,
+      "speech_start": 22.2,
+      "speech_end": 24.1,
+      "role": "narrator",
+      "text": "Now, the demonstration."
+    },
+    {
+      "id": "D01",
+      "start": 25,
+      "end": 30,
+      "speech_start": 25.1,
+      "speech_end": 29.7,
+      "role": "narrator",
+      "text": "An operator must brief command on Gradas in this training scenario."
+    },
+    {
+      "id": "D02",
+      "start": 30,
+      "end": 33,
+      "speech_start": 30.1,
+      "speech_end": 32.8,
+      "role": "narrator",
+      "text": "The evidence arrives through different systems."
+    },
+    {
+      "id": "D03",
+      "start": 33,
+      "end": 38,
+      "speech_start": 33.1,
+      "speech_end": 37.7,
+      "role": "narrator",
+      "text": "Some sources stop updating, leaving only their last reading."
+    },
+    {
+      "id": "D04",
+      "start": 38,
+      "end": 43,
+      "speech_start": 38.1,
+      "speech_end": 42.7,
+      "role": "narrator",
+      "text": "New evidence triggers an automatic assessment."
+    },
+    {
+      "id": "D05",
+      "start": 43,
+      "end": 47,
+      "speech_start": 43.1,
+      "speech_end": 46.7,
+      "role": "narrator",
+      "text": "Supported evidence stays separate from unknowns."
+    },
+    {
+      "id": "D06",
+      "start": 47,
+      "end": 53,
+      "speech_start": 47.1,
+      "speech_end": 51.7,
+      "role": "narrator",
+      "text": "Check timestamps: old images cannot confirm conditions now."
+    },
+    {
+      "id": "D07",
+      "start": 53,
+      "end": 59,
+      "speech_start": 53.1,
+      "speech_end": 57.8,
+      "role": "narrator",
+      "text": "Power and connection events show which sources need checking."
+    },
+    {
+      "id": "D08",
+      "start": 59,
+      "end": 64,
+      "speech_start": 59.2,
+      "speech_end": 63,
+      "role": "training_operator",
+      "text": "Can we confirm anyone is still inside Gradas?"
+    },
+    {
+      "id": "D09",
+      "start": 64,
+      "end": 70,
+      "speech_start": 64.1,
+      "speech_end": 69.4,
+      "role": "narrator",
+      "text": "Permission isn't presence. Occupancy stays unknown."
+    },
+    {
+      "id": "D10",
+      "start": 70,
+      "end": 74,
+      "speech_start": 70.1,
+      "speech_end": 73.7,
+      "role": "narrator",
+      "text": "The answer explains why presence is unknown."
+    },
+    {
+      "id": "D11",
+      "start": 74,
+      "end": 78,
+      "speech_start": null,
+      "speech_end": null,
+      "role": "archival_radio_only",
+      "text": "",
+      "radio_start": 74.5,
+      "radio_end": 77.5
+    },
+    {
+      "id": "D12",
+      "start": 78,
+      "end": 82,
+      "speech_start": 78.1,
+      "speech_end": 81.7,
+      "role": "narrator",
+      "text": "Another incident's radio cannot confirm conditions here."
+    },
+    {
+      "id": "D13",
+      "start": 82,
+      "end": 90,
+      "speech_start": 82.1,
+      "speech_end": 88.8,
+      "role": "training_operator",
+      "text": "Command, Gradas sensors lost power. Current conditions and presence remain unconfirmed."
+    },
+    {
+      "id": "T01",
+      "start": 90,
+      "end": 95,
+      "speech_start": 90.1,
+      "speech_end": 94.7,
+      "role": "narrator",
+      "text": "The agent reads retrieved evidence with source and time preserved."
+    },
+    {
+      "id": "T02",
+      "start": 95,
+      "end": 100,
+      "speech_start": 95.1,
+      "speech_end": 99.7,
+      "role": "narrator",
+      "text": "World models and active sensing remain design goals."
+    },
+    {
+      "id": "T03",
+      "start": 100,
+      "end": 105,
+      "speech_start": 100.1,
+      "speech_end": 104.7,
+      "role": "narrator",
+      "text": "Replay connects to platform evidence and agent answers."
+    },
+    {
+      "id": "F01",
+      "start": 105,
+      "end": 110,
+      "speech_start": 105.1,
+      "speech_end": 109.7,
+      "role": "narrator",
+      "text": "Correct briefings, with a proposed industrial command-centre pilot."
+    },
+    {
+      "id": "F02",
+      "start": 110,
+      "end": 115,
+      "speech_start": 110.1,
+      "speech_end": 114.7,
+      "role": "narrator",
+      "text": "Thirty percent faster correct answers: our untested pilot target."
+    },
+    {
+      "id": "F03",
+      "start": 115,
+      "end": 120,
+      "speech_start": 115.1,
+      "speech_end": 118.9,
+      "role": "narrator",
+      "text": "We're seeking an industrial training partner."
+    }
+  ]
+}

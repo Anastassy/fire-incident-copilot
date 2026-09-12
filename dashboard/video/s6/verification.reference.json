@@ -1,0 +1,45 @@
+{
+  "date": "2026-09-12",
+  "file": "firewatch-120s-captioned.mp4",
+  "sha256": "9e1be0b8233f018b5348792a7e14b20b5553d361116cb4c4d229dee0b60e816d",
+  "bytes": 4267843,
+  "duration_seconds": 120,
+  "video": {
+    "codec": "h264",
+    "width": 1920,
+    "height": 1080,
+    "fps": "30/1",
+    "frames": 3600
+  },
+  "audio": {
+    "codec": "aac",
+    "sample_rate": "48000",
+    "channels": 2,
+    "duration_seconds": 120,
+    "integrated_lufs": -16.44,
+    "true_peak_db": -4.32,
+    "loudness_range_lu": 3.6,
+    "note": "Measured before picture-only fixes; encoded audio bitstream verified unchanged."
+  },
+  "checks": {
+    "full_av_decode": true,
+    "faststart": true,
+    "faststart_preserves_video_and_audio_bitstreams": true,
+    "captions_visible": 58,
+    "caption_count": 58,
+    "script_words_covered": 188,
+    "script_words": 188,
+    "narration_blocks_measured": 23,
+    "radio_source_pcm_verified": true,
+    "source_audio_unchanged_during_caption_burn": true,
+    "visual_review_all_edit_beats": true,
+    "visual_review_all_caption_midpoint_contact_sheet": true
+  },
+  "limitations": [
+    "Native browser recording about 5 fps, exported at 30 fps with held frames.",
+    "Editorial replay excerpts, not a latency benchmark.",
+    "UI small text is soft when enlarged.",
+    "Visual checks sampled frames and cue midpoints, not every frame.",
+    "Speech checked with ASR and timing; no full human listening review."
+  ]
+}

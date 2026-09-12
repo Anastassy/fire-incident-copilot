@@ -1,0 +1,231 @@
+1
+00:00:00,100 --> 00:00:01,640
+Command support teams piece
+
+2
+00:00:01,640 --> 00:00:03,320
+together information from many
+
+3
+00:00:03,320 --> 00:00:03,720
+sources.
+
+4
+00:00:05,100 --> 00:00:05,520
+The pipe:
+
+5
+00:00:06,120 --> 00:00:07,220
+thought near one thirty
+
+6
+00:00:07,220 --> 00:00:07,760
+Fahrenheit,
+
+7
+00:00:08,260 --> 00:00:09,640
+actually six forty.
+
+8
+00:00:11,200 --> 00:00:12,860
+Which information still reflects
+
+9
+00:00:12,860 --> 00:00:13,420
+reality?
+
+10
+00:00:15,100 --> 00:00:16,700
+Our copilot connects evidence,
+
+11
+00:00:16,700 --> 00:00:19,160
+showing what's confirmed and
+
+12
+00:00:19,160 --> 00:00:20,460
+what we still don't know.
+
+13
+00:00:22,200 --> 00:00:23,040
+Now, the demonstration.
+
+14
+00:00:25,100 --> 00:00:26,640
+An operator must brief command
+
+15
+00:00:26,640 --> 00:00:28,280
+on Gradas in this training
+
+16
+00:00:28,280 --> 00:00:28,760
+scenario.
+
+17
+00:00:30,100 --> 00:00:31,500
+The evidence arrives through
+
+18
+00:00:31,500 --> 00:00:32,300
+different systems.
+
+19
+00:00:33,100 --> 00:00:34,680
+Some sources stop updating,
+
+20
+00:00:35,180 --> 00:00:36,640
+leaving only their last reading.
+
+21
+00:00:38,100 --> 00:00:39,560
+New evidence triggers an
+
+22
+00:00:39,560 --> 00:00:40,560
+automatic assessment.
+
+23
+00:00:43,100 --> 00:00:44,480
+Supported evidence stays
+
+24
+00:00:44,480 --> 00:00:45,760
+separate from unknowns.
+
+25
+00:00:47,100 --> 00:00:48,160
+Check timestamps:
+
+26
+00:00:48,620 --> 00:00:50,340
+old images cannot confirm
+
+27
+00:00:50,340 --> 00:00:51,220
+conditions now.
+
+28
+00:00:53,100 --> 00:00:55,200
+Power and connection events show
+
+29
+00:00:55,200 --> 00:00:56,620
+which sources need checking.
+
+30
+00:00:59,200 --> 00:01:00,980
+Can we confirm anyone is
+
+31
+00:01:00,980 --> 00:01:02,160
+still inside Gradas?
+
+32
+00:01:04,100 --> 00:01:05,320
+Permission isn't presence.
+
+33
+00:01:05,900 --> 00:01:07,440
+Occupancy stays unknown.
+
+34
+00:01:10,100 --> 00:01:11,860
+The answer explains why presence
+
+35
+00:01:11,860 --> 00:01:12,460
+is unknown.
+
+36
+00:01:14,950 --> 00:01:15,550
+Copy.
+
+37
+00:01:15,670 --> 00:01:16,510
+V-Fire 25, thank you.
+
+38
+00:01:18,100 --> 00:01:19,860
+Another incident's radio cannot
+
+39
+00:01:19,860 --> 00:01:21,380
+confirm conditions here.
+
+40
+00:01:22,100 --> 00:01:22,400
+Command,
+
+41
+00:01:23,140 --> 00:01:24,680
+Gradas sensors lost power.
+
+42
+00:01:25,260 --> 00:01:26,700
+Current conditions and presence
+
+43
+00:01:26,700 --> 00:01:28,520
+remain unconfirmed.
+
+44
+00:01:30,100 --> 00:01:31,680
+The agent reads retrieved
+
+45
+00:01:31,680 --> 00:01:33,700
+evidence with source and time
+
+46
+00:01:33,700 --> 00:01:34,080
+preserved.
+
+47
+00:01:35,100 --> 00:01:36,760
+World models and active sensing
+
+48
+00:01:36,760 --> 00:01:38,440
+remain design goals.
+
+49
+00:01:40,100 --> 00:01:41,460
+Replay connects to platform
+
+50
+00:01:41,460 --> 00:01:43,300
+evidence and agent answers.
+
+51
+00:01:45,100 --> 00:01:46,820
+Correct briefings, with a
+
+52
+00:01:46,820 --> 00:01:47,900
+proposed industrial
+
+53
+00:01:47,900 --> 00:01:49,040
+command-centre pilot.
+
+54
+00:01:50,100 --> 00:01:51,520
+Thirty percent faster correct
+
+55
+00:01:51,520 --> 00:01:53,680
+answers: our untested pilot
+
+56
+00:01:53,680 --> 00:01:54,120
+target.
+
+57
+00:01:55,100 --> 00:01:56,480
+We're seeking an industrial
+
+58
+00:01:56,480 --> 00:01:57,440
+training partner.

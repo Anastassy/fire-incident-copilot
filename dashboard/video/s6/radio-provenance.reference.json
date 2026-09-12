@@ -1,0 +1,59 @@
+{
+  "audio": "production/radio-original-3s.wav",
+  "sha256": "6947c2c71f1482d121cad3a7910d68fe501d183c45d3668fd47c17e05d67c844",
+  "model": "mlx-community/whisper-large-v3-turbo-q4",
+  "language": "en",
+  "words": [
+    {
+      "word": "Copy.",
+      "start": 0.45,
+      "end": 1.05
+    },
+    {
+      "word": "V-Fire",
+      "start": 1.17,
+      "end": 1.35
+    },
+    {
+      "word": "25,",
+      "start": 1.35,
+      "end": 1.67
+    },
+    {
+      "word": "thank",
+      "start": 1.81,
+      "end": 1.91
+    },
+    {
+      "word": "you.",
+      "start": 1.91,
+      "end": 2.01
+    }
+  ],
+  "timing_origin": "Imported original Whisper word clock after exact resampled PCM verification; no estimated timestamps.",
+  "source_transcript": "palisades-radio-demo/transcripts/decision-focus.en.json",
+  "source_segment_id": 47,
+  "focus_segment_id": 26,
+  "source_clip_offset_s": 138.25,
+  "source_transcript_sha256": "00971a135b395a09f4fd110af5bc82e0ec9cc7549c69b0d5ce7001678f5326df",
+  "exact_resampled_pcm_match": true,
+  "independent_check": "Whisper small, no VAD, using a 20-second source context independently recognized the same wording. This is not measured WER or human-reference validation.",
+  "path_base": "External video assets, except source_transcript, which names the separate source package.",
+  "source_publication_url": "https://www.broadcastify.com/events/2025-01-lafire/",
+  "source_title": "Los Angeles County Fire V-1 / Palisades Fire Command",
+  "source_date": "2025-01-07",
+  "source_original_file": "LA_County_Fire_v1_2025-01-07/38651-1736281253.mp3",
+  "source_original_sha256": "4581c204cb97ccbf830f7f58c17c23f92496554ec347e5c4721e5328e21511f6",
+  "source_focus_audio": "palisades-radio-demo/audio/decision-focus.wav",
+  "source_focus_to_full_offset_s": 292,
+  "source_full_clip_offset_s": 430.25,
+  "duration_s": 3,
+  "placement_start_s": 74.5,
+  "placement_end_s": 77.5,
+  "attribution": "Audio Provided by Broadcastify",
+  "license": "CC-BY-3.0-US per source publication and retained source manifest",
+  "license_url": "https://creativecommons.org/licenses/by/3.0/us/",
+  "speech_synthesized": false,
+  "same_incident_as_base2": false,
+  "human_reference_accuracy_measured": false
+}
