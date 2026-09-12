@@ -8,11 +8,36 @@ Backend-платформа для хакатона: приём телеметр�
 - **MCP** (`/mcp-server`, транспорт streamable-http) — для агентной системы: чтение телеметрии/инцидентов, запись
   инцидентов (гипотезы) и кастомных dashboard-specs по запросу оператора.
 
+### Что построено на хакатоне, что унаследовано
+
+**Полностью реализовано в ходе хакатона:**
+- FastAPI backend с асинхронной архитектурой (SQLAlchemy, Alembic миграции, Pydantic валидация)
+- Ingestion API (`POST /ingest/telemetry`, `WS /ingest/stream`) с апсертом устройств по `external_id`
+- REST API для чтения устройств, телеметрии, инцидентов, дашбордов
+- SSE-потоки для live-обновлений (Redis pub/sub)
+- MCP сервер (13 инструментов) для агентной системы
+- Адаптер-мост (`app/adapter/bridge.py`) к State Machine API симулятора (перекладывает реальные события в ingestion)
+
+**Внешние зависимости (не наш код):**
+- State Machine API (контракт в `raw-source/fire-safety-state-api-v0.2.2/`) — создан другой командой, развёрнут на `https://api.aitinkerers.space`
+- Симулятор (team "Simulation") — предоставляет сценарии и события через State Machine API
+
 Полная архитектура и разбивка ответственности — см. план в `/Users/vitalynec/.claude/plans/swirling-meandering-aho.md`.
 
 ---
 
 ## Для команды симулятора (ingestion)
+
+### Примечание: синтетические vs. реальные данные
+
+Все примеры ниже и в файлах `contracts/safety-telemetry-platform-v1/examples/` — **синтетические/иллюстративные**
+(для тестирования и разработки): они генерируются вручную через curl, содержат фиксированные timestamps
+и `"origin": "synthetic"` в провенансе.
+
+**Реальные данные** появляются, только если запущен мост `bridge` с валидным `STATE_MACHINE_BEARER_TOKEN` —
+тогда события приходят от симулятора с `"origin": "recorded"` (в провенансе указаны реальные source_id,
+acquisition_id, audio_source_file и SHA256). Остальная платформа при этом не меняется и не знает разницы —
+все три интерфейса (REST, SSE, MCP) работают одинаково с синтетическими и реальными данными.
 
 ### Контракт приёма данных
 
@@ -786,30 +811,45 @@ python -m app.adapter.bridge
 
 ## Деплой
 
-`docker-compose.yml` теперь рассчитан на реальный запуск на сервере, а не только на
-локальную разработку:
+### Для запуска CORE платформы (REST/SSE/MCP API, ingestion) — минимальная требуемая подготовка
 
-1. Скопируйте `.env.example` в `.env` и заполните реальные значения (`API_KEY` — сгенерируйте
-   настоящий секрет, не оставляйте плейсхолдер; `STATE_MACHINE_BEARER_TOKEN` — из 1Password,
-   vault `aitinkerers-hack`, item "State Machine API"; остальные поля см. в самом файле).
-2. `docker compose up --build` поднимает весь стек: `db` (Postgres) и `redis` — с
-   healthcheck'ами; `app` дожидается их `service_healthy`, при старте контейнера сам
-   применяет миграции (`alembic upgrade head` — падает с ненулевым кодом при ошибке,
-   не запуская API поверх устаревшей схемы, см. `docker/entrypoint.sh`), затем поднимает
-   uvicorn; `bridge` (мост к State Machine, `app/adapter/bridge.py`) дожидается
-   `app: service_healthy` и запускается тем же образом, но без миграционного шага.
-   `bridge` хранит файл возобновления run'а (`.state_machine_bridge_state.json`) в
-   именованном docker-volume, так что рестарт контейнера продолжает тот же run, а не
-   создаёт новый каждый раз.
-3. Проверить, что всё поднялось: `curl http://<host>:8000/health` (без заголовка,
-   этот путь освобождён от `ApiKeyMiddleware`) должен вернуть `{"status": "ok"}`; любой
-   другой путь без `X-API-Key` должен вернуть `401`.
-4. По умолчанию `docker compose up` также подхватывает `docker-compose.override.yml`
-   (bind-mount репозитория + `uvicorn --reload`) — это только для локальной разработки.
-   На реальном сервере запускайте `docker compose -f docker-compose.yml up --build -d`
-   (без override) либо удалите/переименуйте `docker-compose.override.yml` на этой машине.
+**Новый участник может запустить полностью рабочую базовую платформу с чистого клона:**
 
-Вне рамок этого репозитория (решает тот, кто разворачивает): выбор и подготовка
-целевого хоста, TLS/сертификаты, реверс-прокси и домен, а также сама раздача реальных
-секретов (кто и как кладёт значения в `.env` на сервере) — это отдельные
-организационные/инфраструктурные решения, здесь не заложены.
+1. `cp .env.example .env` — готово, больше ничего менять не нужно. По умолчанию:
+   - `API_KEY=dev-secret-change-me` (может быть любой строкой, реальный генерируется при необходимости)
+   - `DATABASE_URL` и `REDIS_URL` указывают на интерьерные docker-контейнеры (`db:5432` и `redis:6379`
+     внутри docker-сети)
+2. `docker compose up --build` поднимает CORE стек:
+   - `db` (Postgres) и `redis` с healthcheck'ами
+   - `app` (FastAPI backend): дожидается `db` и `redis`, применяет миграции (`alembic upgrade head`),
+     поднимает uvicorn на `http://localhost:8000`
+3. Проверить: `curl http://localhost:8000/health` должен вернуть `{"status": "ok"}` (этот путь без auth);
+   любой другой путь требует `X-API-Key` заголовок.
+4. `GET http://localhost:8000/docs` — Swagger UI для live-тестирования всех эндпоинтов.
+5. Отправлять тестовую телеметрию через `POST /ingest/telemetry` или `curl` примеры в разделе
+   "Для команды симулятора" выше.
+
+**Никаких реальных секретов не требуется** для работы CORE платформы и тестирования всех трёх
+интерфейсов (REST, SSE, MCP).
+
+### Для запуска моста к реальному State Machine (опционально)
+
+Если нужны реальные события из симулятора команды:
+
+1. Получите `STATE_MACHINE_BEARER_TOKEN` (из vault aitinkerers-hack, item "State Machine API")
+2. Заполните в `.env`: `STATE_MACHINE_BEARER_TOKEN=<value>`
+3. `docker compose up --build` также поднимет сервис `bridge` (`app/adapter/bridge.py`), который
+   подключится к `https://api.aitinkerers.space`, откроет SSE-поток сценария и будет отправлять
+   реальные события в `POST /ingest/telemetry`. Остальная платформа при этом не меняется —
+   дашборд и MCP-клиенты видят реальные данные через тот же API.
+
+**Без `STATE_MACHINE_BEARER_TOKEN` сервис `bridge` не стартует**, но CORE платформа работает полностью,
+и можно тестировать через curl/примеры с синтетическими данными.
+
+### Дополнительные детали развёртывания
+
+- По умолчанию `docker compose up` подхватывает `docker-compose.override.yml` (bind-mount репо +
+  `uvicorn --reload`) — только для локальной разработки. На сервере запускайте
+  `docker compose -f docker-compose.yml up --build -d` (без override).
+- Вне рамок этого репозитория: выбор хоста, TLS/сертификаты, реверс-прокси, домен, и раздача
+  реальных секретов в `.env` на сервере — это организационные/инфраструктурные решения.
