@@ -14,8 +14,8 @@ class MCPTools:
     def __init__(self, server): self.server = server
     async def call(self, name, arguments):
         result = await self.server.call_tool(name, arguments)
-        if result.isError: raise PlatformError(f'MCP tool failed: {name}')
-        value = result.structuredContent
+        if getattr(result, 'is_error', getattr(result, 'isError', False)): raise PlatformError(f'MCP tool failed: {name}')
+        value = getattr(result, 'structured_content', getattr(result, 'structuredContent', None))
         if value is None:
             blocks = [block.text for block in result.content if getattr(block, 'type', None) == 'text']
             if len(blocks) != 1: raise PlatformError('Expected one JSON result')

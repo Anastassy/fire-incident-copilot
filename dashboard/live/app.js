@@ -9,7 +9,7 @@ let config, scenarios = [], snapshot, observations = [], streams = [], players =
 let epoch = 0, stateAbort, stateConnected = false, clockAnchor = {time:0, wall:0}, renderTimer;
 let filter = 'all', displayLimit = 100, historyLoading = false, sound = false, selectedCamera = 'both';
 let radioSelection;
-let agentContext, agentSnapshot, agentAbort, agentEpoch = 0, agentTab = 'assistant', agentRefreshPending = false;
+let agentContext, agentSnapshot, agentAbort, agentEpoch = 0, agentTab = 'briefing', agentRefreshPending = false;
 let drawerEpoch = 0, commandPending = false, lastAgentError = '', pendingQuestion, uncertainQuestion;
 const runPath = () => `/api/state/runs/${encodeURIComponent(snapshot.run.run_id)}`;
 const contextQuery = context => new URLSearchParams(context).toString();
@@ -212,22 +212,54 @@ async function connectAgent(context){
     }});}catch{if(signal.aborted||ticket!==agentEpoch)return;await refreshAgent();await sleep(2000);}
   }
 }
-function claimMarkup(claim){const kinds={source_report:'Source report',measurement:'Measurement',inference:'Agent inference',absence_in_checked_data:'Not found in checked data'};return `<div class="claim"><span class="claim-kind">${esc(kinds[claim.kind]||claim.kind)}</span><p>${esc(claim.text)}</p><div>${(claim.evidence_ids||[]).map((id,i)=>`<button class="evidence-link" data-evidence="${esc(id)}">${icon('link')} Source ${i+1}</button>`).join('')}</div></div>`;}
+function claimMarkup(claim){
+  const kinds={source_report:'Source report',measurement:'Measurement',inference:'Agent inference',absence_in_checked_data:'Not found in checked data'};
+  const sourceIds=[...agentEvidence().keys()];
+  const links=(claim.evidence_ids||[]).map(id=>{const index=sourceIds.indexOf(id);return `<button class="evidence-link" data-evidence="${esc(id)}">${icon('link')} Source${index<0?'':` ${index+1}`}</button>`;}).join('');
+  return `<div class="claim"><span class="claim-kind">${esc(kinds[claim.kind]||claim.kind)}</span><p>${esc(claim.text)}</p><div>${links}</div></div>`;
+}
 function traceMarkup(entity){const c=entity.coverage;return `<div class="unknowns">${(entity.unknowns||[]).length?'<strong>Still unknown</strong>':''}${(entity.unknowns||[]).map(x=>`<p>${esc(x)}</p>`).join('')}</div><details class="trace"><summary>Coverage and queries ${icon('arrow')}</summary>${c?`<p>${timecode(c.checked_from_ms)}–${timecode(c.checked_until_ms)} · ${esc({complete:'Complete',partial:'Partial',unknown:'Completeness unknown'}[c.completeness])}</p>${c.limitations.map(x=>`<p>${esc(x)}</p>`).join('')}`:''}<pre>${esc(JSON.stringify(entity.queries||[],null,2))}</pre></details>`;}
+function agentEvidence(){
+  const sources=new Map();
+  for(const entity of [...(agentSnapshot?.cards||[]),...(agentSnapshot?.answers||[])]){
+    for(const claim of entity.claims||[])for(const id of claim.evidence_ids||[])if(!sources.has(id))sources.set(id,claim.text);
+    for(const id of entity.evidence_ids||[])if(!sources.has(id))sources.set(id,entity.statement||entity.question);
+  }
+  return sources;
+}
+function checkMarkup(c,featured=false){
+  return `<article class="check-card${featured?' featured':''}"><div class="card-status-line"><span class="status-tag ${esc(c.assessment)}">${esc(statusLabel(c.assessment))}</span><span>${esc(statusLabel(c.lifecycle))} · v${c.revision}</span></div><h3>${esc(c.statement)}</h3>${c.claims.map(claimMarkup).join('')}${traceMarkup(c)}<details class="trace"><summary>Check status</summary><p>Lifecycle: ${esc(statusLabel(c.lifecycle))}</p><p>Publication: ${esc(c.publication_status)}. Pending can also mean publication is not in use.</p><p>Platform status: ${esc(c.platform_status||'not assigned')}</p>${c.closure_reason?`<p>${esc(c.closure_reason)}</p>`:''}<button class="evidence-link" data-card="${esc(c.hypothesis_id)}">Full API card</button></details></article>`;
+}
+function answerMarkup(a){
+  return `<article class="answer-card"><div class="answer-question">${esc(a.question)}</div><div class="answer-status ${esc(a.status)}">${icon(a.status==='ready'?'check':'spark')}${esc(statusLabel(a.status))}${['queued','running'].includes(a.status)?`<button class="evidence-link" data-cancel="${esc(a.request_id)}">Cancel</button>`:''}</div>${a.claims.map(claimMarkup).join('')}${a.error?`<p class="unknowns">${esc(a.error.message)}</p>`:''}${traceMarkup(a)}${a.status==='error'?`<button class="evidence-link" data-retry="${esc(a.request_id)}">Retry question</button>`:''}</article>`;
+}
 function renderAgent(){
-  const answers=agentSnapshot?.answers||[],cards=agentSnapshot?.cards||[];
-  $('check-count').textContent=cards.length;
-  document.querySelectorAll('[data-agent-tab]').forEach(el=>el.classList.toggle('selected',el.dataset.agentTab===agentTab));
-  const welcome='<div class="copilot-welcome"><span class="eyebrow">EVIDENCE BEFORE CONCLUSIONS</span><h3>What we know.<br>What we do not.</h3><p>Ask a question to check the sources in the agent context. Trace each claim back to the original message.</p></div>';
+  const answers=[...(agentSnapshot?.answers||[])].sort((a,b)=>b.created_at.localeCompare(a.created_at));
+  const cards=[...(agentSnapshot?.cards||[])].sort((a,b)=>(b.checked_at||'').localeCompare(a.checked_at||''));
+  const active=cards.filter(c=>c.lifecycle==='active').length;
+  const running=answers.filter(a=>['queued','running'].includes(a.status)).length;
+  const completed=answers.filter(a=>['ready','insufficient_data'].includes(a.status)).length;
+  const sourceCount=agentEvidence().size;
+  $('check-count').textContent=cards.length;$('answer-count').textContent=answers.length;
+  $('workflow-evidence').textContent=`${sourceCount} linked source${sourceCount===1?'':'s'}`;
+  $('workflow-checks').textContent=`${active} active check${active===1?'':'s'}`;
+  $('workflow-answers').textContent=`${completed} completed answer${completed===1?'':'s'}`;
+  $('copilot-activity').textContent=lastAgentError?'Agent unavailable':!agentSnapshot?'Connecting…':pendingQuestion?'Sending question…':running?`Working on ${running} question${running===1?'':'s'}`:active?`${active} active check${active===1?'':'s'}`:'Ready for a question';
+  $('copilot-activity').dataset.state=lastAgentError?'error':pendingQuestion||running?'busy':'ready';
+  document.querySelectorAll('.agent-tabs [data-agent-tab]').forEach(el=>{el.classList.toggle('selected',el.dataset.agentTab===agentTab);el.setAttribute('aria-pressed',String(el.dataset.agentTab===agentTab));});
+  const welcome='<div class="copilot-welcome"><span class="eyebrow">EVIDENCE BEFORE CONCLUSIONS</span><h3>Your incident briefing starts here.</h3><p>Ask a question to check the sources in the agent context. Copilot shows its claims, evidence and what still needs confirmation.</p></div>';
   let content='';
-  if(agentTab==='checks')content=cards.map(c=>`<article class="check-card"><div class="card-status-line"><span class="status-tag">${esc(statusLabel(c.assessment))}</span><span>v${c.revision}</span></div><h3>${esc(c.statement)}</h3>${c.claims.map(claimMarkup).join('')}${traceMarkup(c)}<details class="trace"><summary>Check status</summary><p>Lifecycle: ${esc(statusLabel(c.lifecycle))}</p><p>Publication: ${esc(c.publication_status)}. Pending can also mean publication is not in use.</p><p>Platform status: ${esc(c.platform_status||'not assigned')}</p>${c.closure_reason?`<p>${esc(c.closure_reason)}</p>`:''}<button class="evidence-link" data-card="${esc(c.hypothesis_id)}">Full API card</button></details></article>`).join('')||'<div class="empty-inline">No checks in this context yet.</div>';
-  else content=[...answers].sort((a,b)=>b.created_at.localeCompare(a.created_at)).map(a=>`<article class="answer-card"><div class="answer-question">${esc(a.question)}</div><div class="answer-status ${esc(a.status)}">${icon(a.status==='ready'?'check':'spark')}${esc(statusLabel(a.status))}${['queued','running'].includes(a.status)?`<button class="evidence-link" data-cancel="${esc(a.request_id)}">Cancel</button>`:''}</div>${a.claims.map(claimMarkup).join('')}${a.error?`<p class="unknowns">${esc(a.error.message)}</p>`:''}${traceMarkup(a)}${a.status==='error'?`<button class="evidence-link" data-retry="${esc(a.request_id)}">Retry question</button>`:''}</article>`).join('')||welcome;
+  if(agentTab==='checks')content=cards.map(c=>checkMarkup(c)).join('')||'<div class="empty-inline">No checks in this context yet.</div>';
+  else if(agentTab==='briefing'){
+    content=cards.length?`<div class="briefing-label"><span class="eyebrow">LATEST CHECK · WHAT THE EVIDENCE SUPPORTS</span><button data-agent-tab="checks">View all ${cards.length}</button></div>${checkMarkup(cards[0],true)}`:welcome;
+    if(answers.length)content+=`<button class="answer-preview" data-agent-tab="assistant"><div><span class="micro">LATEST QUESTION · ${esc(statusLabel(answers[0].status))}</span><strong>${esc(answers[0].question)}</strong></div>${icon('arrow')}</button>`;
+  }else content=answers.map(answerMarkup).join('')||welcome;
   if(pendingQuestion)content=`<div class="loading-text">${esc(pendingQuestion.question)} · sending…</div>`+content;
   if(uncertainQuestion)content='<div class="empty-inline">Submission response not received. <button class="evidence-link" data-resend="true">Retry with the same ID</button></div>'+content;
   if(lastAgentError)content=`<div class="empty-inline">${esc(lastAgentError)}</div>`+content;
-  // Preserve expanded evidence/trace sections through recovery refreshes.
+  // Preserve expanded evidence/trace sections through recovery refreshes; tabs start at the top.
   const target=$('agent-content'),oldHTML=target.dataset.rendered;
-  if(oldHTML!==content){const top=target.scrollTop;target.innerHTML=content;target.dataset.rendered=content;target.scrollTop=top;}
+  if(oldHTML!==content){const top=target.dataset.tab===agentTab?target.scrollTop:0;target.innerHTML=content;target.dataset.rendered=content;target.dataset.tab=agentTab;target.scrollTop=top;}
 }
 async function askQuestion(text,reuseBody){
   if(!text.trim()||!agentContext||pendingQuestion)return;
@@ -302,6 +334,10 @@ $('radio-select').onchange=async()=>{radioSelection=$('radio-select').value;clos
 $('event-search').oninput=renderEvents;$('load-history').onclick=()=>{displayLimit+=100;loadHistory();renderEvents();};
 $('show-radio-log').onclick=()=>{document.querySelector('[data-filter="radio_transcript"]').click();$('event-panel').scrollIntoView({behavior:'smooth'});};
 $('export-events').onclick=()=>{const blob=new Blob([JSON.stringify({run:snapshot?.run,observations:[...observations].sort(byTime)},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`firewatch-${snapshot?.run.run_id||'empty'}-g${snapshot?.run.generation||0}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+$('context-evidence').onclick=()=>{
+  const sources=agentEvidence();
+  openDrawer('Copilot sources',`<p>Evidence linked to checks and answers in the current agent context. Open a source to see its original text and provenance.</p><div class="evidence-index">${[...sources].map(([id,label],i)=>`<button class="evidence-link" data-evidence="${esc(id)}"><span class="micro">${icon('link')} SOURCE ${i+1}</span>${esc(label)}</button>`).join('')||'<p class="unknowns">No linked evidence yet.</p>'}</div>`);
+};
 $('question-form').onsubmit=e=>{e.preventDefault();askQuestion($('question').value);};
 $('suggestions').onclick=e=>{const b=e.target.closest('button');if(b)askQuestion(b.textContent);};
 $('close-evidence').onclick=closeEvidence;$('drawer-backdrop').onclick=closeEvidence;

@@ -302,3 +302,28 @@ publication is not a prerequisite for completing the selected demo.
 
 Keep service changes in `agent-service/`; coordinate changes to other teams' folders
 with their owners.
+
+## OpenRouter and local replay check
+
+Set `FIRE_ENGINE=sdk`, `FIRE_PROVIDER=openrouter`, `FIRE_MODEL=openai/gpt-5.6-sol`
+and `OPENROUTER_API_KEY` in the process environment. The provider uses Chat
+Completions with typed outputs and disables SDK tracing. It never substitutes
+`OPENAI_API_KEY` for the OpenRouter credential. The default provider remains OpenAI.
+
+For a local replay using the running platform at port 8000, put `API_KEY` and
+`OPENROUTER_API_KEY` in `platform/.env`. From `agent-service/`, run:
+
+```sh
+.venv/bin/python scripts/e2e/prepare.py
+.venv/bin/python scripts/e2e/serve.py
+# In another terminal:
+.venv/bin/python scripts/e2e/check.py
+```
+
+The scripts import the repository's 43 Palisades transcript segments, start an
+isolated OpenRouter agent at port 8011, and submit an evidence-backed question.
+Scope, database and results are stored under ignored `work/e2e/`. The preparation
+step reuses an existing demo device; use a fresh local platform for a clean import.
+The check advances replay time and invokes billable model calls. It checks API
+transport and answer completion, not semantic correctness or browser/audio playback.
+OpenRouter live model execution still requires a configured OpenRouter key.
