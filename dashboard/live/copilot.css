@@ -43,6 +43,9 @@
 .agent-tabs { padding: 0 23px; height: 44px; flex-shrink: 0; gap: 23px; background: #14202750; }
 .agent-tabs button { font-size: 11px; }
 .agent-tabs #agent-mode { margin: auto 0 auto auto; font-size: 7px; color: #9ca9ab; }
+.agent-tabs:has(#agent-mode.has-model-config) { height: auto; flex-wrap: wrap; gap: 0 23px; }
+.agent-tabs:has(#agent-mode.has-model-config) > button { min-height: 44px; }
+.agent-tabs #agent-mode.has-model-config { width: 100%; margin: 0 0 10px; font-size: 9px; line-height: 1.6; color: #c1b293; white-space: normal; overflow-wrap: anywhere; }
 .agent-content { min-height: 225px; max-height: 490px; padding: 19px 23px 16px; overflow-wrap: anywhere; }
 .briefing-label { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
 .briefing-label .eyebrow { font-size: 8px; color: #a9babd; }

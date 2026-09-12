@@ -73,9 +73,17 @@ def create_app(db_path=None, engine=None, background=True):
     @app.get('/health')
     def health():
         failed=[t for t in getattr(app.state,'workers',[]) if t.done() and not t.cancelled() and t.exception()]
-        return {'status':'degraded' if failed else 'ok','engine':type(selected).__name__,'platform_connected':bool(platform_sync and platform_sync.status['connected']),
+        result={'status':'degraded' if failed else 'ok','engine':type(selected).__name__,'platform_connected':bool(platform_sync and platform_sync.status['connected']),
                 'platform':platform_sync.status if platform_sync else {'configured':False},
                 'ui_api_version':'v1','authentication':'shared-demo-cookie' if os.getenv('FIRE_UI_SESSION_TOKEN') else 'local-only-no-auth'}
+        if isinstance(selected,SDKEngine):
+            # Report the selected engine, never environment values or client objects.
+            result['model_configuration']={
+                'provider':selected.provider,
+                'primary_model':selected.primary_model,
+                'fallback_model':selected.fallback_model,
+            }
+        return result
     @app.post('/sessions/{sid}')
     def start(sid:str):
         result=store.start(sid);ui.bind_context(sid,result['generation']);return result

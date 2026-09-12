@@ -2,6 +2,7 @@
 __pycache__/
 .pytest_cache/
 .env
+!.env.openrouter.example
 work/
 
 .DS_Store

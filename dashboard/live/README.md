@@ -67,6 +67,15 @@ python3 dashboard/live/server.py \
 
 `FIRE_UI_SESSION_TOKEN` при необходимости передаётся gateway через окружение и добавляется в серверный запрос. Адрес агента задаётся при запуске gateway, контекст можно менять в UI.
 
+OpenRouter с Astra и fallback на Fable 5.1: [настройка 1Password и запуск](../../agent-service/docs/OPENROUTER.md).
+Локальная проверенная конфигурация использует агент на `127.0.0.1:8012`, контекст
+`dashboard-openrouter-demo`, generation `0`, subject `all`. В нём три явно
+синтетических сообщения, которые обрабатывает настоящий SDKEngine. Это проверка
+моделей и интерфейса; State run не импортируется в этот контекст автоматически.
+Для такого запуска gateway указать `--agent-url http://127.0.0.1:8012
+--agent-context dashboard-openrouter-demo` без `--demo-agent`. Health и Copilot
+показывают выбранные ID моделей, ключ браузеру не передаётся.
+
 Настройку SDK и импорта выполняет сервис агента по [его README](../../agent-service/README.md): `FIRE_ENGINE=sdk`, модель и ключ, `FIRE_PLATFORM_URL`, ключ платформы, фиксированный `FIRE_PLATFORM_SCOPE`. Импорт не продвигает часы автоматически. Команда backend должна согласовать session/generation/subject, границы источников и продвижение часов; UI не выдумывает platform reading IDs из State evidence IDs и не запускает собственный анализ.
 
 Для будущего чтения ресурсов платформы gateway принимает `PLATFORM_API_URL` и `PLATFORM_API_KEY` и предоставляет ограниченный read-only `/api/platform/…`. Основной экран сейчас получает сырые данные непосредственно из State API, а выводы — из агента. Отдельный визуальный конструктор `/dashboards` Data Platform в этот экран не включён. В main у платформы `received_at` маппится в `ts`; это не позиция seek исторического аудио. Исходные simulation offsets остаются в provenance/payload.

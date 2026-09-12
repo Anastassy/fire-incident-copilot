@@ -354,10 +354,15 @@ async function boot(){
     try{scenarios=(await api('/api/state/scenarios')).items;}catch(error){toast('State API catalog: '+error.message);}
     $('scenario-select').innerHTML=scenarios.map(s=>`<option value="${esc(s.scenario_id)}">${esc(scenarioName(s))}</option>`).join('');$('scenario-select').value=config.scenario;
     const fixture=config.agent.engine==='FixtureEngine';
-    $('agent-mode').textContent=fixture?'Demo engine · FixtureEngine':config.agent.engine||'Disconnected';
-    $('agent-context-note').textContent=fixture?'Separate agent API demo. These answers and checks do not analyze the Base2 stream.':'Answers and checks from the connected agent context. Each claim includes its sources and coverage.';
+    const models=config.agent.model_configuration;
+    const modelNames={'openai/gpt-6-astra':'GPT-6 Astra','anthropic/claude-fable-5.1':'Fable 5.1'};
+    const modelName=id=>modelNames[id]||id;
+    $('agent-mode').textContent=fixture?'Demo engine · FixtureEngine':models?.primary_model?`${models.provider==='openrouter'?'OpenRouter':models.provider==='openai'?'OpenAI':models.provider} · ${modelName(models.primary_model)}${models.fallback_model?' · fallback '+modelName(models.fallback_model):''}`:config.agent.engine||'Disconnected';
+    $('agent-mode').classList.toggle('has-model-config',!fixture&&Boolean(models?.primary_model));
+    $('agent-mode').title=!fixture&&models?.primary_model?`Primary: ${models.primary_model}${models.fallback_model?'\nFallback: '+models.fallback_model:''}`:'';
+    $('agent-context-note').textContent=fixture?'Separate agent API demo. These answers and checks do not analyze the Base2 stream.':config.agent.platform?.configured?'Answers and checks use only readings imported into the connected agent context. Each claim includes sources and coverage.':'Separate agent context. The State timeline on the right is not imported into Copilot. Answers use only the sources available in this agent context.';
     $('agent-demo-tools').hidden=!(fixture&&config.demo_agent);
-    $('endpoint-info').textContent=`State: ${config.state_url}\nAgent: ${config.agent_url}\nData Platform: ${config.platform_configured?config.platform_url:'not connected yet'}\nAgent import: ${JSON.stringify(config.agent.platform||{})}`;
+    $('endpoint-info').textContent=`State: ${config.state_url}\nAgent: ${config.agent_url}\nData Platform: ${config.platform_configured?config.platform_url:'not connected yet'}\nAgent import: ${JSON.stringify(config.agent.platform||{})}${!fixture&&models?.primary_model?'\nModel provider: '+models.provider+'\nPrimary model: '+models.primary_model+'\nFallback model: '+(models.fallback_model||'not configured'):''}`;
     if(fixture&&config.demo_agent){api('/api/agent-demo',{action:'request'}).then(connectAgent).catch(error=>{lastAgentError=error.message;connectAgent(config.agent_context);});}else connectAgent(config.agent_context);
     if(config.state_configured)connectState(new URL(location.href).searchParams.get('run'),config.scenario);else toast('Provide State API credentials when starting the gateway.');
   }catch(error){toast('Connection: '+error.message);}

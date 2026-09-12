@@ -43,7 +43,8 @@ Web → /agent/v1/questions → question queue → bounded retrieval → answer
 handoffs, autonomous planning agents or model-controlled platform writes. The
 application retrieves data and passes it to the model; the agents do not currently
 choose MCP tools or search the full platform history themselves. Each SDK run has
-at most three turns and a 30-second timeout.
+at most three turns per model and a 28-second total budget inside the UI's
+30-second timeout (14 seconds per model when fallback is enabled).
 
 Correlation, timestamps, retries, persistence and UI revisions are application
 code. They do not require another model call. The question agent does not create
@@ -53,7 +54,9 @@ of the same material; shared semantic-result caching is not implemented.
 The default `FixtureEngine` is a deterministic test double. It reads explicit
 `payload.fixture` annotations for extraction and echoes source descriptions for
 questions. It does not understand arbitrary transcripts or translate answers.
-Live SDK extraction and answer quality have not been validated in this delivery.
+Live SDK extraction and answers have been smoke-tested on explicitly synthetic
+messages with OpenRouter; real Palisades interpretation quality remains unvalidated.
+See [scope and results](docs/OPENROUTER.md).
 
 ## Palisades channel check
 
@@ -191,7 +194,8 @@ uv run uvicorn fire_agents.api:create_app --factory --host 127.0.0.1 --port 8010
 
 API documentation: `http://127.0.0.1:8010/docs`. For SDK execution, supply
 `FIRE_ENGINE=sdk`, `FIRE_MODEL` and `OPENAI_API_KEY` through the process environment.
-The `.env` file is not loaded automatically. OpenRouter fallback is not implemented.
+The `.env` file is not loaded automatically. Set `FIRE_FALLBACK_MODEL` to enable
+one fallback attempt after a recoverable model failure; see [OpenRouter setup](docs/OPENROUTER.md).
 `FIRE_DB_PATH` selects the database (default `work/runtime.sqlite3`);
 `FIRE_WATCH_TIMEOUT_MS` controls the ordinary-task timeout (default 300000).
 
@@ -305,10 +309,16 @@ with their owners.
 
 ## OpenRouter and local replay check
 
-Set `FIRE_ENGINE=sdk`, `FIRE_PROVIDER=openrouter`, `FIRE_MODEL=openai/gpt-5.6-sol`
-and `OPENROUTER_API_KEY` in the process environment. The provider uses Chat
+Set `FIRE_ENGINE=sdk`, `FIRE_PROVIDER=openrouter`, `FIRE_MODEL=openai/gpt-6-astra`,
+`FIRE_FALLBACK_MODEL=anthropic/claude-fable-5.1` and `OPENROUTER_API_KEY` in the process environment. The provider uses Chat
 Completions with typed outputs and disables SDK tracing. It never substitutes
 `OPENAI_API_KEY` for the OpenRouter credential. The default provider remains OpenAI.
+
+Both models use strict typed outputs, `reasoning.effort=low` and compatible
+provider routing. The 28-second request budget gives each model at most 14 seconds
+when fallback is enabled. Cancellation never starts the fallback. Extraction text
+defaults to English; set `FIRE_OUTPUT_LANGUAGE=ru` for Russian. Answers honor the
+question's `language`. See [1Password startup and validation](docs/OPENROUTER.md).
 
 For a local replay using the running platform at port 8000, put `API_KEY` and
 `OPENROUTER_API_KEY` in `platform/.env`. From `agent-service/`, run:
